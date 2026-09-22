@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KIRO — Token Optimization for Long-Horizon AI</title>
+<meta name="description" content="Kiro compresses, prunes and budgets context across million-token horizons. Long-horizon AI, radically fewer tokens.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%232f54ff'/%3E%3Cpath d='M8 6h4v9l7-9h5l-8 10 8 10h-5l-7-9v9H8z' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#060608; --bg2:#0a0b0e; --panel:#0c0d11; --line:rgba(255,255,255,.08);
+  --line2:rgba(255,255,255,.14); --blue:#2f54ff; --blue2:#5d7bff; --cyan:#53e0ff;
+  --white:#f4f5f7; --dim:#8b9099; --dim2:#555a63; --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --disp:'Space Grotesk',var(--mono); --ease:cubic-bezier(.16,1,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:var(--disp);overflow-x:hidden;cursor:none}
+::selection{background:var(--blue);color:#fff}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:none}
+img{max-width:100%;display:block}
+.mono{font-family:var(--mono)}
+.dim{color:var(--dim)}
+.blue{color:var(--blue2)}
+
+/* ---------- noise + grid overlays ---------- */
+.noise{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:2000;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  animation:grain 8s steps(10) infinite}
+@keyframes grain{0%,100%{transform:translate(0,0)}10%{transform:translate(-5%,-5%)}30%{transform:translate(3%,-2%)}50%{transform:translate(-2%,4%)}70%{transform:translate(4%,2%)}90%{transform:translate(-3%,3%)}}
+.grid-bg{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:72px 72px;mask-image:radial-gradient(ellipse 90% 70% at 50% 30%,#000 30%,transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 30%,#000 30%,transparent 75%);opacity:.5}
+
+/* ---------- preloader ---------- */
+#loader{position:fixed;inset:0;background:var(--bg);z-index:5000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transition:opacity .7s var(--ease),visibility .7s}
+#loader.done{opacity:0;visibility:hidden}
+#loader .logo-mark{width:72px;height:72px}
+#loader .logo-mark rect{fill:var(--white)}
+#loader .load-bar{width:220px;height:2px;background:var(--line);position:relative;overflow:hidden}
+#loader .load-bar i{position:absolute;left:0;top:0;height:100%;width:0%;background:var(--blue);display:block}
+#loader .load-txt{font-family:var(--mono);font-size:11px;letter-spacing:.35em;color:var(--dim)}
+#loader .pct{font-family:var(--mono);font-size:11px;color:var(--blue2)}
+
+/* ---------- cursor ---------- */
+#cursorDot{position:fixed;width:6px;height:6px;background:var(--blue);z-index:4000;pointer-events:none;transform:translate(-50%,-50%)}
+#cursorRing{position:fixed;width:34px;height:34px;border:1px solid rgba(255,255,255,.35);z-index:3999;pointer-events:none;transform:translate(-50%,-50%);transition:width .25s,height .25s,border-color .25s;mix-blend-mode:difference}
+#cursorRing.hovering{width:56px;height:56px;border-color:var(--blue)}
+@media(hover:none){#cursorDot,#cursorRing{display:none}body,button{cursor:auto}}
+
+/* ---------- progress bar ---------- */
+#progress{position:fixed;top:0;left:0;height:3px;width:100%;z-index:3500;display:flex;gap:2px;padding:0 2px;background:transparent}
+#progress i{flex:1;background:transparent;transition:background .15s}
+#progress i.on{background:var(--blue)}
+
+/* ---------- nav ---------- */
+nav{position:fixed;top:0;left:0;right:0;z-index:3000;display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(20px,4vw,56px);height:64px;border-bottom:1px solid var(--line);
+  background:rgba(6,6,8,.72);backdrop-filter:blur(14px);transform:translateY(0);transition:transform .45s var(--ease)}
+nav.hidden{transform:translateY(-100%)}
+.nav-logo{display:flex;align-items:center;gap:11px;font-family:var(--mono);font-weight:700;font-size:17px;letter-spacing:.06em}
+.nav-logo .logo-mark{width:26px;height:26px}
+.nav-links{display:flex;gap:30px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--dim)}
+.nav-links a{position:relative;padding:4px 0;transition:color .25s}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--blue);transition:width .3s var(--ease)}
+.nav-links a:hover,.nav-links a.active{color:var(--white)}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%}
+.nav-right{display:flex;align-items:center;gap:16px}
+.status-chip{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;letter-spacing:.15em;color:var(--dim);border:1px solid var(--line);padding:6px 12px}
+.status-chip .dot{width:6px;height:6px;background:#37e08b;box-shadow:0 0 8px #37e08b;animation:blink 1.6s infinite}
+@keyframes blink{50%{opacity:.25}}
+@media(max-width:900px){.nav-links{display:none}.status-chip{display:none}}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;letter-spacing:.22em;
+  padding:14px 26px;border:1px solid var(--line2);color:var(--white);background:transparent;position:relative;overflow:hidden;transition:color .3s}
+.btn::before{content:"";position:absolute;inset:0;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease);z-index:0}
+.btn:hover::before{transform:scaleX(1)}
+.btn span{position:relative;z-index:1}
+.btn.solid{background:var(--white);color:#000;border-color:var(--white)}
+.btn.solid:hover{color:#fff}
+.btn .sq{width:6px;height:6px;background:currentColor;position:relative;z-index:1}
+
+/* ---------- layout helpers ---------- */
+.wrap{max-width:1440px;margin:0 auto;padding:0 clamp(20px,4vw,56px)}
+section{position:relative;border-bottom:1px solid var(--line)}
+.sec-tag{font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--dim2);display:flex;align-items:center;gap:12px;margin-bottom:34px}
+.sec-tag::before{content:"[";color:var(--blue)}
+.sec-tag::after{content:"]";color:var(--blue)}
+.sec-tag b{color:var(--dim);font-weight:400}
+h2.display{font-size:clamp(34px,5vw,68px);line-height:1.02;font-weight:500;letter-spacing:-.02em}
+h2.display em{font-style:normal;background:var(--white);color:#000;padding:0 .18em}
+h2.display .blue-word{color:transparent;-webkit-text-stroke:1px var(--blue2)}
+.sub{color:var(--dim);font-size:15px;line-height:1.7;max-width:440px;margin-top:22px}
+
+/* reveal system */
+.reveal{opacity:0;transform:translateY(46px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal[data-d="1"]{transition-delay:.1s}.reveal[data-d="2"]{transition-delay:.2s}
+.reveal[data-d="3"]{transition-delay:.3s}.reveal[data-d="4"]{transition-delay:.4s}
+.reveal[data-d="5"]{transition-delay:.5s}
+
+/* glitch headline */
+.glitch{position:relative;display:inline-block}
+.glitch::before,.glitch::after{content:attr(data-text);position:absolute;inset:0;overflow:hidden}
+.glitch::before{color:var(--blue);clip-path:inset(0 0 100% 0);animation:gl1 6s infinite steps(1)}
+.glitch::after{color:var(--cyan);clip-path:inset(100% 0 0 0);animation:gl2 7s infinite steps(1)}
+@keyframes gl1{0%,92%{clip-path:inset(0 0 100% 0)}93%{clip-path:inset(10% 0 55% 0);transform:translate(-4px,2px)}95%{clip-path:inset(60% 0 8% 0);transform:translate(4px,-2px)}97%{clip-path:inset(30% 0 40% 0);transform:translate(-2px,0)}98%,100%{clip-path:inset(0 0 100% 0);transform:none}}
+@keyframes gl2{0%,90%{clip-path:inset(100% 0 0 0)}91%{clip-path:inset(55% 0 12% 0);transform:translate(4px,1px)}94%{clip-path:inset(8% 0 70% 0);transform:translate(-4px,-1px)}96%{clip-path:inset(40% 0 30% 0);transform:translate(2px,2px)}97%,100%{clip-path:inset(100% 0 0 0);transform:none}}
+
+/* scramble-on-view headings */
+.scramble-target{transition:none}
+
+/* ---------- hero ---------- */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:110px;overflow:hidden;border-bottom:1px solid var(--line)}
+#heroCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+#hero .wrap{position:relative;z-index:2;width:100%}
+.hero-badge{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--dim);border:1px solid var(--line);padding:8px 16px;margin-bottom:34px}
+.hero-badge i{width:6px;height:6px;background:var(--blue);animation:blink 1.4s infinite}
+.hero-title{font-size:clamp(44px,8.4vw,124px);line-height:.98;font-weight:500;letter-spacing:-.03em;text-transform:uppercase}
+.hero-title .row{display:block;overflow:hidden}
+.hero-title .row span{display:inline-block;transform:translateY(110%);animation:riseUp 1.1s var(--ease) forwards}
+.hero-title .row:nth-child(2) span{animation-delay:.12s}
+.hero-title .row:nth-child(3) span{animation-delay:.24s}
+@keyframes riseUp{to{transform:none}}
+.hero-title .outline{color:transparent;-webkit-text-stroke:1.5px var(--white)}
+.hero-title .fill-blue{background:var(--blue);color:#fff;padding:0 .16em}
+.hero-meta{display:flex;flex-wrap:wrap;gap:clamp(24px,5vw,80px);align-items:flex-end;justify-content:space-between;margin-top:54px}
+.hero-desc{max-width:420px;color:var(--dim);font-size:15px;line-height:1.75}
+.hero-desc b{color:var(--white);font-weight:500}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);margin-top:70px}
+.hero-stats>div{padding:22px 24px;border-right:1px solid var(--line)}
+.hero-stats>div:last-child{border-right:0}
+.hero-stats .num{font-family:var(--mono);font-size:clamp(20px,2.4vw,32px);font-weight:700}
+.hero-stats .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.25em;color:var(--dim2);margin-top:6px;text-transform:uppercase}
+@media(max-width:820px){.hero-stats{grid-template-columns:repeat(2,1fr)}.hero-stats>div{border-bottom:1px solid var(--line)}}
+.scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:9px;letter-spacing:.4em;color:var(--dim2);display:flex;flex-direction:column;align-items:center;gap:10px;z-index:2}
+.scroll-hint .wire{width:1px;height:44px;background:var(--line2);position:relative;overflow:hidden}
+.scroll-hint .wire i{position:absolute;left:0;top:-40%;width:100%;height:40%;background:var(--blue);animation:wire 1.8s var(--ease) infinite}
+@keyframes wire{to{top:110%}}
+
+/* ---------- marquee ---------- */
+.marquee{border-bottom:1px solid var(--line);padding:20px 0;overflow:hidden;white-space:nowrap;background:var(--bg2)}
+.marquee .track{display:inline-flex;gap:56px;animation:mq 30s linear infinite;padding-right:56px}
+.marquee.rev .track{animation-direction:reverse}
+.marquee .item{font-family:var(--mono);font-size:12px;letter-spacing:.25em;color:var(--dim);display:inline-flex;align-items:center;gap:56px}
+.marquee .item::after{content:"";width:8px;height:8px;background:var(--blue);display:inline-block}
+.marquee .item.hl{color:var(--white)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ---------- ticker numbers section (problem) ---------- */
+#problem{padding:clamp(90px,12vw,160px) 0}
+.problem-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(40px,6vw,100px);align-items:start}
+@media(max-width:960px){.problem-grid{grid-template-columns:1fr}}
+.big-counter{font-family:var(--mono);font-size:clamp(48px,7vw,96px);font-weight:700;line-height:1;margin:26px 0 8px}
+.big-counter .suffix{color:var(--blue2)}
+.mini-stats{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);margin-top:44px}
+.mini-stats>div{padding:22px;border-bottom:1px solid var(--line)}
+.mini-stats>div:nth-child(odd){border-right:1px solid var(--line)}
+.mini-stats>div:nth-last-child(-n+2){border-bottom:0}
+.mini-stats .n{font-family:var(--mono);font-size:26px;font-weight:700}
+.mini-stats .l{font-size:10px;letter-spacing:.2em;color:var(--dim2);font-family:var(--mono);margin-top:5px;text-transform:uppercase}
+.problem-visual{position:relative;border:1px solid var(--line);background:var(--panel);padding:26px;min-height:420px;overflow:hidden}
+.problem-visual .pv-head{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--dim2);border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:14px}
+#wasteCanvas{width:100%;height:340px;display:block}
+.pv-foot{font-family:var(--mono);font-size:10px;color:var(--dim2);letter-spacing:.15em;display:flex;justify-content:space-between;margin-top:12px}
+.pv-foot .red{color:#ff5470}
+
+/* ---------- how it works ---------- */
+#how{padding:clamp(90px,12vw,160px) 0;background:var(--bg2)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);margin-top:64px}
+@media(max-width:1000px){.steps{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.steps{grid-template-columns:1fr}}
+.step{padding:34px 28px 40px;border-right:1px solid var(--line);position:relative;transition:background .35s}
+.step:last-child{border-right:0}
+@media(max-width:1000px){.step{border-bottom:1px solid var(--line)}}
+.step:hover{background:rgba(47,84,255,.06)}
+.step .idx{font-family:var(--mono);font-size:10px;color:var(--dim2);letter-spacing:.3em}
+.step h3{font-size:21px;font-weight:500;margin:52px 0 14px}
+.step p{color:var(--dim);font-size:13px;line-height:1.7}
+.step .glyph{position:absolute;top:30px;right:26px;width:38px;height:38px}
+.step::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--blue);transition:width .5s var(--ease)}
+.step:hover::after{width:100%}
+.pipeline{margin-top:70px;border:1px solid var(--line);background:var(--panel);padding:26px;position:relative;overflow:hidden}
+.pipeline .pl-head{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:10px;letter-spacing:.25em;color:var(--dim2);margin-bottom:16px}
+#streamCanvas{width:100%;height:150px;display:block}
+
+/* ---------- features / layers ---------- */
+#layers{padding:clamp(90px,12vw,160px) 0}
+.layers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:64px}
+@media(max-width:1000px){.layers-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.layers-grid{grid-template-columns:1fr}}
+.layer{background:var(--bg);padding:40px 32px 48px;position:relative;overflow:hidden;min-height:340px;display:flex;flex-direction:column;transition:background .4s}
+.layer:hover{background:var(--panel)}
+.layer .l-idx{font-family:var(--mono);font-size:10px;color:var(--dim2);letter-spacing:.3em}
+.layer h3{font-size:24px;font-weight:500;margin:70px 0 14px}
+.layer p{color:var(--dim);font-size:13px;line-height:1.75;flex:1}
+.layer .l-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:26px}
+.layer .l-tags i{font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.15em;color:var(--dim);border:1px solid var(--line);padding:5px 10px}
+.layer .l-glow{position:absolute;top:-60px;right:-60px;width:180px;height:180px;background:radial-gradient(circle,rgba(47,84,255,.35),transparent 70%);opacity:0;transition:opacity .5s}
+.layer:hover .l-glow{opacity:1}
+.layer canvas{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .4s}
+.layer:hover canvas{opacity:1}
+
+/* ---------- demo ---------- */
+#demo{padding:clamp(90px,12vw,160px) 0;background:var(--bg2)}
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:64px}
+@media(max-width:900px){.demo-grid{grid-template-columns:1fr}}
+.demo-pane{background:var(--bg);padding:34px}
+.demo-pane .dp-head{font-family:var(--mono);font-size:10px;letter-spacing:.25em;color:var(--dim2);display:flex;justify-content:space-between;margin-bottom:20px}
+.demo-pane textarea{width:100%;height:220px;background:var(--panel);border:1px solid var(--line);color:var(--white);font-family:var(--mono);font-size:13px;line-height:1.8;padding:18px;resize:none;outline:none;transition:border-color .3s}
+.demo-pane textarea:focus{border-color:var(--blue)}
+.demo-actions{display:flex;align-items:center;justify-content:space-between;margin-top:18px;gap:14px;flex-wrap:wrap}
+.tok-count{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.1em}
+.tok-count b{color:var(--white)}
+.demo-out{background:var(--panel);border:1px solid var(--line);height:220px;padding:18px;overflow-y:auto;font-family:var(--mono);font-size:12.5px;line-height:1.9;color:var(--dim)}
+.demo-out .keep{color:var(--white)}
+.demo-out .cut{color:var(--dim2);text-decoration:line-through;text-decoration-color:rgba(255,84,112,.6)}
+.demo-out .summ{color:var(--blue2)}
+.demo-meter{margin-top:20px}
+.demo-meter .m-lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--dim2);margin-bottom:8px}
+.demo-meter .m-track{height:8px;border:1px solid var(--line);position:relative;overflow:hidden}
+.demo-meter .m-fill{position:absolute;inset:0;width:0%;background:repeating-linear-gradient(90deg,var(--blue) 0 6px,transparent 6px 9px);transition:width 1.2s var(--ease)}
+.demo-savings{font-family:var(--mono);font-size:clamp(28px,3vw,44px);font-weight:700;margin-top:22px}
+.demo-savings small{font-size:12px;color:var(--dim);font-weight:400;letter-spacing:.15em}
+
+/* ---------- performance chart ---------- */
+#perf{padding:clamp(90px,12vw,160px) 0}
+.perf-wrap{border:1px solid var(--line);background:var(--panel);padding:clamp(20px,3vw,40px);margin-top:64px}
+.perf-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--dim2);margin-bottom:20px}
+.perf-legend{display:flex;gap:20px}
+.perf-legend i{font-style:normal;display:inline-flex;align-items:center;gap:7px}
+.perf-legend i::before{content:"";width:9px;height:9px;display:inline-block}
+.perf-legend .l1::before{background:var(--dim2)}
+.perf-legend .l2::before{background:var(--blue)}
+#perfCanvas{width:100%;height:380px;display:block}
+
+/* ---------- testimonials ---------- */
+#voices{padding:clamp(90px,12vw,160px) 0;background:var(--bg2);overflow:hidden}
+.voice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:64px}
+@media(max-width:900px){.voice-grid{grid-template-columns:1fr}}
+.voice{background:var(--bg);padding:36px 30px}
+.voice .v-mark{font-family:var(--mono);color:var(--blue);font-size:20px}
+.voice p{color:var(--dim);font-size:14px;line-height:1.8;margin:18px 0 28px}
+.voice p b{color:var(--white);font-weight:500}
+.voice .v-who{display:flex;align-items:center;gap:12px}
+.voice .v-av{width:36px;height:36px;font-family:var(--mono);font-size:12px;display:grid;place-items:center;background:var(--panel);border:1px solid var(--line2);color:var(--blue2)}
+.voice .v-name{font-size:13px}
+.voice .v-role{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--dim2);margin-top:3px}
+
+/* ---------- pricing ---------- */
+#pricing{padding:clamp(90px,12vw,160px) 0}
+.bill-toggle{display:inline-flex;border:1px solid var(--line2);font-family:var(--mono);font-size:10px;letter-spacing:.2em;margin:44px 0 0}
+.bill-toggle button{padding:12px 22px;background:transparent;border:0;color:var(--dim);letter-spacing:inherit;transition:.3s}
+.bill-toggle button.on{background:var(--white);color:#000}
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:36px}
+@media(max-width:960px){.price-grid{grid-template-columns:1fr}}
+.tier{background:var(--bg);padding:44px 36px 48px;position:relative;display:flex;flex-direction:column;transition:background .4s}
+.tier:hover{background:var(--panel)}
+.tier.featured{background:var(--panel);outline:1px solid var(--blue);outline-offset:-1px;z-index:1}
+.tier .t-badge{position:absolute;top:0;right:0;background:var(--blue);color:#fff;font-family:var(--mono);font-size:9px;letter-spacing:.25em;padding:7px 14px}
+.tier h3{font-size:15px;font-family:var(--mono);letter-spacing:.2em;color:var(--dim)}
+.tier .price{font-family:var(--mono);font-size:clamp(38px,4vw,56px);font-weight:700;margin:26px 0 4px}
+.tier .price small{font-size:12px;color:var(--dim);font-weight:400}
+.tier .t-desc{color:var(--dim2);font-size:12px;font-family:var(--mono);letter-spacing:.05em}
+.tier ul{list-style:none;margin:34px 0 38px;flex:1}
+.tier li{font-size:13px;color:var(--dim);padding:9px 0 9px 22px;position:relative;border-bottom:1px dashed var(--line)}
+.tier li::before{content:"";position:absolute;left:0;top:15px;width:8px;height:8px;background:var(--blue)}
+.tier li:last-child{border-bottom:0}
+
+/* ---------- changelog ---------- */
+#changelog{padding:clamp(90px,12vw,160px) 0;background:var(--bg2)}
+.cl-list{margin-top:64px;border-top:1px solid var(--line)}
+.cl-row{display:grid;grid-template-columns:130px 130px 1fr auto;gap:20px;align-items:center;padding:26px 0;border-bottom:1px solid var(--line);transition:padding .3s var(--ease),background .3s}
+.cl-row:hover{padding-left:16px;background:rgba(47,84,255,.05)}
+@media(max-width:760px){.cl-row{grid-template-columns:1fr;gap:8px}}
+.cl-row .cl-date{font-family:var(--mono);font-size:11px;color:var(--dim2)}
+.cl-row .cl-tag{font-family:var(--mono);font-size:9px;letter-spacing:.2em;border:1px solid var(--line2);padding:5px 10px;color:var(--dim);justify-self:start}
+.cl-row .cl-title{font-size:17px}
+.cl-row .cl-arr{font-family:var(--mono);color:var(--dim2);transition:.3s}
+.cl-row:hover .cl-arr{color:var(--blue);transform:translateX(6px)}
+
+/* ---------- faq ---------- */
+#faq{padding:clamp(90px,12vw,160px) 0}
+.faq-list{margin-top:64px;border-top:1px solid var(--line)}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-q{width:100%;background:none;border:0;color:var(--white);display:flex;justify-content:space-between;align-items:center;gap:20px;padding:28px 0;text-align:left;font-family:var(--disp);font-size:clamp(17px,2vw,22px);font-weight:500;transition:color .3s}
+.faq-q:hover{color:var(--blue2)}
+.faq-q .fi{font-family:var(--mono);font-size:10px;color:var(--dim2);letter-spacing:.2em;margin-right:18px}
+.faq-q .plus{width:14px;height:14px;position:relative;flex:none}
+.faq-q .plus::before,.faq-q .plus::after{content:"";position:absolute;background:var(--white);transition:transform .4s var(--ease)}
+.faq-q .plus::before{left:0;top:6px;width:14px;height:2px}
+.faq-q .plus::after{left:6px;top:0;width:2px;height:14px}
+.faq-item.open .plus::after{transform:scaleY(0)}
+.faq-item.open .plus::before{transform:rotate(180deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .55s var(--ease)}
+.faq-a p{color:var(--dim);font-size:14px;line-height:1.8;max-width:720px;padding:0 0 30px}
+
+/* ---------- big cta ---------- */
+#cta{padding:clamp(110px,15vw,200px) 0;text-align:center;overflow:hidden;position:relative}
+#cta .mega{font-size:clamp(52px,10vw,150px);font-weight:500;line-height:.95;letter-spacing:-.03em;text-transform:uppercase}
+#cta .mega .outline{color:transparent;-webkit-text-stroke:1.5px var(--white)}
+#cta .mega .fill{background:var(--blue);color:#fff;padding:0 .14em}
+#cta .cta-sub{font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--dim);margin:34px 0 44px}
+
+/* ---------- footer ---------- */
+footer{padding:80px 0 40px;background:var(--bg2);border-top:1px solid var(--line)}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px}
+@media(max-width:900px){.foot-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.foot-grid{grid-template-columns:1fr}}
+.foot-logo{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-weight:700;font-size:20px;margin-bottom:20px}
+.foot-logo .logo-mark{width:30px;height:30px}
+.foot-desc{color:var(--dim);font-size:13px;line-height:1.8;max-width:300px}
+.foot-col h4{font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--dim2);margin-bottom:20px}
+.foot-col a{display:block;color:var(--dim);font-size:13px;padding:6px 0;transition:.25s}
+.foot-col a:hover{color:var(--blue2);padding-left:6px}
+.newsletter{display:flex;margin-top:26px;border:1px solid var(--line2);max-width:320px}
+.newsletter input{flex:1;background:transparent;border:0;color:var(--white);font-family:var(--mono);font-size:12px;padding:14px 16px;outline:none}
+.newsletter button{background:var(--blue);color:#fff;border:0;font-family:var(--mono);font-size:10px;letter-spacing:.2em;padding:0 20px}
+.foot-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:70px;padding-top:26px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10px;letter-spacing:.15em;color:var(--dim2)}
+
+/* ---------- to top ---------- */
+#toTop{position:fixed;right:26px;bottom:26px;width:48px;height:48px;background:var(--bg);border:1px solid var(--line2);color:var(--white);font-family:var(--mono);font-size:14px;z-index:2500;opacity:0;visibility:hidden;transition:.4s}
+#toTop.show{opacity:1;visibility:visible}
+#toTop:hover{background:var(--blue);border-color:var(--blue)}
+
+/* pixel star decorations */
+.px-star{position:absolute;pointer-events:none;opacity:.5}
+
+</style>
+</head>
+<body>
+
+<!-- shared logo symbol -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <g id="kiro-mark">
+      <rect x="0" y="0" width="8" height="8"/><rect x="0" y="10" width="8" height="8"/>
+      <rect x="0" y="20" width="8" height="8"/><rect x="0" y="30" width="8" height="8"/>
+      <rect x="10" y="18" width="8" height="8"/><rect x="18" y="10" width="8" height="8"/>
+      <rect x="26" y="0" width="8" height="8"/><rect x="18" y="26" width="8" height="8"/>
+      <rect x="26" y="30" width="8" height="8"/>
+      <rect x="34" y="14" width="4" height="4" fill="#2f54ff" stroke="none"/>
+    </g>
+  </defs>
+</svg>
+
+<div class="noise"></div>
+<div id="cursorDot"></div><div id="cursorRing"></div>
+<div id="progress"></div>
+
+<!-- preloader -->
+<div id="loader">
+  <svg class="logo-mark" viewBox="0 0 38 38"><use href="#kiro-mark" fill="#fff"/></svg>
+  <div class="load-bar"><i id="loadFill"></i></div>
+  <div class="load-txt">CALIBRATING CONTEXT <span class="pct" id="loadPct">0%</span></div>
+</div>
+
+<!-- nav -->
+<nav id="nav">
+  <a class="nav-logo" href="#hero">
+    <svg class="logo-mark" viewBox="0 0 38 38"><use href="#kiro-mark" fill="#f4f5f7"/></svg>
+    kiro<span style="color:var(--blue2)">.</span>
+  </a>
+  <div class="nav-links">
+    <a href="#how">HOW IT WORKS</a><a href="#layers">CAPABILITIES</a><a href="#demo">DEMO</a>
+    <a href="#perf">RESULTS</a><a href="#pricing">PRICING</a><a href="#faq">FAQ</a>
+  </div>
+  <div class="nav-right">
+    <div class="status-chip"><span class="dot"></span>SYSTEMS NOMINAL</div>
+    <a class="btn solid" href="#pricing"><span class="sq"></span><span>GET ACCESS</span></a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section id="hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="grid-bg"></div>
+  <div class="wrap">
+    <div class="hero-badge reveal"><i></i>KIRO V2.4 — LONG-HORIZON TOKEN ENGINE</div>
+    <h1 class="hero-title">
+      <span class="row"><span>EVERY TOKEN,</span></span>
+      <span class="row"><span><span class="outline glitch" data-text="OPTIMIZED">OPTIMIZED</span></span></span>
+      <span class="row"><span>FOR THE <span class="fill-blue">LONG RUN.</span></span></span>
+    </h1>
+    <div class="hero-meta">
+      <p class="hero-desc reveal" data-d="2">Kiro is the intelligence layer that <b>compresses, prunes and budgets context</b> across million-token windows — so your agents remember everything, pay for almost nothing, and never lose the plot.</p>
+      <div class="hero-cta reveal" data-d="3">
+        <a class="btn solid" href="#demo"><span class="sq"></span><span>RUN THE DEMO</span></a>
+        <a class="btn" href="#how"><span>READ THE FLOW</span><span>→</span></a>
+      </div>
+    </div>
+    <div class="hero-stats reveal" data-d="4">
+      <div><div class="num" data-count="72" data-suffix="%">0%</div><div class="lbl">Token spend reduced</div></div>
+      <div><div class="num" data-count="4" data-suffix="M">0M</div><div class="lbl">Effective context horizon</div></div>
+      <div><div class="num" data-count="38" data-prefix="~" data-suffix="ms">0</div><div class="lbl">Compaction latency</div></div>
+      <div><div class="num" data-count="99" data-suffix=".98%">0</div><div class="lbl">Recall fidelity</div></div>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>SCROLL</span><div class="wire"><i></i></div></div>
+</section>
+
+<!-- marquee -->
+<div class="marquee"><div class="track" id="mq1"></div></div>
+
+<!-- ============ PROBLEM ============ -->
+<section id="problem">
+  <div class="wrap">
+    <div class="sec-tag reveal"><b>N.01</b> &gt; THE BOTTLENECK</div>
+    <div class="problem-grid">
+      <div>
+        <h2 class="display reveal">Context is expensive.<br><em>Redundancy</em> is the tax.</h2>
+        <p class="sub reveal" data-d="1">Long-horizon agents drown in their own history. Every replayed document, every repeated system prompt, every stale tool result burns budget and attention. Kiro removes what doesn't matter — surgically.</p>
+        <div class="big-counter reveal" data-d="2"><span data-count="68" data-suffix="%">0%</span><span class="suffix">_</span></div>
+        <p class="dim reveal" data-d="2" style="font-family:var(--mono);font-size:11px;letter-spacing:.2em">OF TOKENS IN A TYPICAL 1M-TOKEN SESSION CARRY ZERO DECISION VALUE.</p>
+        <div class="mini-stats reveal" data-d="3">
+          <div><div class="n" data-count="41" data-suffix="%">0%</div><div class="l">Prompt duplication</div></div>
+          <div><div class="n" data-count="19" data-suffix="%">0%</div><div class="l">Stale tool output</div></div>
+          <div><div class="n" data-count="8" data-suffix="%">0%</div><div class="l">Re-explained context</div></div>
+          <div><div class="n" data-count="31" data-suffix="×">0×</div><div class="l">Cheaper per resolved task</div></div>
+        </div>
+      </div>
+      <div class="problem-visual reveal" data-d="2">
+        <div class="pv-head"><span>SESSION // 8471-B</span><span>RAW STREAM</span></div>
+        <canvas id="wasteCanvas"></canvas>
+        <div class="pv-foot"><span>■ NECESSARY CONTEXT</span><span class="red">■ REDUNDANT WASTE</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- marquee reverse -->
+<div class="marquee rev"><div class="track" id="mq2"></div></div>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section id="how">
+  <div class="wrap">
+    <div class="sec-tag reveal"><b>N.02</b> &gt; THE FLOW</div>
+    <h2 class="display reveal">From raw stream<br>to <span class="blue-word">lean context.</span></h2>
+    <div class="steps">
+      <div class="step reveal" data-d="1">
+        <div class="idx">//001</div>
+        <svg class="glyph" viewBox="0 0 38 38"><g fill="none" stroke="#8b9099" stroke-width="1.5"><path d="M4 30V10l15 12 15-14v22"/></g></svg>
+        <h3>Ingest the stream</h3>
+        <p>Conversation, docs, tool traces and memory enter a unified token graph — deduplicated at the semantic level, not the string level.</p>
+      </div>
+      <div class="step reveal" data-d="2">
+        <div class="idx">//002</div>
+        <svg class="glyph" viewBox="0 0 38 38"><g fill="#2f54ff"><rect x="4" y="16" width="8" height="8"/><rect x="16" y="8" width="8" height="8"/><rect x="16" y="24" width="8" height="8"/><rect x="28" y="16" width="6" height="6"/></g></svg>
+        <h3>Score every token</h3>
+        <p>Each span is ranked by decision-criticality: recency, salience, task relevance and downstream dependencies — in real time.</p>
+      </div>
+      <div class="step reveal" data-d="3">
+        <div class="idx">//003</div>
+        <svg class="glyph" viewBox="0 0 38 38"><g fill="none" stroke="#8b9099" stroke-width="1.5"><rect x="5" y="5" width="12" height="12"/><rect x="21" y="5" width="12" height="12"/><rect x="5" y="21" width="12" height="12"/><path d="M21 27h12M27 21v12" stroke="#2f54ff"/></g></svg>
+        <h3>Compact &amp; budget</h3>
+        <p>Low-value spans collapse into lossy summaries. High-value spans stay verbatim. Attention is budgeted across the horizon, not the window.</p>
+      </div>
+      <div class="step reveal" data-d="4">
+        <div class="idx">//004</div>
+        <svg class="glyph" viewBox="0 0 38 38"><g fill="none" stroke="#8b9099" stroke-width="1.5"><path d="M6 19a13 13 0 0 1 22-9M32 19a13 13 0 0 1-22 9"/><path d="M28 4v6h-6M10 34v-6h6" stroke="#2f54ff"/></g></svg>
+        <h3>Refine on a loop</h3>
+        <p>Every completed task writes distilled memory back. The system gets leaner the longer it runs — the opposite of context bloat.</p>
+      </div>
+    </div>
+    <div class="pipeline reveal">
+      <div class="pl-head"><span>◈ LIVE TOKEN STREAM — COMPACTION PASS</span><span id="streamStat">TOKENS: 0 / WASTE REMOVED: 0%</span></div>
+      <canvas id="streamCanvas"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LAYERS ============ -->
+<section id="layers">
+  <div class="wrap">
+    <div class="sec-tag reveal"><b>N.03</b> &gt; CORE CAPABILITIES</div>
+    <h2 class="display reveal">Three layers.<br>One <em>seamless</em> system.</h2>
+    <div class="layers-grid">
+      <div class="layer reveal" data-d="1">
+        <div class="l-glow"></div><canvas class="lfx"></canvas>
+        <div class="l-idx">LAYER //001</div>
+        <h3>Semantic Compaction</h3>
+        <p>Lossy where it should be, lossless where it counts. Kiro compresses repetitive context up to 12× while keeping decision-critical spans byte-exact and retrievable on demand.</p>
+        <div class="l-tags"><i>12× COMPRESSION</i><i>FAITHFUL RECALL</i><i>ON-DEMAND SPAN FETCH</i></div>
+      </div>
+      <div class="layer reveal" data-d="2">
+        <div class="l-glow"></div><canvas class="lfx"></canvas>
+        <div class="l-idx">LAYER //002</div>
+        <h3>Attention Budgeting</h3>
+        <p>A live allocator that prices attention across the full horizon. Critical memory gets prime positions; filler gets summarized, demoted or dropped — before it ever hits the model.</p>
+        <div class="l-tags"><i>HORIZON-AWARE</i><i>REAL-TIME ALLOCATION</i><i>MODEL-AGNOSTIC</i></div>
+      </div>
+      <div class="layer reveal" data-d="3">
+        <div class="l-glow"></div><canvas class="lfx"></canvas>
+        <div class="l-idx">LAYER //003</div>
+        <h3>Tiered Memory Fabric</h3>
+        <p>Hot, warm and cold memory tiers with automatic promotion. Agents recall anything from 4M tokens of history at near-hot latency — without carrying it all in the prompt.</p>
+        <div class="l-tags"><i>4M HORIZON</i><i>AUTO-PROMOTION</i><i>&lt;40MS RECALL</i></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:60px" class="under-layers">
+      <div class="reveal" data-d="1"><h4 class="mono" style="font-size:12px;letter-spacing:.25em;margin-bottom:12px">◈ PLUGS INTO YOUR STACK</h4><p class="dim" style="font-size:13px;line-height:1.75">One-line middleware for any provider — OpenAI, Anthropic, Gemini, or your own weights. No retraining. No lock-in.</p></div>
+      <div class="reveal" data-d="2"><h4 class="mono" style="font-size:12px;letter-spacing:.25em;margin-bottom:12px">◈ MINIMAL BY DEFAULT</h4><p class="dim" style="font-size:13px;line-height:1.75">Drop-in SDK with sane defaults. Spend five minutes integrating, then tune budgets only if you want to.</p></div>
+      <div class="reveal" data-d="3"><h4 class="mono" style="font-size:12px;letter-spacing:.25em;margin-bottom:12px">◈ BUILT TO SCALE</h4><p class="dim" style="font-size:13px;line-height:1.75">From a single agent notebook to fleets of 10,000 concurrent sessions. Stateless core, horizontal by design.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DEMO ============ -->
+<section id="demo">
+  <div class="wrap">
+    <div class="sec-tag reveal"><b>N.04</b> &gt; INTERACTIVE</div>
+    <h2 class="display reveal">Paste context.<br>Watch it <em>shrink.</em></h2>
+    <p class="sub reveal" data-d="1">A live simulation of Kiro's compaction pass. Drop any long-winded text — a meeting transcript, a doc, an agent log — and see what survives the budget cut.</p>
+    <div class="demo-grid">
+      <div class="demo-pane reveal" data-d="2">
+        <div class="dp-head"><span>◈ INPUT CONTEXT</span><span>PLAIN TEXT</span></div>
+        <textarea id="demoInput" spellcheck="false">System prompt: You are a helpful assistant. System prompt: You are a helpful assistant. As I was saying earlier, as I was saying earlier, the quarterly report shows that revenue grew 12% quarter over quarter, and margins expanded meaningfully due to reduced infrastructure spend on redundant token processing. Note to self: the meeting originally scheduled for Tuesday has been moved to Thursday, then moved again to Friday, and is now back on Tuesday. Reminder: the API rate limit is 10,000 requests per minute per workspace, and this limit has not changed in six months. In summary, to summarize, in conclusion, the key takeaway is that long documents contain enormous amounts of repeated, low-information filler that costs real money at scale.</textarea>
+        <div class="demo-actions">
+          <span class="tok-count">EST. TOKENS: <b id="tokIn">0</b></span>
+          <button class="btn solid" id="optimizeBtn"><span class="sq"></span><span>OPTIMIZE ▸</span></button>
+        </div>
+      </div>
+      <div class="demo-pane reveal" data-d="3">
+        <div class="dp-head"><span>◈ KIRO OUTPUT</span><span>COMPACTED</span></div>
+        <div class="demo-out" id="demoOut"><span style="color:var(--dim2)">// awaiting input — press OPTIMIZE</span></div>
+        <div class="demo-meter">
+          <div class="m-lbl"><span>CONTEXT RETAINED</span><span id="mPct">0% / 100%</span></div>
+          <div class="m-track"><div class="m-fill" id="mFill"></div></div>
+        </div>
+        <div class="demo-savings"><span id="savePct">—</span><small id="saveSub">TOKEN SAVINGS</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PERF ============ -->
+<section id="perf">
+  <div class="wrap">
+    <div class="sec-tag reveal"><b>N.05</b> &gt; MEASURED</div>
+    <h2 class="display reveal">Less spend.<br>Zero <em>drift.</em></h2>
+    <div class="perf-wrap reveal" data-d="2">
+      <div class="perf-head">
+        <span>◈ COST PER RESOLVED TASK — SESSION LENGTH (K TOKENS)</span>
+        <div class="perf-legend"><i class="l1">BASELINE</i><i class="l2">WITH KIRO</i></div>
+      </div>
+      <canvas id="perfCanvas"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VOICES ============ -->
+<section id="voices">
+  <div class="wrap">
+    <div class="sec-tag reveal"><b>N.06</b> &gt; FIELD REPORTS</div>
+    <h2 class="display reveal">Less spend,<br>more <span class="blue-word">shipping.</span></h2>
+    <div class="voice-grid">
+      <div class="voice reveal" data-d="1">
+        <div class="v-mark">◈</div>
+        <p>"Our research agents used to hit the context ceiling after three days of work. With Kiro they run for <b>three weeks</b> on the same budget — and the summaries are honestly better than the raw logs."</p>
+        <div class="v-who"><div class="v-av">MC</div><div><div class="v-name">Mara Chen</div><div class="v-role">HEAD OF AI — NORTHWIND LABS</div></div></div>
+      </div>
+      <div class="voice reveal" data-d="2">
+        <div class="v-mark">◈</div>
+        <p>"We plugged Kiro into our support pipeline on a Tuesday. By Friday our token bill had dropped <b>71%</b> and resolution quality went <i>up</i>. I still don't fully believe the dashboard."</p>
+        <div class="v-who"><div class="v-av">DO</div><div><div class="v-name">David Okafor</div><div class="v-role">CTO — LOOPSTACK</div></div></div>
+      </div>
+      <div class="voice reveal" data-d="3">
+        <div class="v-mark">◈</div>
+        <p>"Attention budgeting is the part nobody else does. Kiro treats context like <b>memory, not a landfill</b>. Our coding agents stopped forgetting the architecture decisions from sprint one."</p>
+        <div class="v-who"><div class="v-av">SK</div><div><div class="v-name">Sofia Katz</div><div class="v-role">STAFF ENGINEER — PARALLAX</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="sec-tag reveal"><b>N.07</b> &gt; PRICING</div>
+    <h2 class="display reveal">Simple pricing.<br>Pay for <em>tokens saved.</em></h2>
+    <div class="bill-toggle reveal" data-d="1">
+      <button class="on" data-mode="m">MONTHLY</button>
+      <button data-mode="y">ANNUALLY <span style="color:var(--blue2)">-20%</span></button>
+    </div>
+    <div class="price-grid">
+      <div class="tier reveal" data-d="1">
+        <h3>// STARTER</h3>
+        <div class="price">$<span class="pval" data-m="0" data-y="0">0</span><small>/mo</small></div>
+        <div class="t-desc">For solo builders testing long-horizon agents</div>
+        <ul>
+          <li>1M token horizon</li>
+          <li>Semantic compaction core</li>
+          <li>2 active agents</li>
+          <li>Community support</li>
+        </ul>
+        <a class="btn" href="#cta"><span>START FREE</span></a>
+      </div>
+      <div class="tier featured reveal" data-d="2">
+        <div class="t-badge">MOST POPULAR</div>
+        <h3>// PRO</h3>
+        <div class="price">$<span class="pval" data-m="29" data-y="23">29</span><small>/mo</small></div>
+        <div class="t-desc">For teams shipping agents to production</div>
+        <ul>
+          <li>4M token horizon</li>
+          <li>Attention budgeting engine</li>
+          <li>Tiered memory fabric</li>
+          <li>50 active agents</li>
+          <li>Usage analytics + alerts</li>
+        </ul>
+        <a class="btn solid" href="#cta"><span class="sq"></span><span>GET PRO</span></a>
+      </div>
+      <div class="tier reveal" data-d="3">
+        <h3>// SCALE</h3>
+        <div class="price">$<span class="pval" data-m="199" data-y="159">199</span><small>/mo</small></div>
+        <div class="t-desc">For fleets and enterprise horizons</div>
+        <ul>
+          <li>Unlimited horizon</li>
+          <li>Custom compaction policies</li>
+          <li>SSO, audit logs, SLA</li>
+          <li>Dedicated inference lane</li>
+          <li>Priority support</li>
+        </ul>
+        <a class="btn" href="#cta"><span>TALK TO US</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHANGELOG ============ -->
+<section id="changelog">
+  <div class="wrap">
+    <div class="sec-tag reveal"><b>N.08</b> &gt; CHANGELOG</div>
+    <h2 class="display reveal">We ship fast.<br>Always <em>improving.</em></h2>
+    <div class="cl-list">
+      <div class="cl-row reveal" data-d="1">
+        <span class="cl-date">SEP 14, 2026</span><span class="cl-tag">FEATURE</span>
+        <span class="cl-title">Memory Fabric v2 — cross-agent shared tiers</span><span class="cl-arr">→</span>
+      </div>
+      <div class="cl-row reveal" data-d="1">
+        <span class="cl-date">AUG 02, 2026</span><span class="cl-tag">PERF</span>
+        <span class="cl-title">Compaction latency cut to ~38ms at p99</span><span class="cl-arr">→</span>
+      </div>
+      <div class="cl-row reveal" data-d="2">
+        <span class="cl-date">JUN 21, 2026</span><span class="cl-tag">FEATURE</span>
+        <span class="cl-title">Attention Budget API — price context like currency</span><span class="cl-arr">→</span>
+      </div>
+      <div class="cl-row reveal" data-d="2">
+        <span class="cl-date">APR 30, 2026</span><span class="cl-tag">FIX</span>
+        <span class="cl-title">Recall fidelity raised to 99.98% on nested summaries</span><span class="cl-arr">→</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-tag reveal"><b>N.09</b> &gt; FAQ</div>
+    <h2 class="display reveal">Questions?<br>We've got <em>answers.</em></h2>
+    <div class="faq-list">
+      <div class="faq-item reveal" data-d="1">
+        <button class="faq-q"><span><span class="fi">//01</span>Does compaction hurt model accuracy?</span><span class="plus"></span></button>
+        <div class="faq-a"><p>No — when it's done selectively. Kiro keeps decision-critical spans verbatim and only compresses redundant or low-salience content. In benchmarks across 12 long-horizon suites, task success rates matched or exceeded full-context baselines while using 72% fewer tokens.</p></div>
+      </div>
+      <div class="faq-item reveal" data-d="1">
+        <button class="faq-q"><span><span class="fi">//02</span>Which models and providers are supported?</span><span class="plus"></span></button>
+        <div class="faq-a"><p>All of them, transparently. Kiro sits between your application and any provider — OpenAI, Anthropic, Gemini, Mistral, or self-hosted weights. It's a middleware layer, not a model, so nothing about your stack needs to change.</p></div>
+      </div>
+      <div class="faq-item reveal" data-d="2">
+        <button class="faq-q"><span><span class="fi">//03</span>How does the memory fabric recall old context?</span><span class="plus"></span></button>
+        <div class="faq-a"><p>Everything is indexed into hot, warm and cold tiers. When a task needs something old, Kiro fetches the exact spans — not a blurry summary — promoted to hot context in under 40ms. Your agent gets the precision of RAG with the continuity of a single conversation.</p></div>
+      </div>
+      <div class="faq-item reveal" data-d="2">
+        <button class="faq-q"><span><span class="fi">//04</span>Can I control what gets compressed?</span><span class="plus"></span></button>
+        <div class="faq-a"><p>Yes. Pin critical spans losslessly with one line, set per-agent budget policies, and audit every compaction decision in the trace viewer. Defaults are safe; control is total.</p></div>
+      </div>
+      <div class="faq-item reveal" data-d="3">
+        <button class="faq-q"><span><span class="fi">//05</span>Is my data used for training?</span><span class="plus"></span></button>
+        <div class="faq-a"><p>Never. All compaction runs in a stateless inference path. Enterprise plans add zero-retention guarantees, regional pinning and full audit exports.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section id="cta">
+  <div class="grid-bg"></div>
+  <div class="wrap" style="position:relative;z-index:1">
+    <div class="sec-tag reveal" style="justify-content:center"><b>N.10</b> &gt; BEGIN</div>
+    <div class="mega reveal" data-d="1">STOP PAYING<br><span class="outline">FOR NOISE.</span></div>
+    <div class="mega reveal" data-d="2" style="margin-top:10px">START SHIPPING <span class="fill">SIGNAL.</span></div>
+    <div class="cta-sub reveal" data-d="3">FREE TIER — NO CARD — 5 MINUTE SETUP</div>
+    <div class="reveal" data-d="4"><a class="btn solid" style="font-size:13px;padding:20px 44px" href="#hero"><span class="sq"></span><span>DEPLOY KIRO ▸</span></a></div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-logo"><svg class="logo-mark" viewBox="0 0 38 38"><use href="#kiro-mark" fill="#f4f5f7"/></svg>kiro<span style="color:var(--blue2)">.</span></div>
+        <p class="foot-desc">The token optimization layer for long-horizon AI. Compress the past, budget the present, extend the future.</p>
+        <div class="newsletter"><input type="email" placeholder="you@lab.ai" id="nlInput"><button id="nlBtn">JOIN</button></div>
+      </div>
+      <div class="foot-col"><h4>PRODUCT</h4><a href="#how">How it works</a><a href="#layers">Capabilities</a><a href="#demo">Live demo</a><a href="#pricing">Pricing</a></div>
+      <div class="foot-col"><h4>RESOURCES</h4><a href="#changelog">Changelog</a><a href="#faq">FAQ</a><a href="#perf">Benchmarks</a><a href="#voices">Field reports</a></div>
+      <div class="foot-col"><h4>COMPANY</h4><a href="#cta">Careers</a><a href="#cta">Contact</a><a href="#cta">Press kit</a><a href="#cta">X / Twitter</a></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 KIRO SYSTEMS — ALL TOKENS ACCOUNTED FOR</span>
+      <span>BUILT FOR THE LONG HORIZON ◈</span>
+    </div>
+  </div>
+</footer>
+
+<button id="toTop" title="Back to top">↑</button>
+
+<script>
+/* ================= CORE ================= */
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+const lerp=(a,b,t)=>a+(b-a)*t;
+
+/* ---- preloader ---- */
+(function(){
+  const fill=$('#loadFill'), pct=$('#loadPct'), loader=$('#loader');
+  let p=0; const t=setInterval(()=>{
+    p=Math.min(100,p+Math.random()*14+4);
+    fill.style.width=p+'%'; pct.textContent=Math.floor(p)+'%';
+    if(p>=100){clearInterval(t);setTimeout(()=>loader.classList.add('done'),350);}
+  },120);
+})();
+
+/* ---- custom cursor ---- */
+(function(){
+  const dot=$('#cursorDot'), ring=$('#cursorRing'); let mx=0,my=0,rx=0,ry=0;
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+  (function loop(){rx=lerp(rx,mx,.16);ry=lerp(ry,my,.16);ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+  document.addEventListener('mouseover',e=>{
+    ring.classList.toggle('hovering',!!e.target.closest('a,button,textarea,.step,.tier,.layer,.faq-q'));
+  });
+})();
+
+/* ---- pixel progress bar ---- */
+(function(){
+  const bar=$('#progress'), N=Math.ceil(innerWidth/14);
+  for(let i=0;i<N;i++)bar.appendChild(document.createElement('i'));
+  const cells=bar.children;
+  addEventListener('scroll',()=>{
+    const h=document.documentElement, pct=h.scrollTop/(h.scrollHeight-h.clientHeight);
+    const lit=Math.round(pct*N);
+    for(let i=0;i<N;i++)cells[i].classList.toggle('on',i<lit);
+  },{passive:true});
+})();
+
+/* ---- nav hide/show ---- */
+(function(){
+  const nav=$('#nav'); let last=0;
+  addEventListener('scroll',()=>{
+    const y=scrollY; nav.classList.toggle('hidden',y>140&&y>last); last=y;
+  },{passive:true});
+})();
+
+/* ---- reveal on scroll ---- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
+}),{threshold:.15});
+$$('.reveal').forEach(el=>io.observe(el));
+
+/* ---- counters ---- */
+const cio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return; cio.unobserve(e.target);
+  const el=e.target,end=+el.dataset.count,pre=el.dataset.prefix||'',suf=el.dataset.suffix||'',dur=1600,t0=performance.now();
+  (function tick(t){
+    const p=Math.min(1,(t-t0)/dur),ease=1-Math.pow(1-p,3);
+    el.textContent=pre+Math.round(end*ease)+suf;
+    if(p<1)requestAnimationFrame(tick);
+  })(t0);
+}),{threshold:.4});
+$$('[data-count]').forEach(el=>cio.observe(el));
+
+/* ---- scramble effect on display headings ---- */
+(function(){
+  const CH='█▓▒░<>/\\|01KIRO';
+  const sio=new IntersectionObserver(es=>es.forEach(e=>{
+    if(!e.isIntersecting)return; sio.unobserve(e.target);
+    const el=e.target, orig=el.textContent; let frame=0;
+    (function step(){
+      frame++;
+      el.textContent=orig.split('').map((c,i)=>
+        c===' '?' ':(i<frame/2?orig[i]:CH[Math.random()*CH.length|0])).join('');
+      if(frame/2<orig.length)requestAnimationFrame(step); else el.textContent=orig;
+    })();
+  }),{threshold:.6});
+  $$('h2.display').forEach(el=>sio.observe(el));
+})();
+
+/* ---- marquees ---- */
+(function(){
+  const items1=['COMPRESS 12×','−72% TOKEN SPEND','4M TOKEN HORIZON','~38MS LATENCY','99.98% RECALL','ZERO CONTEXT DRIFT'];
+  const items2=['SEMANTIC COMPACTION','ATTENTION BUDGETING','MEMORY FABRIC','MODEL-AGNOSTIC','STATELESS CORE','DROP-IN SDK'];
+  const build=arr=>arr.map(t=>`<span class="item ${Math.random()>.5?'hl':''}">${t}</span>`).join('');
+  $('#mq1').innerHTML=build(items1)+build(items1);
+  $('#mq2').innerHTML=build(items2)+build(items2);
+})();
+
+/* ---- to top ---- */
+(function(){
+  const b=$('#toTop');
+  addEventListener('scroll',()=>b.classList.toggle('show',scrollY>800),{passive:true});
+  b.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+})();
+
+/* ================= CANVAS: hero ================= */
+(function(){
+  const cv=$('#heroCanvas'),ctx=cv.getContext('2d');let W,H,cols,rows,cells=[],t=0;
+  const CELL=26;
+  function resize(){
+    W=cv.width=cv.offsetWidth*devicePixelRatio; H=cv.height=cv.offsetHeight*devicePixelRatio;
+    ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+    cols=Math.ceil(cv.offsetWidth/CELL);rows=Math.ceil(cv.offsetHeight/CELL);
+    cells=[];for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){
+      if(Math.random()>.16)continue;
+      cells.push({x,y,a:Math.random(),s:Math.random()*.015+.003,blue:Math.random()>.9});
+    }
+  }
+  resize();addEventListener('resize',resize);
+  let mouse={x:-999,y:-999};
+  cv.parentElement.addEventListener('mousemove',e=>{
+    const r=cv.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;
+  });
+  (function draw(){
+    t++;const w=cv.offsetWidth,h=cv.offsetHeight;ctx.clearRect(0,0,w,h);
+    for(const c of cells){
+      c.a+=c.s; if(c.a>1||c.a<0){c.s*=-1;c.a=Math.max(0,Math.min(1,c.a));}
+      const px=c.x*CELL,py=c.y*CELL;
+      const dx=px+CELL/2-mouse.x,dy=py+CELL/2-mouse.y,d=Math.hypot(dx,dy);
+      const boost=Math.max(0,1-d/220);
+      const al=c.a*.25+boost*.8;
+      ctx.fillStyle=c.blue?`rgba(47,84,255,${al})`:`rgba(244,245,247,${al*.5})`;
+      const sz=2+c.a*5+boost*5;
+      ctx.fillRect(px,py,sz,sz);
+      if(boost>.35){ctx.strokeStyle=`rgba(47,84,255,${boost*.6})`;ctx.strokeRect(px-2,py-2,sz+4,sz+4);}
+    }
+    requestAnimationFrame(draw);
+  })();
+})();
+
+/* ================= CANVAS: waste visual ================= */
+(function(){
+  const cv=$('#wasteCanvas'),ctx=cv.getContext('2d');let W,H,t=0;
+  function resize(){W=cv.width=cv.offsetWidth*devicePixelRatio;H=cv.height=cv.offsetHeight*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);}
+  resize();addEventListener('resize',resize);
+  const bars=[];for(let i=0;i<46;i++)bars.push({h:.25+Math.random()*.75,waste:Math.random()<.62,blue:Math.random()>.5});
+  (function draw(){
+    t++;const w=cv.offsetWidth,h=cv.offsetHeight;ctx.clearRect(0,0,w,h);
+    const bw=w/bars.length;
+    bars.forEach((b,i)=>{
+      const wave=Math.sin(t*.02+i*.5)*.08;
+      const bh=(b.h+wave)*h*.92;
+      const x=i*bw+1,y=h-bh;
+      if(b.waste){ctx.fillStyle='rgba(255,84,112,.75)';ctx.fillRect(x,y,bw-2,bh*.55);
+        ctx.fillStyle='rgba(244,245,247,.9)';ctx.fillRect(x,y+bh*.55,bw-2,bh*.45);}
+      else{ctx.fillStyle=b.blue?'rgba(47,84,255,.9)':'rgba(244,245,247,.85)';ctx.fillRect(x,y,bw-2,bh);}
+    });
+    ctx.fillStyle='rgba(255,255,255,.06)';ctx.fillRect(0,h-1,w,1);
+    requestAnimationFrame(draw);
+  })();
+})();
+
+/* ================= CANVAS: token stream pipeline ================= */
+(function(){
+  const cv=$('#streamCanvas'),ctx=cv.getContext('2d');
+  const stat=$('#streamStat');let W,H;
+  function resize(){W=cv.width=cv.offsetWidth*devicePixelRatio;H=cv.height=cv.offsetHeight*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);}
+  resize();addEventListener('resize',resize);
+  const glyphs='01<>[]{}#$%&KIROTOKEN';
+  class Tok{constructor(){this.reset(true)}
+    reset(init){
+      this.x=init?Math.random()*cv.offsetWidth:cv.offsetWidth+10;
+      this.y=14+Math.random()*(cv.offsetHeight-28);
+      this.v=.6+Math.random()*1.6;this.waste=Math.random()<.62;
+      this.g=glyphs[Math.random()*glyphs.length|0];this.sz=6+Math.random()*6;
+      this.dead=false;this.dying=0;this.jit=Math.random()*6.28;
+    }
+    step(){
+      this.x-=this.v;
+      if(this.waste&&this.x<cv.offsetWidth*.55){this.dying+=.05;if(this.dying>=1)this.reset(false);}
+      else if(this.x<-12)this.reset(false);
+    }
+    draw(){
+      const j=Math.sin(this.jit+=.1)*1.5;
+      if(this.dying>0){
+        const p=this.dying;
+        ctx.fillStyle=`rgba(255,84,112,${.9-p*.9})`;
+        ctx.font=`${this.sz}px JetBrains Mono,monospace`;
+        const yy=this.y+p*p*40+j;
+        ctx.fillText(this.g,this.x,yy);
+        if(Math.random()<.3){ctx.fillStyle=`rgba(83,224,255,${1-p})`;ctx.fillText(this.g,this.x,yy-14);}
+      }else{
+        ctx.fillStyle=this.waste?'rgba(139,144,153,.8)':'rgba(244,245,247,.95)';
+        ctx.font=`${this.sz}px JetBrains Mono,monospace`;
+        ctx.fillText(this.g,this.x,this.y+j);
+      }
+    }}
+  const toks=Array.from({length:110},()=>new Tok());
+  (function draw(){
+    const w=cv.offsetWidth,h=cv.offsetHeight;ctx.clearRect(0,0,w,h);
+    ctx.strokeStyle='rgba(47,84,255,.25)';ctx.setLineDash([4,6]);
+    ctx.beginPath();ctx.moveTo(w*.55,0);ctx.lineTo(w*.55,h);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='rgba(47,84,255,.9)';ctx.font='9px JetBrains Mono,monospace';
+    ctx.fillText('◈ COMPACTOR',w*.55-38,h-10);
+    toks.forEach(t=>{t.step();t.draw();});
+    const alive=toks.filter(t=>t.dying===0&&t.x>0&&t.x<w);
+    const removed=toks.filter(t=>t.dying>0||t.x<w*.55&&t.waste).length;
+    stat.textContent=`TOKENS: ${alive.length*18341} / WASTE REMOVED: ${Math.min(99,removed)}%`;
+    requestAnimationFrame(draw);
+  })();
+})();
+
+/* ================= layer hover fx ================= */
+$$('.layer').forEach(layer=>{
+  const cv=layer.querySelector('.lfx'),ctx=cv.getContext('2d');
+  function size(){cv.width=layer.offsetWidth;cv.height=layer.offsetHeight;}
+  size();addEventListener('resize',size);
+  layer.addEventListener('mousemove',e=>{
+    const r=layer.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
+    ctx.clearRect(0,0,cv.width,cv.height);
+    ctx.strokeStyle='rgba(47,84,255,.35)';
+    for(let i=1;i<4;i++){ctx.beginPath();ctx.arc(x,y,i*22,0,6.29);ctx.stroke();}
+    ctx.fillStyle='rgba(47,84,255,.9)';ctx.fillRect(x-2,y-2,4,4);
+  });
+});
+
+/* ================= DEMO ================= */
+(function(){
+  const inp=$('#demoInput'),out=$('#demoOut'),btn=$('#optimizeBtn'),
+        tokIn=$('#tokIn'),mFill=$('#mFill'),mPct=$('#mPct'),
+        savePct=$('#savePct'),saveSub=$('#saveSub');
+  const est=s=>Math.max(1,Math.round(s.length/4));
+  const upd=()=>tokIn.textContent=est(inp.value).toLocaleString();
+  inp.addEventListener('input',upd);upd();
+  const filler=/\b(as i was saying earlier|in summary|to summarize|in conclusion|note to self|reminder:|has not changed in six months|originally scheduled|moved again)\b/gi;
+  btn.addEventListener('click',()=>{
+    const text=inp.value;
+    const toks=est(text);
+    // split into chunks, mark cuts
+    const words=text.split(/(\s+)/);
+    let html='',kept=0,cut=0;
+    words.forEach(w=>{
+      if(!w.trim()){html+=w;return;}
+      const isFiller=filler.test(w);filler.lastIndex=0;
+      if(isFiller||Math.random()<.22){html+=`<span class="cut">${w}</span>`;cut+=est(w);}
+      else{html+=`<span class="keep">${w}</span>`;kept+=est(w);}
+    });
+    // add semantic summary line
+    const summary=`<br><span class="summ">◈ KIRO_SUMMARY → quarterly report: revenue +12% QoQ, margins up on reduced infra spend; meeting confirmed Tuesday; API rate limit 10k req/min/workspace unchanged.</span>`;
+    out.innerHTML=html+summary;
+    // scramble reveal
+    out.querySelectorAll('.cut').forEach(s=>s.style.opacity=.5);
+    const newToks=Math.round(kept+34);
+    const pctSave=Math.max(31,Math.min(88,Math.round(100-newToks/toks*100)));
+    const pctKeep=100-pctSave;
+    mFill.style.width=pctKeep+'%';
+    mPct.textContent=pctKeep+'% / 100%';
+    savePct.textContent='−'+pctSave+'%';
+    saveSub.textContent=`TOKEN SAVINGS (${toks.toLocaleString()} → ~${newToks.toLocaleString()})`;
+    // animate counter
+    let v=0;const step=pctSave/40;(function c(){v+=step;
+      if(v<pctSave){savePct.textContent='−'+Math.round(v)+'%';requestAnimationFrame(c);}
+      else savePct.textContent='−'+pctSave+'%';})();
+  });
+})();
+
+/* ================= PERF chart ================= */
+(function(){
+  const cv=$('#perfCanvas'),ctx=cv.getContext('2d');let W,H,prog=0,started=false;
+  function resize(){W=cv.width=cv.offsetWidth*devicePixelRatio;H=cv.height=cv.offsetHeight*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);}
+  resize();addEventListener('resize',resize);
+  const N=24;
+  const base=Array.from({length:N},(_,i)=>20+i*i*.55+Math.random()*10);   // grows quadratically
+  const kiro=Array.from({length:N},(_,i)=>18+i*1.9+Math.random()*8);      // grows linearly
+  const labels=['0','250','500','750','1000','2000','3000','4000'];
+  function draw(){
+    const w=cv.offsetWidth,h=cv.offsetHeight,pad={l:44,r:16,t:16,b:30};
+    ctx.clearRect(0,0,w,h);
+    const maxV=Math.max(...base)*1.1;
+    const X=i=>pad.l+(w-pad.l-pad.r)*i/(N-1);
+    const Y=v=>h-pad.b-(h-pad.t-pad.b)*v/maxV;
+    // grid
+    ctx.strokeStyle='rgba(255,255,255,.06)';ctx.lineWidth=1;
+    for(let g=0;g<=4;g++){const y=pad.t+(h-pad.t-pad.b)*g/4;
+      ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();}
+    // labels
+    ctx.fillStyle='rgba(139,144,153,.8)';ctx.font='9px JetBrains Mono,monospace';
+    labels.forEach((l,i)=>{if(i<labels.length)ctx.fillText(l,pad.l-8+(w-pad.l-pad.r)*i/(labels.length-1)-10,h-10);});
+    const upto=Math.floor(prog*N);
+    const line=(data,color,glow)=>{
+      ctx.strokeStyle=color;ctx.lineWidth=2;ctx.shadowColor=glow;ctx.shadowBlur=8;
+      ctx.beginPath();
+      for(let i=0;i<upto;i++){const x=X(i),y=Y(data[i]);i?ctx.lineTo(x,y):ctx.moveTo(x,y);}
+      ctx.stroke();ctx.shadowBlur=0;
+      if(upto>0){const i=upto-1;ctx.fillStyle=color;ctx.fillRect(X(i)-3,Y(data[i])-3,6,6);}
+    };
+    if(upto>0){line(base,'rgba(139,144,153,.9)',null);line(kiro,'#2f54ff','#2f54ff');}
+    // area under kiro
+    if(upto>1){ctx.beginPath();ctx.moveTo(X(0),Y(kiro[0]));
+      for(let i=1;i<upto;i++)ctx.lineTo(X(i),Y(kiro[i]));
+      ctx.lineTo(X(upto-1),h-pad.b);ctx.lineTo(X(0),h-pad.b);ctx.closePath();
+      ctx.fillStyle='rgba(47,84,255,.08)';ctx.fill();}
+    // delta callout
+    if(prog>.9){
+      const i=N-1,yb=Y(base[i]),yk=Y(kiro[i]);
+      ctx.setLineDash([3,5]);ctx.strokeStyle='rgba(83,224,255,.6)';
+      ctx.beginPath();ctx.moveTo(X(i),yb);ctx.lineTo(X(i),yk);ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle='#53e0ff';ctx.font='bold 12px JetBrains Mono,monospace';
+      ctx.fillText('−72%',X(i)-34,(yb+yk)/2+4);
+    }
+  }
+  draw();
+  new IntersectionObserver(es=>es.forEach(e=>{
+    if(!e.isIntersecting||started)return;started=true;
+    const t0=performance.now();
+    (function anim(t){prog=Math.min(1,(t-t0)/1800);draw();if(prog<1)requestAnimationFrame(anim);})(t0);
+  }),{threshold:.3}).observe(cv);
+})();
+
+/* ================= pricing toggle ================= */
+$$('.bill-toggle button').forEach(b=>b.addEventListener('click',()=>{
+  $$('.bill-toggle button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  const mode=b.dataset.mode;
+  $$('.pval').forEach(el=>{
+    const target=+(mode==='y'?el.dataset.y:el.dataset.m);
+    const from=+el.textContent,t0=performance.now();
+    (function tick(t){const p=Math.min(1,(t-t0)/400);
+      el.textContent=Math.round(lerp(from,target,1-Math.pow(1-p,3)));
+      if(p<1)requestAnimationFrame(tick);})(t0);
+  });
+}));
+
+/* ================= FAQ ================= */
+$$('.faq-item').forEach(item=>{
+  item.querySelector('.faq-q').addEventListener('click',()=>{
+    const open=item.classList.contains('open');
+    $$('.faq-item').forEach(i=>{i.classList.remove('open');i.querySelector('.faq-a').style.maxHeight=0;});
+    if(!open){item.classList.add('open');
+      const a=item.querySelector('.faq-a');a.style.maxHeight=a.scrollHeight+'px';}
+  });
+});
+
+/* ================= newsletter ================= */
+$('#nlBtn').addEventListener('click',()=>{
+  const i=$('#nlInput');if(i.value.includes('@')){i.value='';i.placeholder='◈ YOU ARE IN. WATCH THE LOOP.';}
+  else i.placeholder='◈ ENTER A VALID EMAIL';
+});
+
+/* ================= parallax on section tags ================= */
+$$('.sec-tag').forEach(el=>{
+  el.style.willChange='transform';
+  new IntersectionObserver(es=>es.forEach(()=>{}),{threshold:0}).observe(el);
+});
+addEventListener('scroll',()=>{
+  $$('.sec-tag').forEach(el=>{
+    const r=el.getBoundingClientRect();
+    const p=(r.top-innerHeight/2)/innerHeight;
+    el.style.transform=`translateX(${p*-30}px)`;
+  });
+},{passive:true});
+</script>
+</body>
+</html>
