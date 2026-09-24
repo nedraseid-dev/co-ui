@@ -22,10 +22,10 @@ export default function Footer() {
               <svg className="logo-mark w-[30px] h-[30px]" viewBox="0 0 38 38">
                 <use href="#kiro-mark" fill="#f4f5f7" />
               </svg>
-              kiro<span className="text-blue-2">.</span>
+              viro<span className="text-blue-2">.</span>
             </div>
             <p className="foot-desc text-dim text-[13px] leading-[1.8] max-w-[300px]">
-              The token optimization layer for long-horizon AI. Compress the past, budget the present, extend the future.
+              A context runtime for long-horizon AI. Keep the signal, reduce the replay.
             </p>
             <div className="newsletter flex mt-[26px] border border-line2 max-w-[320px]">
               <input
@@ -47,15 +47,15 @@ export default function Footer() {
           </div>
 
           <div className="foot-col">
-            <h4 className="font-mono text-[10px] tracking-[0.3em] text-dim2 mb-[20px]">PRODUCT</h4>
+            <h4 className="font-mono text-[10px] tracking-[0.3em] text-dim2 mb-[20px]">DEVELOPER</h4>
             <a href="#how" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
-              How it works
+              Docs
             </a>
             <a href="#layers" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
-              Capabilities
+              API
             </a>
             <a href="#demo" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
-              Live demo
+              Examples
             </a>
             <a href="#pricing" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
               Pricing
@@ -63,23 +63,23 @@ export default function Footer() {
           </div>
 
           <div className="foot-col">
-            <h4 className="font-mono text-[10px] tracking-[0.3em] text-dim2 mb-[20px]">RESOURCES</h4>
+            <h4 className="font-mono text-[10px] tracking-[0.3em] text-dim2 mb-[20px]">PROJECT</h4>
             <a href="#changelog" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
-              Changelog
+              GitHub
             </a>
             <a href="#faq" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
               FAQ
             </a>
             <a href="#perf" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
-              Benchmarks
+              Privacy
             </a>
             <a href="#voices" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
-              Field reports
+              Terms
             </a>
           </div>
 
           <div className="foot-col">
-            <h4 className="font-mono text-[10px] tracking-[0.3em] text-dim2 mb-[20px]">COMPANY</h4>
+            <h4 className="font-mono text-[10px] tracking-[0.3em] text-dim2 mb-[20px]">VIRO</h4>
             <a href="#cta" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
               Careers
             </a>
@@ -96,7 +96,7 @@ export default function Footer() {
         </div>
 
         <div className="foot-bottom flex justify-between flex-wrap gap-[14px] mt-[70px] pt-[26px] border-t border-line font-mono text-[10px] tracking-[0.15em] text-dim2">
-          <span>© 2026 KIRO SYSTEMS — ALL TOKENS ACCOUNTED FOR</span>
+          <span>© 2026 VIRO SYSTEMS — ALL TOKENS ACCOUNTED FOR</span>
           <span>BUILT FOR THE LONG HORIZON ◈</span>
         </div>
       </div>

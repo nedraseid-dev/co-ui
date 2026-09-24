@@ -3,11 +3,10 @@ import React, { useEffect, useState, useRef } from 'react';
 const GLYPHS = '█▓▒░<>/\\|01KIRO';
 
 const NAV_LINKS = [
+  { id: 'setup', label: 'DOCS' },
+  { id: 'how', label: 'API' },
+  { id: 'github', label: 'GITHUB', href: 'https://github.com' },
   { id: 'how', label: 'HOW IT WORKS' },
-  { id: 'layers', label: 'CAPABILITIES' },
-  { id: 'demo', label: 'DEMO' },
-  { id: 'perf', label: 'RESULTS' },
-  { id: 'pricing', label: 'PRICING' },
   { id: 'faq', label: 'FAQ' },
 ];
 
@@ -57,7 +56,7 @@ function NavLink({ id, label, isActive }) {
 
   return (
     <a
-      href={`#${id}`}
+      href={id === 'github' ? 'https://github.com' : `#${id}`}
       className={`relative py-[4px] transition-colors duration-250 ${
         isActive ? 'text-white active' : 'text-dim hover:text-white'
       }`}
@@ -116,7 +115,7 @@ export default function Navbar() {
         <svg className="w-[26px] h-[26px]" viewBox="0 0 38 38">
           <use href="#kiro-mark" fill="#f4f5f7" />
         </svg>
-        kiro<span className="text-blue-2">.</span>
+        viro<span className="text-blue-2">.</span>
       </a>
 
       <div className="hidden md:flex gap-[30px] font-mono text-[11px] tracking-[0.18em] text-dim nav-links">
@@ -131,13 +130,9 @@ export default function Navbar() {
       </div>
 
       <div className="flex items-center gap-[16px]">
-        <div className="hidden md:flex items-center gap-[7px] font-mono text-[10px] tracking-[0.15em] text-dim border border-line py-[6px] px-[12px] status-chip">
-          <span className="dot" />
-          SYSTEMS NOMINAL
-        </div>
-        <a className="btn solid" href="#pricing">
+        <a className="btn solid" href="#setup">
           <span className="sq" />
-          <span>GET ACCESS</span>
+          <span>INSTALL</span>
         </a>
       </div>
     </nav>

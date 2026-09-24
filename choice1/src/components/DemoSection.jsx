@@ -37,7 +37,7 @@ export default function DemoSection() {
       }
     });
 
-    const summary = `<br><span class="summ">◈ KIRO_SUMMARY → quarterly report: revenue +12% QoQ, margins up on reduced infra spend; meeting confirmed Tuesday; API rate limit 10k req/min/workspace unchanged.</span>`;
+    const summary = `<br><span class="summ">◈ VIRO_SUMMARY → quarterly report: revenue +12% QoQ, margins up on reduced infra spend; meeting confirmed Tuesday; API rate limit 10k req/min/workspace unchanged.</span>`;
     setOptimizedHtml(html + summary);
 
     const newToks = Math.round(kept + 34);
@@ -66,16 +66,16 @@ export default function DemoSection() {
     <section id="demo" className="py-[clamp(90px,12vw,160px)] bg-bg2">
       <div className="wrap">
         <div className="sec-tag reveal">
-          <b>N.04</b> &gt; INTERACTIVE
+          <b>N.05</b> &gt; CONTEXT TRACE
         </div>
 
         <h2 className="display reveal">
-          Paste context.
+          Inspect the pass.
           <br />
-          Watch it <em>shrink.</em>
+          See what <em>survives.</em>
         </h2>
         <p className="sub reveal" data-d="1">
-          A live simulation of Kiro's compaction pass. Drop any long-winded text — a meeting transcript, a doc, an agent log — and see what survives the budget cut.
+          Run a local example through VIRO's compaction pass. Kept spans remain visible; discarded repetition is marked in the trace.
         </p>
 
         <div className="demo-grid grid grid-cols-1 lg:grid-cols-2 gap-[1px] bg-line border border-line mt-[64px]">
@@ -108,7 +108,7 @@ export default function DemoSection() {
           {/* Output Pane */}
           <div className="demo-pane reveal bg-bg p-[34px]" data-d="3">
             <div className="dp-head font-mono text-[10px] tracking-[0.25em] text-dim2 flex justify-between mb-[20px]">
-              <span>◈ KIRO OUTPUT</span>
+                <span>◈ VIRO OUTPUT</span>
               <span>COMPACTED</span>
             </div>
 
@@ -119,7 +119,7 @@ export default function DemoSection() {
               {optimizedHtml ? (
                 <div dangerouslySetInnerHTML={{ __html: optimizedHtml }} />
               ) : (
-                <span className="text-dim2">// awaiting input — press OPTIMIZE</span>
+                <span className="text-dim2">// awaiting input — press COMPACT</span>
               )}
             </div>
 

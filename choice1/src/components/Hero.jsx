@@ -1,6 +1,5 @@
 import React from 'react';
 import HeroCanvas from './HeroCanvas';
-import CountUp from './CountUp';
 
 export default function Hero() {
   return (
@@ -10,73 +9,47 @@ export default function Hero() {
       <div className="wrap relative z-[2] w-full">
         <div className="hero-badge reveal">
           <i className="w-[6px] h-[6px] bg-blue block animate-[blink_1.4s_infinite]" />
-          KIRO V2.4 — LONG-HORIZON TOKEN ENGINE
+          VIRO / LONG-HORIZON CONTEXT RUNTIME
         </div>
 
         <h1 className="hero-title text-[clamp(44px,8.4vw,124px)] leading-[0.98] font-medium tracking-[-0.03em] uppercase">
           <span className="row">
-            <span>EVERY TOKEN,</span>
+              <span>LONG RUNS,</span>
           </span>
           <span className="row">
             <span>
-              <span className="outline glitch" data-text="OPTIMIZED">OPTIMIZED</span>
+                <span className="outline glitch" data-text="LESS WASTE">LESS WASTE</span>
             </span>
           </span>
           <span className="row">
             <span>
-              FOR THE <span className="fill-blue">LONG RUN.</span>
+              FOR YOUR <span className="fill-blue">AGENTS.</span>
             </span>
           </span>
         </h1>
 
         <div className="hero-meta flex flex-wrap gap-[clamp(24px,5vw,80px)] items-end justify-between mt-[54px]">
           <p className="hero-desc reveal max-w-[420px] text-dim text-[15px] leading-[1.75]" data-d="2">
-            Kiro is the intelligence layer that <b className="text-white font-medium">compresses, prunes and budgets context</b> across million-token windows — so your agents remember everything, pay for almost nothing, and never lose the plot.
+            VIRO compresses redundant context across long AI runs, lowering token cost without changing your prompts, model or workflow.
           </p>
           <div className="hero-cta reveal flex gap-[14px] flex-wrap" data-d="3">
-            <a className="btn solid" href="#demo">
+            <a className="btn solid" href="#setup">
               <span className="sq" />
-              <span>RUN THE DEMO</span>
+              <span>npm install viro-sdk</span>
             </a>
-            <a className="btn" href="#how">
-              <span>READ THE FLOW</span>
+            <a className="btn" href="#faq">
+              <span>VIEW DOCS</span>
               <span>→</span>
             </a>
           </div>
         </div>
 
-        <div className="hero-stats reveal grid grid-cols-2 md:grid-cols-4 border border-line mt-[70px]" data-d="4">
-          <div className="p-[22px_24px] border-r border-b md:border-b-0 border-line">
-            <div className="num font-mono text-[clamp(20px,2.4vw,32px)] font-bold">
-              <CountUp end={72} suffix="%" />
-            </div>
-            <div className="lbl font-mono text-[9px] tracking-[0.25em] text-dim2 mt-[6px] uppercase">
-              Token spend reduced
-            </div>
-          </div>
-          <div className="p-[22px_24px] md:border-r border-b md:border-b-0 border-line">
-            <div className="num font-mono text-[clamp(20px,2.4vw,32px)] font-bold">
-              <CountUp end={4} suffix="M" />
-            </div>
-            <div className="lbl font-mono text-[9px] tracking-[0.25em] text-dim2 mt-[6px] uppercase">
-              Effective context horizon
-            </div>
-          </div>
-          <div className="p-[22px_24px] border-r border-line">
-            <div className="num font-mono text-[clamp(20px,2.4vw,32px)] font-bold">
-              <CountUp end={38} prefix="~" suffix="ms" />
-            </div>
-            <div className="lbl font-mono text-[9px] tracking-[0.25em] text-dim2 mt-[6px] uppercase">
-              Compaction latency
-            </div>
-          </div>
-          <div className="p-[22px_24px]">
-            <div className="num font-mono text-[clamp(20px,2.4vw,32px)] font-bold">
-              <CountUp end={99} suffix=".98%" />
-            </div>
-            <div className="lbl font-mono text-[9px] tracking-[0.25em] text-dim2 mt-[6px] uppercase">
-              Recall fidelity
-            </div>
+        <div className="hero-terminal reveal border border-line bg-panel mt-[70px] font-mono text-[12px] leading-[2]" data-d="4">
+          <div className="flex justify-between border-b border-line px-[20px] py-[12px] text-[10px] tracking-[0.2em] text-dim2"><span>VIRO TRACE // SESSION 8471-B</span><span>LIVE</span></div>
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-[20px] items-center p-[24px]">
+            <div><div className="text-dim2 mb-[8px]">RAW CONTEXT</div><div className="text-[#ff5470]">128,420 tokens</div><div className="text-dim2">history + tool output + repeats</div></div>
+            <div className="text-blue-2 text-[18px]">&#8594; VIRO &#8594;</div>
+            <div><div className="text-dim2 mb-[8px]">ACTIVE CONTEXT</div><div className="text-cyan">35,910 tokens</div><div className="text-dim2">signal retained / noise pruned</div></div>
           </div>
         </div>
       </div>

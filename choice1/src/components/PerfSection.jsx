@@ -1,173 +1,35 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
+
+const METRICS = [
+  ['TOKENS SAVED', '9.42M', 'across 2,184 runs'],
+  ['COMPRESSION', '72.4%', 'median over 30 days'],
+  ['SESSIONS OPTIMIZED', '1,906', 'active long-horizon jobs'],
+  ['RETRIEVAL P95', '38ms', 'on-demand context return'],
+];
 
 export default function PerfSection() {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    const cv = canvasRef.current;
-    if (!cv) return;
-    const ctx = cv.getContext('2d');
-    let prog = 0;
-    let started = false;
-    let animId;
-
-    function resize() {
-      const dpr = window.devicePixelRatio || 1;
-      cv.width = cv.offsetWidth * dpr;
-      cv.height = cv.offsetHeight * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-
-    resize();
-    window.addEventListener('resize', resize);
-
-    const N = 24;
-    const base = Array.from({ length: N }, (_, i) => 20 + i * i * 0.55 + Math.random() * 10);
-    const kiro = Array.from({ length: N }, (_, i) => 18 + i * 1.9 + Math.random() * 8);
-    const labels = ['0', '250', '500', '750', '1000', '2000', '3000', '4000'];
-
-    function draw() {
-      const w = cv.offsetWidth;
-      const h = cv.offsetHeight;
-      const pad = { l: 44, r: 16, t: 16, b: 30 };
-      ctx.clearRect(0, 0, w, h);
-
-      const maxV = Math.max(...base) * 1.1;
-      const X = (i) => pad.l + ((w - pad.l - pad.r) * i) / (N - 1);
-      const Y = (v) => h - pad.b - ((h - pad.t - pad.b) * v) / maxV;
-
-      // grid lines
-      ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-      ctx.lineWidth = 1;
-      for (let g = 0; g <= 4; g++) {
-        const y = pad.t + ((h - pad.t - pad.b) * g) / 4;
-        ctx.beginPath();
-        ctx.moveTo(pad.l, y);
-        ctx.lineTo(w - pad.r, y);
-        ctx.stroke();
-      }
-
-      // x labels
-      ctx.fillStyle = 'rgba(139,144,153,0.8)';
-      ctx.font = '9px JetBrains Mono, monospace';
-      labels.forEach((l, i) => {
-        if (i < labels.length) {
-          ctx.fillText(l, pad.l - 8 + ((w - pad.l - pad.r) * i) / (labels.length - 1) - 10, h - 10);
-        }
-      });
-
-      const upto = Math.floor(prog * N);
-      const line = (data, color, glow) => {
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 2;
-        ctx.shadowColor = glow;
-        ctx.shadowBlur = glow ? 8 : 0;
-        ctx.beginPath();
-        for (let i = 0; i < upto; i++) {
-          const x = X(i);
-          const y = Y(data[i]);
-          i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
-        }
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-        if (upto > 0) {
-          const i = upto - 1;
-          ctx.fillStyle = color;
-          ctx.fillRect(X(i) - 3, Y(data[i]) - 3, 6, 6);
-        }
-      };
-
-      if (upto > 0) {
-        line(base, 'rgba(139,144,153,0.9)', null);
-        line(kiro, '#2f54ff', '#2f54ff');
-      }
-
-      // area under kiro
-      if (upto > 1) {
-        ctx.beginPath();
-        ctx.moveTo(X(0), Y(kiro[0]));
-        for (let i = 1; i < upto; i++) ctx.lineTo(X(i), Y(kiro[i]));
-        ctx.lineTo(X(upto - 1), h - pad.b);
-        ctx.lineTo(X(0), h - pad.b);
-        ctx.closePath();
-        ctx.fillStyle = 'rgba(47,84,255,0.08)';
-        ctx.fill();
-      }
-
-      // delta callout
-      if (prog > 0.9) {
-        const i = N - 1;
-        const yb = Y(base[i]);
-        const yk = Y(kiro[i]);
-        ctx.setLineDash([3, 5]);
-        ctx.strokeStyle = 'rgba(83,224,255,0.6)';
-        ctx.beginPath();
-        ctx.moveTo(X(i), yb);
-        ctx.lineTo(X(i), yk);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.fillStyle = '#53e0ff';
-        ctx.font = 'bold 12px JetBrains Mono, monospace';
-        ctx.fillText('−72%', X(i) - 34, (yb + yk) / 2 + 4);
-      }
-    }
-
-    draw();
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (!e.isIntersecting || started) return;
-          started = true;
-          const t0 = performance.now();
-          function anim(now) {
-            prog = Math.min(1, (now - t0) / 1800);
-            draw();
-            if (prog < 1) {
-              animId = requestAnimationFrame(anim);
-            }
-          }
-          animId = requestAnimationFrame(anim);
-        });
-      },
-      { threshold: 0.3 }
-    );
-
-    observer.observe(cv);
-
-    return () => {
-      window.removeEventListener('resize', resize);
-      observer.disconnect();
-      cancelAnimationFrame(animId);
-    };
-  }, []);
-
   return (
     <section id="perf" className="py-[clamp(90px,12vw,160px)]">
       <div className="wrap">
-        <div className="sec-tag reveal">
-          <b>N.05</b> &gt; MEASURED
+        <div className="sec-tag reveal"><b>N.06</b> &gt; LIVE METRICS</div>
+        <div className="flex flex-wrap justify-between gap-[24px] items-end">
+          <h2 className="display reveal">Less context.<br /><span className="blue-word">Same signal.</span></h2>
+          <p className="sub reveal max-w-[320px]" data-d="1">A representative VIRO workspace view. Numbers are synthetic, the accounting model is real.</p>
         </div>
-
-        <h2 className="display reveal">
-          Less spend.
-          <br />
-          Zero <em>drift.</em>
-        </h2>
-
-        <div className="perf-wrap reveal border border-line bg-panel p-[clamp(20px,3vw,40px)] mt-[64px]" data-d="2">
-          <div className="perf-head flex justify-between flex-wrap gap-[14px] font-mono text-[10px] tracking-[0.2em] text-dim2 mb-[20px]">
-            <span>◈ COST PER RESOLVED TASK — SESSION LENGTH (K TOKENS)</span>
-            <div className="perf-legend flex gap-[20px]">
-              <i className="not-italic inline-flex items-center gap-[7px] before:content-[''] before:w-[9px] before:h-[9px] before:inline-block before:bg-dim2">
-                BASELINE
-              </i>
-              <i className="not-italic inline-flex items-center gap-[7px] before:content-[''] before:w-[9px] before:h-[9px] before:inline-block before:bg-blue">
-                WITH KIRO
-              </i>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border border-line mt-[64px] bg-panel">
+          {METRICS.map(([label, value, detail], index) => (
+            <div key={label} className={`reveal p-[26px] min-h-[170px] ${index < 3 ? 'border-r border-b lg:border-b-0 border-line' : 'border-b lg:border-b-0 border-line'}`} data-d={String(index + 1)}>
+              <div className="font-mono text-[10px] tracking-[0.2em] text-dim2">{label}</div>
+              <div className="font-mono text-[clamp(30px,4vw,52px)] font-bold leading-none mt-[38px] text-white">{value}</div>
+              <div className="font-mono text-[10px] tracking-[0.12em] text-blue-2 mt-[12px]">{detail}</div>
             </div>
+          ))}
+        </div>
+        <div className="reveal border border-line border-t-0 bg-panel p-[24px]" data-d="4">
+          <div className="flex justify-between font-mono text-[10px] tracking-[0.18em] text-dim2 mb-[14px]"><span>CONTEXT UTILIZATION / 24H</span><span className="text-cyan">TARGET &lt; 40%</span></div>
+          <div className="flex items-end gap-[4px] h-[86px]">
+            {[82, 76, 88, 71, 69, 63, 59, 57, 51, 48, 44, 39, 35, 38, 32, 29, 31, 26, 24, 28, 22, 25, 20, 18].map((height, index) => <i key={index} className="flex-1 bg-blue opacity-[0.85]" style={{ height: `${height}%` }} />)}
           </div>
-          <canvas id="perfCanvas" ref={canvasRef} className="w-full h-[380px] block" />
         </div>
       </div>
     </section>

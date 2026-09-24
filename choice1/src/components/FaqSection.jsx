@@ -4,19 +4,19 @@ const FAQS = [
   {
     num: '//01',
     q: 'Does compaction hurt model accuracy?',
-    a: 'No — when it\'s done selectively. Kiro keeps decision-critical spans verbatim and only compresses redundant or low-salience content. In benchmarks across 12 long-horizon suites, task success rates matched or exceeded full-context baselines while using 72% fewer tokens.',
+    a: 'No — when it\'s done selectively. VIRO keeps decision-critical spans verbatim and only compresses redundant or low-salience content. In representative long-horizon runs, task success stays aligned with the full-context baseline while using fewer tokens.',
     delay: '1',
   },
   {
     num: '//02',
     q: 'Which models and providers are supported?',
-    a: 'All of them, transparently. Kiro sits between your application and any provider — OpenAI, Anthropic, Gemini, Mistral, or self-hosted weights. It\'s a middleware layer, not a model, so nothing about your stack needs to change.',
+    a: 'All of them, transparently. VIRO sits between your application and any provider. It is a middleware layer, not a model, so nothing about your stack needs to change.',
     delay: '1',
   },
   {
     num: '//03',
     q: 'How does the memory fabric recall old context?',
-    a: 'Everything is indexed into hot, warm and cold tiers. When a task needs something old, Kiro fetches the exact spans — not a blurry summary — promoted to hot context in under 40ms. Your agent gets the precision of RAG with the continuity of a single conversation.',
+    a: 'Everything is indexed into hot, warm and cold tiers. When a task needs something old, VIRO fetches the exact spans, promoted to active context on demand. Your agent keeps continuity without replaying the entire session.',
     delay: '2',
   },
   {
@@ -73,13 +73,13 @@ export default function FaqSection() {
     <section id="faq" className="py-[clamp(90px,12vw,160px)]">
       <div className="wrap">
         <div className="sec-tag reveal">
-          <b>N.09</b> &gt; FAQ
+          <b>N.07</b> &gt; FAQ
         </div>
 
         <h2 className="display reveal">
-          Questions?
+          Technical
           <br />
-          We've got <em>answers.</em>
+          <em>answers.</em>
         </h2>
 
         <div className="faq-list mt-[64px] border-t border-line">

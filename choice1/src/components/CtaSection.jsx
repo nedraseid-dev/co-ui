@@ -10,23 +10,23 @@ export default function CtaSection() {
         </div>
 
         <div className="mega reveal" data-d="1">
-          STOP PAYING
+          SHIP MORE
           <br />
-          <span className="outline">FOR NOISE.</span>
+          <span className="outline">WITH LESS CONTEXT.</span>
         </div>
 
         <div className="mega reveal mt-[10px]" data-d="2">
-          START SHIPPING <span className="fill">SIGNAL.</span>
+          START WITH <span className="fill">VIRO.</span>
         </div>
 
         <div className="cta-sub reveal font-mono text-[11px] tracking-[0.3em] text-dim my-[34px_44px]" data-d="3">
-          FREE TIER — NO CARD — 5 MINUTE SETUP
+          FREE TIER — MODEL AGNOSTIC — 5 MINUTE SETUP
         </div>
 
         <div className="reveal" data-d="4">
-          <a className="btn solid text-[13px] p-[20px_44px]" href="#hero">
+          <a className="btn solid text-[13px] p-[20px_44px]" href="#setup">
             <span className="sq" />
-            <span>DEPLOY KIRO ▸</span>
+            <span>npm install viro-sdk ▸</span>
           </a>
         </div>
       </div>

@@ -7,18 +7,18 @@ export default function ProblemSection() {
     <section id="problem" className="py-[clamp(90px,12vw,160px)]">
       <div className="wrap">
         <div className="sec-tag reveal">
-          <b>N.01</b> &gt; THE BOTTLENECK
+          <b>N.01</b> &gt; THE PROBLEM
         </div>
 
         <div className="problem-grid grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-[clamp(40px,6vw,100px)] items-start">
           <div>
             <h2 className="display reveal">
-              Context is expensive.
+              Long sessions
               <br />
-              <em>Redundancy</em> is the tax.
+              <em>carry dead weight.</em>
             </h2>
             <p className="sub reveal" data-d="1">
-              Long-horizon agents drown in their own history. Every replayed document, every repeated system prompt, every stale tool result burns budget and attention. Kiro removes what doesn't matter — surgically.
+              Every turn replays more context than the model needs. The bill rises while the useful signal stays flat.
             </p>
 
             <div className="big-counter reveal font-mono text-[clamp(48px,7vw,96px)] font-bold leading-none my-[26px_8px]" data-d="2">
@@ -27,7 +27,7 @@ export default function ProblemSection() {
             </div>
 
             <p className="dim reveal font-mono text-[11px] tracking-[0.2em]" data-d="2">
-              OF TOKENS IN A TYPICAL 1M-TOKEN SESSION CARRY ZERO DECISION VALUE.
+              OF TOKENS IN A LONG-RUN SESSION CARRY NO NEW DECISION VALUE.
             </p>
 
             <div className="mini-stats reveal grid grid-cols-2 border border-line mt-[44px]" data-d="3">
@@ -36,7 +36,7 @@ export default function ProblemSection() {
                   <CountUp end={41} suffix="%" />
                 </div>
                 <div className="l font-mono text-[10px] tracking-[0.2em] text-dim2 mt-[5px] uppercase">
-                  Prompt duplication
+                  Repeated history
                 </div>
               </div>
               <div className="p-[22px] border-b border-line">
@@ -52,7 +52,7 @@ export default function ProblemSection() {
                   <CountUp end={8} suffix="%" />
                 </div>
                 <div className="l font-mono text-[10px] tracking-[0.2em] text-dim2 mt-[5px] uppercase">
-                  Re-explained context
+                  Context bloat
                 </div>
               </div>
               <div className="p-[22px]">
@@ -60,7 +60,7 @@ export default function ProblemSection() {
                   <CountUp end={31} suffix="×" />
                 </div>
                 <div className="l font-mono text-[10px] tracking-[0.2em] text-dim2 mt-[5px] uppercase">
-                  Cheaper per resolved task
+                  Cost multiplier
                 </div>
               </div>
             </div>
@@ -69,7 +69,7 @@ export default function ProblemSection() {
           <div className="problem-visual reveal relative border border-line bg-panel p-[26px] min-h-[420px] overflow-hidden" data-d="2">
             <div className="pv-head flex justify-between font-mono text-[10px] tracking-[0.2em] text-dim2 border-b border-line pb-[14px] mb-[14px]">
               <span>SESSION // 8471-B</span>
-              <span>RAW STREAM</span>
+              <span>BEFORE PRUNING</span>
             </div>
             <WasteCanvas />
             <div className="pv-foot font-mono text-[10px] text-dim2 tracking-[0.15em] flex justify-between mt-[12px]">

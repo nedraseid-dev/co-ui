@@ -8,33 +8,30 @@ import Hero from './components/Hero';
 import Marquee from './components/Marquee';
 import ProblemSection from './components/ProblemSection';
 import HowItWorksSection from './components/HowItWorksSection';
-import LayersSection from './components/LayersSection';
 import DemoSection from './components/DemoSection';
 import PerfSection from './components/PerfSection';
-import VoicesSection from './components/VoicesSection';
-import PricingSection from './components/PricingSection';
-import ChangelogSection from './components/ChangelogSection';
+import SetupSection from './components/SetupSection';
 import FaqSection from './components/FaqSection';
 import CtaSection from './components/CtaSection';
 import Footer from './components/Footer';
 import BackToTop from './components/BackToTop';
 
 const MARQUEE_ITEMS_1 = [
-  'COMPRESS 12×',
+  'VIRO SDK',
   '−72% TOKEN SPEND',
   '4M TOKEN HORIZON',
-  '~38MS LATENCY',
-  '99.98% RECALL',
-  'ZERO CONTEXT DRIFT',
+  '~38MS RETRIEVAL',
+  'MODEL AGNOSTIC',
+  'ZERO WORKFLOW CHANGES',
 ];
 
 const MARQUEE_ITEMS_2 = [
-  'SEMANTIC COMPACTION',
-  'ATTENTION BUDGETING',
-  'MEMORY FABRIC',
-  'MODEL-AGNOSTIC',
+  'OBSERVE',
+  'COMPRESS',
+  'RETRIEVE ON DEMAND',
+  'TRACEABLE CONTEXT',
   'STATELESS CORE',
-  'DROP-IN SDK',
+  'DROP-IN RUNTIME',
 ];
 
 export default function App() {
@@ -54,12 +51,9 @@ export default function App() {
         <ProblemSection />
         <Marquee items={MARQUEE_ITEMS_2} reverse={true} />
         <HowItWorksSection />
-        <LayersSection />
+        <SetupSection />
         <DemoSection />
         <PerfSection />
-        <VoicesSection />
-        <PricingSection />
-        <ChangelogSection />
         <FaqSection />
         <CtaSection />
       </main>
