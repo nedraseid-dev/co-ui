@@ -67,12 +67,12 @@ export default function HeroCanvas() {
         const boost = Math.max(0, 1 - d / 220);
         const al = c.a * 0.25 + boost * 0.8;
         ctx.fillStyle = c.blue
-          ? `rgba(47,84,255,${al})`
+          ? `rgba(255,107,0,${al})`
           : `rgba(244,245,247,${al * 0.5})`;
         const sz = 2 + c.a * 5 + boost * 5;
         ctx.fillRect(px, py, sz, sz);
         if (boost > 0.35) {
-          ctx.strokeStyle = `rgba(47,84,255,${boost * 0.6})`;
+          ctx.strokeStyle = `rgba(255,107,0,${boost * 0.6})`;
           ctx.strokeRect(px - 2, py - 2, sz + 4, sz + 4);
         }
       }

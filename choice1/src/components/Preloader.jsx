@@ -33,7 +33,7 @@ export default function Preloader() {
           <use href="#parsim-mark" fill="#fff" />
         </svg>
         <div className="font-mono text-[22px] tracking-[-0.05em] text-white">parsim</div>
-        <div className="font-mono text-[9px] text-blue-2">the token razor</div>
+        <div className="font-mono text-[9px] text-[#FF6B00]">the token razor</div>
       </div>
       <div className="w-[220px] h-[2px] bg-line relative overflow-hidden">
         <i

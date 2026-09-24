@@ -8,7 +8,7 @@ export default function Hero() {
       <div className="grid-bg" />
       <div className="wrap relative z-[2] w-full">
         <div className="hero-badge reveal">
-          <i className="w-[6px] h-[6px] bg-blue block animate-[blink_1.4s_infinite]" />
+          <i className="w-[6px] h-[6px] bg-[#FF6B00] block animate-[blink_1.4s_infinite]" />
           PARSIM / LONG-HORIZON CONTEXT RUNTIME
         </div>
 
@@ -47,9 +47,9 @@ export default function Hero() {
         <div className="hero-terminal reveal border border-line bg-panel mt-[70px] font-mono text-[12px] leading-[2]" data-d="4">
           <div className="flex justify-between border-b border-line px-[20px] py-[12px] text-[10px] tracking-[0.2em] text-dim2"><span>PARSIM TRACE // SESSION 8471-B</span><span>LIVE</span></div>
           <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-[20px] items-center p-[24px]">
-            <div><div className="text-dim2 mb-[8px]">RAW CONTEXT</div><div className="text-[#ff5470]">128,420 tokens</div><div className="text-dim2">history + tool output + repeats</div></div>
-            <div className="text-blue-2 text-[18px]">&#8594; PARSIM &#8594;</div>
-            <div><div className="text-dim2 mb-[8px]">ACTIVE CONTEXT</div><div className="text-cyan">35,910 tokens</div><div className="text-dim2">signal retained / noise pruned</div></div>
+            <div><div className="text-dim2 mb-[8px]">RAW CONTEXT</div><div className="text-white">128,420 tokens</div><div className="text-dim2">history + tool output + repeats</div></div>
+            <div className="text-white text-[18px]">&#8594; PARSIM &#8594;</div>
+            <div><div className="text-dim2 mb-[8px]">ACTIVE CONTEXT</div><div className="text-white">35,910 tokens</div><div className="text-dim2">signal retained / noise pruned</div></div>
           </div>
         </div>
       </div>

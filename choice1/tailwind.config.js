@@ -13,10 +13,10 @@ export default {
         line: 'rgba(255, 255, 255, 0.08)',
         line2: 'rgba(255, 255, 255, 0.14)',
         blue: {
-          DEFAULT: '#2f54ff',
-          2: '#5d7bff',
+          DEFAULT: '#FF6B00',
+          2: '#CC5500',
         },
-        cyan: '#53e0ff',
+        cyan: '#FF6B00',
         white: '#f4f5f7',
         dim: '#8b9099',
         dim2: '#555a63',

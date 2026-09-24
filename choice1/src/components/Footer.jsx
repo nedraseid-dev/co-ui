@@ -22,7 +22,7 @@ export default function Footer() {
               <svg className="logo-mark w-[34px] h-[28px]" viewBox="0 0 42 32">
                 <use href="#parsim-mark" fill="#f4f5f7" />
               </svg>
-              <span className="flex flex-col leading-none gap-[3px]"><span>parsim</span><span className="text-[9px] font-normal text-blue-2">the token razor</span></span>
+              <span className="flex flex-col leading-none gap-[3px]"><span>parsim</span><span className="text-[9px] font-normal text-[#FF6B00]">the token razor</span></span>
             </div>
             <p className="foot-desc text-dim text-[13px] leading-[1.8] max-w-[300px]">
               A context runtime for long-horizon AI. Keep the signal, reduce the replay.

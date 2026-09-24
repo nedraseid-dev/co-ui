@@ -117,7 +117,7 @@ export default function Navbar() {
         </svg>
         <span className="flex flex-col leading-none gap-[3px]">
           <span className="text-[18px] tracking-[-0.04em]">parsim</span>
-          <span className="text-[8px] font-normal tracking-[0.02em] text-blue-2">the token razor</span>
+          <span className="text-[8px] font-normal tracking-[0.02em] text-[#FF6B00]">the token razor</span>
         </span>
       </a>
 

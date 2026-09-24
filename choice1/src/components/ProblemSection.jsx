@@ -23,7 +23,7 @@ export default function ProblemSection() {
 
             <div className="big-counter reveal font-mono text-[clamp(48px,7vw,96px)] font-bold leading-none my-[26px_8px]" data-d="2">
               <CountUp end={68} suffix="%" />
-              <span className="text-blue-2">_</span>
+              <span className="text-[#FF6B00]">_</span>
             </div>
 
             <p className="dim reveal font-mono text-[11px] tracking-[0.2em]" data-d="2">
@@ -74,7 +74,7 @@ export default function ProblemSection() {
             <WasteCanvas />
             <div className="pv-foot font-mono text-[10px] text-dim2 tracking-[0.15em] flex justify-between mt-[12px]">
               <span>■ NECESSARY CONTEXT</span>
-              <span className="text-[#ff5470]">■ REDUNDANT WASTE</span>
+              <span className="text-white">■ REDUNDANT WASTE</span>
             </div>
           </div>
         </div>

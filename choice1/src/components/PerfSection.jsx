@@ -21,14 +21,14 @@ export default function PerfSection() {
             <div key={label} className={`reveal p-[26px] min-h-[170px] ${index < 3 ? 'border-r border-b lg:border-b-0 border-line' : 'border-b lg:border-b-0 border-line'}`} data-d={String(index + 1)}>
               <div className="font-mono text-[10px] tracking-[0.2em] text-dim2">{label}</div>
               <div className="font-mono text-[clamp(30px,4vw,52px)] font-bold leading-none mt-[38px] text-white">{value}</div>
-              <div className="font-mono text-[10px] tracking-[0.12em] text-blue-2 mt-[12px]">{detail}</div>
+              <div className="font-mono text-[10px] tracking-[0.12em] text-[#FF6B00] mt-[12px]">{detail}</div>
             </div>
           ))}
         </div>
         <div className="reveal border border-line border-t-0 bg-panel p-[24px]" data-d="4">
-          <div className="flex justify-between font-mono text-[10px] tracking-[0.18em] text-dim2 mb-[14px]"><span>CONTEXT UTILIZATION / 24H</span><span className="text-cyan">TARGET &lt; 40%</span></div>
+          <div className="flex justify-between font-mono text-[10px] tracking-[0.18em] text-dim2 mb-[14px]"><span>CONTEXT UTILIZATION / 24H</span><span className="text-white">TARGET &lt; 40%</span></div>
           <div className="flex items-end gap-[4px] h-[86px]">
-            {[82, 76, 88, 71, 69, 63, 59, 57, 51, 48, 44, 39, 35, 38, 32, 29, 31, 26, 24, 28, 22, 25, 20, 18].map((height, index) => <i key={index} className="flex-1 bg-blue opacity-[0.85]" style={{ height: `${height}%` }} />)}
+            {[82, 76, 88, 71, 69, 63, 59, 57, 51, 48, 44, 39, 35, 38, 32, 29, 31, 26, 24, 28, 22, 25, 20, 18].map((height, index) => <i key={index} className="flex-1 bg-white opacity-[0.85]" style={{ height: `${height}%` }} />)}
           </div>
         </div>
       </div>

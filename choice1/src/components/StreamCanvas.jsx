@@ -53,12 +53,12 @@ export default function StreamCanvas() {
         const j = Math.sin((this.jit += 0.1)) * 1.5;
         if (this.dying > 0) {
           const p = this.dying;
-          ctx.fillStyle = `rgba(255,84,112,${0.9 - p * 0.9})`;
+          ctx.fillStyle = `rgba(204,85,0,${0.9 - p * 0.9})`;
           ctx.font = `${this.sz}px JetBrains Mono, monospace`;
           const yy = this.y + p * p * 40 + j;
           ctx.fillText(this.g, this.x, yy);
           if (Math.random() < 0.3) {
-            ctx.fillStyle = `rgba(83,224,255,${1 - p})`;
+            ctx.fillStyle = `rgba(255,107,0,${1 - p})`;
             ctx.fillText(this.g, this.x, yy - 14);
           }
         } else {
@@ -77,7 +77,7 @@ export default function StreamCanvas() {
       const h = cv.offsetHeight;
       ctx.clearRect(0, 0, w, h);
 
-      ctx.strokeStyle = 'rgba(47,84,255,0.25)';
+      ctx.strokeStyle = 'rgba(255,107,0,0.25)';
       ctx.setLineDash([4, 6]);
       ctx.beginPath();
       ctx.moveTo(w * 0.55, 0);
@@ -85,7 +85,7 @@ export default function StreamCanvas() {
       ctx.stroke();
       ctx.setLineDash([]);
 
-      ctx.fillStyle = 'rgba(47,84,255,0.9)';
+      ctx.fillStyle = 'rgba(255,107,0,0.9)';
       ctx.font = '9px JetBrains Mono, monospace';
       ctx.fillText('◈ COMPACTOR', w * 0.55 - 38, h - 10);
 

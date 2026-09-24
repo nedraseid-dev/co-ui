@@ -16,7 +16,7 @@ export default function HowItWorksSection() {
         </h2>
 
         <div className="steps grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border border-line mt-[64px]">
-          <div className="step reveal p-[34px_28px_40px] border-r border-b lg:border-b-0 border-line relative transition-[background] duration-350 hover:bg-[rgba(47,84,255,0.06)]" data-d="1">
+          <div className="step reveal p-[34px_28px_40px] border-r border-b lg:border-b-0 border-line relative transition-[background] duration-350 hover:bg-[rgba(255,107,0,0.06)]" data-d="1">
             <div className="idx font-mono text-[10px] text-dim2 tracking-[0.3em]">//001</div>
             <svg className="glyph absolute top-[30px] right-[26px] w-[38px] h-[38px]" viewBox="0 0 38 38">
               <g fill="none" stroke="#8b9099" strokeWidth="1.5">
@@ -29,10 +29,10 @@ export default function HowItWorksSection() {
             </p>
           </div>
 
-          <div className="step reveal p-[34px_28px_40px] border-r border-b lg:border-b-0 border-line relative transition-[background] duration-350 hover:bg-[rgba(47,84,255,0.06)]" data-d="2">
+          <div className="step reveal p-[34px_28px_40px] border-r border-b lg:border-b-0 border-line relative transition-[background] duration-350 hover:bg-[rgba(255,107,0,0.06)]" data-d="2">
             <div className="idx font-mono text-[10px] text-dim2 tracking-[0.3em]">//002</div>
             <svg className="glyph absolute top-[30px] right-[26px] w-[38px] h-[38px]" viewBox="0 0 38 38">
-              <g fill="#2f54ff">
+              <g fill="#FF6B00">
                 <rect x="4" y="16" width="8" height="8" />
                 <rect x="16" y="8" width="8" height="8" />
                 <rect x="16" y="24" width="8" height="8" />
@@ -45,14 +45,14 @@ export default function HowItWorksSection() {
             </p>
           </div>
 
-          <div className="step reveal p-[34px_28px_40px] border-r border-b sm:border-b-0 border-line relative transition-[background] duration-350 hover:bg-[rgba(47,84,255,0.06)]" data-d="3">
+          <div className="step reveal p-[34px_28px_40px] border-r border-b sm:border-b-0 border-line relative transition-[background] duration-350 hover:bg-[rgba(255,107,0,0.06)]" data-d="3">
             <div className="idx font-mono text-[10px] text-dim2 tracking-[0.3em]">//003</div>
             <svg className="glyph absolute top-[30px] right-[26px] w-[38px] h-[38px]" viewBox="0 0 38 38">
               <g fill="none" stroke="#8b9099" strokeWidth="1.5">
                 <rect x="5" y="5" width="12" height="12" />
                 <rect x="21" y="5" width="12" height="12" />
                 <rect x="5" y="21" width="12" height="12" />
-                <path d="M21 27h12M27 21v12" stroke="#2f54ff" />
+                <path d="M21 27h12M27 21v12" stroke="#FF6B00" />
               </g>
             </svg>
             <h3 className="text-[21px] font-medium my-[52px_14px]">Retrieve on demand</h3>

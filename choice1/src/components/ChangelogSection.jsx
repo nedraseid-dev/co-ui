@@ -45,7 +45,7 @@ export default function ChangelogSection() {
           {CHANGELOGS.map((item, idx) => (
             <div
               key={idx}
-              className="cl-row reveal grid grid-cols-1 md:grid-cols-[130px_130px_1fr_auto] gap-[8px] md:gap-[20px] items-center py-[26px] border-b border-line transition-all duration-300 ease-kiro-ease hover:pl-[16px] hover:bg-[rgba(47,84,255,0.05)] group"
+              className="cl-row reveal grid grid-cols-1 md:grid-cols-[130px_130px_1fr_auto] gap-[8px] md:gap-[20px] items-center py-[26px] border-b border-line transition-all duration-300 ease-kiro-ease hover:pl-[16px] hover:bg-[rgba(255,107,0,0.05)] group"
               data-d={item.delay}
             >
               <span className="cl-date font-mono text-[11px] text-dim2">{item.date}</span>

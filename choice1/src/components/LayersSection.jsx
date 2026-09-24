@@ -23,13 +23,13 @@ export function LayerCard({ idx, title, desc, tags, delay }) {
       const x = e.clientX - r.left;
       const y = e.clientY - r.top;
       ctx.clearRect(0, 0, cv.width, cv.height);
-      ctx.strokeStyle = 'rgba(47,84,255,0.35)';
+      ctx.strokeStyle = 'rgba(255,107,0,0.35)';
       for (let i = 1; i < 4; i++) {
         ctx.beginPath();
         ctx.arc(x, y, i * 22, 0, 6.29);
         ctx.stroke();
       }
-      ctx.fillStyle = 'rgba(47,84,255,0.9)';
+      ctx.fillStyle = 'rgba(255,107,0,0.9)';
       ctx.fillRect(x - 2, y - 2, 4, 4);
     };
 
@@ -53,7 +53,7 @@ export function LayerCard({ idx, title, desc, tags, delay }) {
       className="layer reveal bg-bg p-[40px_32px_48px] relative overflow-hidden min-h-[340px] flex flex-col transition-[background] duration-400 hover:bg-panel group"
       data-d={delay}
     >
-      <div className="l-glow absolute -top-[60px] -right-[60px] w-[180px] h-[180px] bg-[radial-gradient(circle,rgba(47,84,255,0.35),transparent_70%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
+      <div className="l-glow absolute -top-[60px] -right-[60px] w-[180px] h-[180px] bg-[radial-gradient(circle,rgba(255,107,0,0.35),transparent_70%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
       <canvas ref={canvasRef} className="lfx absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-400 group-hover:opacity-100" />
       <div className="l-idx font-mono text-[10px] text-dim2 tracking-[0.3em]">{idx}</div>
       <h3 className="text-[24px] font-medium my-[70px_14px]">{title}</h3>

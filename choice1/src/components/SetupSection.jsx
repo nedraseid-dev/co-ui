@@ -13,12 +13,12 @@ export default function SetupSection() {
           <div className="reveal border border-line bg-panel font-mono text-[12px] leading-[2]" data-d="2">
             <div className="flex justify-between border-b border-line px-[20px] py-[12px] text-[10px] tracking-[0.2em] text-dim2"><span>TERMINAL</span><span>PARSIM // READY</span></div>
             <div className="p-[22px] text-dim">
-              <div><span className="text-blue-2">$</span> npm install parsim-sdk</div>
+              <div><span className="text-[#FF6B00]">$</span> npm install parsim-sdk</div>
               <div className="text-dim2">added 1 package in 1.8s</div>
-              <div className="mt-[12px]"><span className="text-blue-2">$</span> parsim init</div>
+              <div className="mt-[12px]"><span className="text-[#FF6B00]">$</span> parsim init</div>
               <div className="text-white">&#9656; context observer online</div>
               <div className="text-white">&#9656; retrieval policy: on-demand</div>
-              <div className="text-blue-2">&#9656; no prompt or model changes detected</div>
+              <div className="text-[#FF6B00]">&#9656; no prompt or model changes detected</div>
             </div>
           </div>
         </div>

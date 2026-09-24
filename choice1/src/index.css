@@ -8,9 +8,9 @@
   --panel: #0c0d11;
   --line: rgba(255, 255, 255, 0.08);
   --line2: rgba(255, 255, 255, 0.14);
-  --blue: #2f54ff;
-  --blue2: #5d7bff;
-  --cyan: #53e0ff;
+  --blue: #ff6b00;
+  --blue2: #cc5500;
+  --cyan: #ff6b00;
   --white: #f4f5f7;
   --dim: #8b9099;
   --dim2: #555a63;
@@ -33,6 +33,7 @@ body {
   background: var(--bg) url('/viro-background.png') center / cover fixed no-repeat;
   color: var(--white);
   font-family: var(--disp);
+  font-size: 14px;
   overflow-x: hidden;
   cursor: none;
 }
@@ -196,7 +197,7 @@ nav.hidden-nav {
 }
 .nav-links a:hover,
 .nav-links a.active {
-  color: var(--white);
+  color: var(--blue2);
 }
 .nav-links a:hover::after,
 .nav-links a.active::after {
@@ -205,8 +206,8 @@ nav.hidden-nav {
 .status-chip .dot {
   width: 6px;
   height: 6px;
-  background: #37e08b;
-  box-shadow: 0 0 8px #37e08b;
+  background: var(--blue);
+  box-shadow: 0 0 8px var(--blue);
   animation: blink 1.6s infinite;
 }
 
@@ -230,7 +231,7 @@ nav.hidden-nav {
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--blue);
+  background: var(--blue2);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.35s var(--ease);
@@ -301,7 +302,7 @@ h2.display .blue-word {
 }
 .sub {
   color: var(--dim);
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.7;
   max-width: 440px;
   margin-top: 22px;
@@ -433,7 +434,7 @@ h2.display .blue-word {
   content: "";
   width: 8px;
   height: 8px;
-  background: var(--blue);
+  background: #FF6B00;
   display: inline-block;
 }
 .marquee .item.hl {
@@ -458,7 +459,7 @@ h2.display .blue-word {
 
 /* demo cuts and highlights */
 .demo-out .keep { color: var(--white); }
-.demo-out .cut { color: var(--dim2); text-decoration: line-through; text-decoration-color: rgba(255, 84, 112, 0.6); }
+.demo-out .cut { color: var(--dim2); text-decoration: line-through; text-decoration-color: rgba(204, 85, 0, 0.6); }
 .demo-out .summ { color: var(--blue2); }
 
 /* faq icon animation */

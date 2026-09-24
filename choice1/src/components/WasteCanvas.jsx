@@ -43,12 +43,12 @@ export default function WasteCanvas() {
         const y = h - bh;
 
         if (b.waste) {
-          ctx.fillStyle = 'rgba(255,84,112,0.75)';
+          ctx.fillStyle = 'rgba(204,85,0,0.75)';
           ctx.fillRect(x, y, bw - 2, bh * 0.55);
           ctx.fillStyle = 'rgba(244,245,247,0.9)';
           ctx.fillRect(x, y + bh * 0.55, bw - 2, bh * 0.45);
         } else {
-          ctx.fillStyle = b.blue ? 'rgba(47,84,255,0.9)' : 'rgba(244,245,247,0.85)';
+          ctx.fillStyle = b.blue ? 'rgba(255,107,0,0.9)' : 'rgba(244,245,247,0.85)';
           ctx.fillRect(x, y, bw - 2, bh);
         }
       });
