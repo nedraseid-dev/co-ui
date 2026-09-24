@@ -11,7 +11,7 @@ export default function PerfSection() {
   return (
     <section id="perf" className="py-[clamp(90px,12vw,160px)]">
       <div className="wrap">
-        <div className="sec-tag reveal"><b>N.06</b> &gt; LIVE METRICS</div>
+        <div className="sec-tag reveal"><b>N.05</b> &gt; LIVE METRICS</div>
         <div className="flex flex-wrap justify-between gap-[24px] items-end">
           <h2 className="display reveal">Less context.<br /><span className="blue-word">Same signal.</span></h2>
           <p className="sub reveal max-w-[320px]" data-d="1">A representative parsim workspace view. Numbers are synthetic, the accounting model is real.</p>

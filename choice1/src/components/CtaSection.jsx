@@ -6,7 +6,7 @@ export default function CtaSection() {
       <div className="grid-bg" />
       <div className="wrap relative z-[1]">
         <div className="sec-tag reveal justify-center">
-          <b>N.10</b> &gt; BEGIN
+          <b>N.07</b> &gt; BEGIN
         </div>
 
         <div className="mega reveal" data-d="1">

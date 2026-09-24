@@ -66,7 +66,7 @@ export default function DemoSection() {
     <section id="demo" className="py-[clamp(90px,12vw,160px)] bg-bg2">
       <div className="wrap">
         <div className="sec-tag reveal">
-          <b>N.05</b> &gt; CONTEXT TRACE
+          <b>N.04</b> &gt; CONTEXT TRACE
         </div>
 
         <h2 className="display reveal">

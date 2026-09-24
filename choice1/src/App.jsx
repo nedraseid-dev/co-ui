@@ -2,7 +2,6 @@ import React from 'react';
 import { useKiroEffects } from './hooks/useKiroEffects';
 import Preloader from './components/Preloader';
 import CustomCursor from './components/CustomCursor';
-import ProgressBar from './components/ProgressBar';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Marquee from './components/Marquee';
@@ -41,7 +40,6 @@ export default function App() {
     <>
       <div className="noise" />
       <CustomCursor />
-      <ProgressBar />
       <Preloader />
       <Navbar />
 

@@ -3,10 +3,9 @@ import React, { useEffect, useState, useRef } from 'react';
 const GLYPHS = '█▓▒░<>/\\|01KIRO';
 
 const NAV_LINKS = [
-  { id: 'setup', label: 'DOCS' },
-  { id: 'how', label: 'API' },
-  { id: 'github', label: 'GITHUB', href: 'https://github.com' },
-  { id: 'how', label: 'HOW IT WORKS' },
+  { id: 'how', label: 'How it works' },
+  { id: 'setup', label: 'Docs' },
+  { id: 'demo', label: 'API' },
   { id: 'faq', label: 'FAQ' },
 ];
 
@@ -56,7 +55,7 @@ function NavLink({ id, label, isActive }) {
 
   return (
     <a
-      href={id === 'github' ? 'https://github.com' : `#${id}`}
+      href={`#${id}`}
       className={`relative py-[4px] transition-colors duration-250 ${
         isActive ? 'text-white active' : 'text-dim hover:text-white'
       }`}

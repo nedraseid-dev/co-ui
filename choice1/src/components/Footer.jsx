@@ -39,7 +39,7 @@ export default function Footer() {
               <button
                 type="button"
                 onClick={handleSubscribe}
-                className="bg-blue text-white border-0 font-mono text-[10px] tracking-[0.2em] px-[20px] transition-opacity hover:opacity-90 cursor-none"
+                className="bg-[#FF6B00] text-white border-0 font-mono text-[10px] tracking-[0.2em] px-[20px] transition-colors hover:bg-white hover:text-black cursor-none"
               >
                 JOIN
               </button>
@@ -48,45 +48,45 @@ export default function Footer() {
 
           <div className="foot-col">
             <h4 className="font-mono text-[10px] tracking-[0.3em] text-dim2 mb-[20px]">DEVELOPER</h4>
-            <a href="#how" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
+            <a href="#how" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-[#FF6B00] hover:pl-[6px]">
               Docs
             </a>
-            <a href="#layers" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
+            <a href="#layers" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-[#FF6B00] hover:pl-[6px]">
               API
             </a>
-            <a href="#demo" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
+            <a href="#demo" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-[#FF6B00] hover:pl-[6px]">
               Examples
             </a>
-            <a href="#pricing" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
+            <a href="#pricing" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-[#FF6B00] hover:pl-[6px]">
               Pricing
             </a>
           </div>
 
           <div className="foot-col">
             <h4 className="font-mono text-[10px] tracking-[0.3em] text-dim2 mb-[20px]">PROJECT</h4>
-            <a href="#changelog" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
+            <a href="#changelog" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-[#FF6B00] hover:pl-[6px]">
               GitHub
             </a>
-            <a href="#faq" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
+            <a href="#faq" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-[#FF6B00] hover:pl-[6px]">
               FAQ
             </a>
-            <a href="#perf" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
+            <a href="#perf" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-[#FF6B00] hover:pl-[6px]">
               Privacy
             </a>
-            <a href="#voices" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
+            <a href="#voices" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-[#FF6B00] hover:pl-[6px]">
               Terms
             </a>
           </div>
 
           <div className="foot-col">
             <h4 className="font-mono text-[10px] tracking-[0.3em] text-dim2 mb-[20px]">PARSIM</h4>
-            <a href="#cta" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
+            <a href="#cta" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-[#FF6B00] hover:pl-[6px]">
               Careers
             </a>
-            <a href="#cta" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
+            <a href="#cta" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-[#FF6B00] hover:pl-[6px]">
               Contact
             </a>
-            <a href="#cta" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
+            <a href="#cta" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-[#FF6B00] hover:pl-[6px]">
               Press kit
             </a>
             <a href="#cta" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">

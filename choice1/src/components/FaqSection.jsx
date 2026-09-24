@@ -71,7 +71,7 @@ export default function FaqSection() {
     <section id="faq" className="py-[clamp(90px,12vw,160px)]">
       <div className="wrap">
         <div className="sec-tag reveal">
-          <b>N.07</b> &gt; FAQ
+          <b>N.06</b> &gt; FAQ
         </div>
 
         <h2 className="display reveal">
