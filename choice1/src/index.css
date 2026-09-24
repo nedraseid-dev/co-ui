@@ -30,11 +30,20 @@ html {
 }
 
 body {
-  background: var(--bg);
+  background: var(--bg) url('/viro-background.png') center / cover fixed no-repeat;
   color: var(--white);
   font-family: var(--disp);
   overflow-x: hidden;
   cursor: none;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(6, 6, 8, 0.58), rgba(6, 6, 8, 0.9));
 }
 
 ::selection {
