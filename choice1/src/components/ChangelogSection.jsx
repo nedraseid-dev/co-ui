@@ -53,7 +53,7 @@ export default function ChangelogSection() {
                 {item.tag}
               </span>
               <span className="cl-title text-[17px]">{item.title}</span>
-              <span className="cl-arr font-mono text-dim2 transition-all duration-300 group-hover:text-blue group-hover:translate-x-[6px]">
+              <span className="cl-arr font-mono text-dim2 transition-all duration-300 group-hover:text-[#FF6B00] group-hover:translate-x-[6px]">
                 →
               </span>
             </div>

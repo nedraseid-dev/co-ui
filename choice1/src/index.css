@@ -9,7 +9,7 @@
   --line: rgba(255, 255, 255, 0.08);
   --line2: rgba(255, 255, 255, 0.14);
   --blue: #ff6b00;
-  --blue2: #cc5500;
+  --blue2: #ff6b00;
   --cyan: #ff6b00;
   --white: #f4f5f7;
   --dim: #8b9099;
@@ -231,7 +231,7 @@ nav.hidden-nav {
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--blue2);
+  background: #FF6B00;
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.35s var(--ease);

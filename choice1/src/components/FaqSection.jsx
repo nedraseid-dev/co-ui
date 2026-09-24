@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 
 const FAQS = [
   {
@@ -34,14 +34,13 @@ const FAQS = [
 ];
 
 function FaqItem({ item, isOpen, onToggle }) {
-  const contentRef = useRef(null);
-
   return (
-    <div className={`faq-item reveal border-b border-line ${isOpen ? 'open' : ''}`} data-d={item.delay}>
+    <div className={`faq-item border-b border-line ${isOpen ? 'open' : ''}`}>
       <button
         type="button"
-        className="faq-q w-full bg-none border-0 text-white flex justify-between items-center gap-[20px] py-[28px] text-left font-display text-[clamp(17px,2vw,22px)] font-medium transition-colors duration-300 hover:text-blue-2"
+        className="faq-q w-full bg-none border-0 text-white flex justify-between items-center gap-[20px] py-[28px] text-left font-display text-[clamp(17px,2vw,22px)] font-medium transition-colors duration-300 hover:text-[#FF6B00]"
         onClick={onToggle}
+        aria-expanded={isOpen}
       >
         <span className="flex items-center">
           <span className="fi font-mono text-[10px] text-dim2 tracking-[0.2em] mr-[18px]">{item.num}</span>
@@ -50,10 +49,9 @@ function FaqItem({ item, isOpen, onToggle }) {
         <span className="plus w-[14px] h-[14px] relative flex-none" />
       </button>
       <div
-        ref={contentRef}
         className="faq-a overflow-hidden transition-[max-height] duration-550 ease-kiro-ease"
         style={{
-          maxHeight: isOpen && contentRef.current ? `${contentRef.current.scrollHeight}px` : '0px',
+          maxHeight: isOpen ? '500px' : '0px',
         }}
       >
         <p className="text-dim text-[14px] leading-[1.8] max-w-[720px] pb-[30px]">{item.a}</p>
