@@ -9,7 +9,7 @@ export default function Hero() {
       <div className="wrap relative z-[2] w-full">
         <div className="hero-badge reveal">
           <i className="w-[6px] h-[6px] bg-blue block animate-[blink_1.4s_infinite]" />
-          VIRO / LONG-HORIZON CONTEXT RUNTIME
+          PARSIM / LONG-HORIZON CONTEXT RUNTIME
         </div>
 
         <h1 className="hero-title text-[clamp(44px,8.4vw,124px)] leading-[0.98] font-medium tracking-[-0.03em] uppercase">
@@ -30,12 +30,12 @@ export default function Hero() {
 
         <div className="hero-meta flex flex-wrap gap-[clamp(24px,5vw,80px)] items-end justify-between mt-[54px]">
           <p className="hero-desc reveal max-w-[420px] text-dim text-[15px] leading-[1.75]" data-d="2">
-            VIRO compresses redundant context across long AI runs, lowering token cost without changing your prompts, model or workflow.
+            parsim compresses redundant context across long AI runs, lowering token cost without changing your prompts, model or workflow.
           </p>
           <div className="hero-cta reveal flex gap-[14px] flex-wrap" data-d="3">
             <a className="btn solid" href="#setup">
               <span className="sq" />
-              <span>npm install viro-sdk</span>
+              <span>npm install parsim-sdk</span>
             </a>
             <a className="btn" href="#faq">
               <span>VIEW DOCS</span>
@@ -45,10 +45,10 @@ export default function Hero() {
         </div>
 
         <div className="hero-terminal reveal border border-line bg-panel mt-[70px] font-mono text-[12px] leading-[2]" data-d="4">
-          <div className="flex justify-between border-b border-line px-[20px] py-[12px] text-[10px] tracking-[0.2em] text-dim2"><span>VIRO TRACE // SESSION 8471-B</span><span>LIVE</span></div>
+          <div className="flex justify-between border-b border-line px-[20px] py-[12px] text-[10px] tracking-[0.2em] text-dim2"><span>PARSIM TRACE // SESSION 8471-B</span><span>LIVE</span></div>
           <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-[20px] items-center p-[24px]">
             <div><div className="text-dim2 mb-[8px]">RAW CONTEXT</div><div className="text-[#ff5470]">128,420 tokens</div><div className="text-dim2">history + tool output + repeats</div></div>
-            <div className="text-blue-2 text-[18px]">&#8594; VIRO &#8594;</div>
+            <div className="text-blue-2 text-[18px]">&#8594; PARSIM &#8594;</div>
             <div><div className="text-dim2 mb-[8px]">ACTIVE CONTEXT</div><div className="text-cyan">35,910 tokens</div><div className="text-dim2">signal retained / noise pruned</div></div>
           </div>
         </div>

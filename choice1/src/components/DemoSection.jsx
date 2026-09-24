@@ -37,7 +37,7 @@ export default function DemoSection() {
       }
     });
 
-    const summary = `<br><span class="summ">◈ VIRO_SUMMARY → quarterly report: revenue +12% QoQ, margins up on reduced infra spend; meeting confirmed Tuesday; API rate limit 10k req/min/workspace unchanged.</span>`;
+    const summary = `<br><span class="summ">◈ PARSIM_SUMMARY → quarterly report: revenue +12% QoQ, margins up on reduced infra spend; meeting confirmed Tuesday; API rate limit 10k req/min/workspace unchanged.</span>`;
     setOptimizedHtml(html + summary);
 
     const newToks = Math.round(kept + 34);
@@ -75,7 +75,7 @@ export default function DemoSection() {
           See what <em>survives.</em>
         </h2>
         <p className="sub reveal" data-d="1">
-          Run a local example through VIRO's compaction pass. Kept spans remain visible; discarded repetition is marked in the trace.
+          Run a local example through parsim's compaction pass. Kept spans remain visible; discarded repetition is marked in the trace.
         </p>
 
         <div className="demo-grid grid grid-cols-1 lg:grid-cols-2 gap-[1px] bg-line border border-line mt-[64px]">
@@ -108,7 +108,7 @@ export default function DemoSection() {
           {/* Output Pane */}
           <div className="demo-pane reveal bg-bg p-[34px]" data-d="3">
             <div className="dp-head font-mono text-[10px] tracking-[0.25em] text-dim2 flex justify-between mb-[20px]">
-                <span>◈ VIRO OUTPUT</span>
+                <span>◈ PARSIM OUTPUT</span>
               <span>COMPACTED</span>
             </div>
 

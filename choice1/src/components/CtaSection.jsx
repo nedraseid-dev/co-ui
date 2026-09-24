@@ -16,7 +16,7 @@ export default function CtaSection() {
         </div>
 
         <div className="mega reveal mt-[10px]" data-d="2">
-          START WITH <span className="fill">VIRO.</span>
+          START WITH <span className="fill">PARSIM.</span>
         </div>
 
         <div className="cta-sub reveal font-mono text-[11px] tracking-[0.3em] text-dim my-[34px_44px]" data-d="3">
@@ -26,7 +26,7 @@ export default function CtaSection() {
         <div className="reveal" data-d="4">
           <a className="btn solid text-[13px] p-[20px_44px]" href="#setup">
             <span className="sq" />
-            <span>npm install viro-sdk ▸</span>
+            <span>npm install parsim-sdk ▸</span>
           </a>
         </div>
       </div>

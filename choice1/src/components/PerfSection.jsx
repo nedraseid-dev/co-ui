@@ -14,7 +14,7 @@ export default function PerfSection() {
         <div className="sec-tag reveal"><b>N.06</b> &gt; LIVE METRICS</div>
         <div className="flex flex-wrap justify-between gap-[24px] items-end">
           <h2 className="display reveal">Less context.<br /><span className="blue-word">Same signal.</span></h2>
-          <p className="sub reveal max-w-[320px]" data-d="1">A representative VIRO workspace view. Numbers are synthetic, the accounting model is real.</p>
+          <p className="sub reveal max-w-[320px]" data-d="1">A representative parsim workspace view. Numbers are synthetic, the accounting model is real.</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border border-line mt-[64px] bg-panel">
           {METRICS.map(([label, value, detail], index) => (

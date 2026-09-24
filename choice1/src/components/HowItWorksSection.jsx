@@ -6,7 +6,7 @@ export default function HowItWorksSection() {
     <section id="how" className="py-[clamp(90px,12vw,160px)] bg-bg2">
       <div className="wrap">
         <div className="sec-tag reveal">
-          <b>N.02</b> &gt; HOW VIRO WORKS
+          <b>N.02</b> &gt; HOW PARSIM WORKS
         </div>
 
         <h2 className="display reveal">
@@ -25,7 +25,7 @@ export default function HowItWorksSection() {
             </svg>
             <h3 className="text-[21px] font-medium my-[52px_14px]">Observe</h3>
             <p className="text-dim text-[13px] leading-[1.7]">
-              VIRO maps conversation, tool traces and memory as they arrive without changing the model call.
+              parsim maps conversation, tool traces and memory as they arrive without changing the model call.
             </p>
           </div>
 

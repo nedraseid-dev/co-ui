@@ -4,19 +4,19 @@ const FAQS = [
   {
     num: '//01',
     q: 'Does compaction hurt model accuracy?',
-    a: 'No — when it\'s done selectively. VIRO keeps decision-critical spans verbatim and only compresses redundant or low-salience content. In representative long-horizon runs, task success stays aligned with the full-context baseline while using fewer tokens.',
+    a: 'No — when it\'s done selectively. parsim keeps decision-critical spans verbatim and only compresses redundant or low-salience content. In representative long-horizon runs, task success stays aligned with the full-context baseline while using fewer tokens.',
     delay: '1',
   },
   {
     num: '//02',
     q: 'Which models and providers are supported?',
-    a: 'All of them, transparently. VIRO sits between your application and any provider. It is a middleware layer, not a model, so nothing about your stack needs to change.',
+    a: 'All of them, transparently. parsim sits between your application and any provider. It is a middleware layer, not a model, so nothing about your stack needs to change.',
     delay: '1',
   },
   {
     num: '//03',
     q: 'How does the memory fabric recall old context?',
-    a: 'Everything is indexed into hot, warm and cold tiers. When a task needs something old, VIRO fetches the exact spans, promoted to active context on demand. Your agent keeps continuity without replaying the entire session.',
+    a: 'Everything is indexed into hot, warm and cold tiers. When a task needs something old, parsim fetches the exact spans, promoted to active context on demand. Your agent keeps continuity without replaying the entire session.',
     delay: '2',
   },
   {

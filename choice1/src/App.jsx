@@ -17,7 +17,7 @@ import Footer from './components/Footer';
 import BackToTop from './components/BackToTop';
 
 const MARQUEE_ITEMS_1 = [
-  'VIRO SDK',
+  'PARSIM SDK',
   '−72% TOKEN SPEND',
   '4M TOKEN HORIZON',
   '~38MS RETRIEVAL',

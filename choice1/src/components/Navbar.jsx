@@ -112,10 +112,13 @@ export default function Navbar() {
       }`}
     >
       <a className="flex items-center gap-[11px] font-mono font-bold text-[17px] tracking-[0.06em]" href="#hero">
-        <svg className="w-[26px] h-[26px]" viewBox="0 0 38 38">
-          <use href="#kiro-mark" fill="#f4f5f7" />
+        <svg className="w-[30px] h-[30px]" viewBox="0 0 42 32">
+          <use href="#parsim-mark" fill="#f4f5f7" />
         </svg>
-        viro<span className="text-blue-2">.</span>
+        <span className="flex flex-col leading-none gap-[3px]">
+          <span className="text-[18px] tracking-[-0.04em]">parsim</span>
+          <span className="text-[8px] font-normal tracking-[0.02em] text-blue-2">the token razor</span>
+        </span>
       </a>
 
       <div className="hidden md:flex gap-[30px] font-mono text-[11px] tracking-[0.18em] text-dim nav-links">

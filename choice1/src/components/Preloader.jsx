@@ -28,9 +28,13 @@ export default function Preloader() {
         isDone ? 'opacity-0 invisible' : 'opacity-100 visible'
       }`}
     >
-      <svg className="w-[72px] h-[72px]" viewBox="0 0 38 38">
-        <use href="#kiro-mark" fill="#fff" />
-      </svg>
+      <div className="flex flex-col items-center gap-[10px]">
+        <svg className="w-[72px] h-[55px]" viewBox="0 0 42 32">
+          <use href="#parsim-mark" fill="#fff" />
+        </svg>
+        <div className="font-mono text-[22px] tracking-[-0.05em] text-white">parsim</div>
+        <div className="font-mono text-[9px] text-blue-2">the token razor</div>
+      </div>
       <div className="w-[220px] h-[2px] bg-line relative overflow-hidden">
         <i
           className="absolute left-0 top-0 h-full bg-blue block transition-[width] duration-100 ease-linear"

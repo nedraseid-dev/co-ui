@@ -19,10 +19,10 @@ export default function Footer() {
         <div className="foot-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] gap-[40px]">
           <div>
             <div className="foot-logo flex items-center gap-[12px] font-mono font-bold text-[20px] mb-[20px]">
-              <svg className="logo-mark w-[30px] h-[30px]" viewBox="0 0 38 38">
-                <use href="#kiro-mark" fill="#f4f5f7" />
+              <svg className="logo-mark w-[34px] h-[28px]" viewBox="0 0 42 32">
+                <use href="#parsim-mark" fill="#f4f5f7" />
               </svg>
-              viro<span className="text-blue-2">.</span>
+              <span className="flex flex-col leading-none gap-[3px]"><span>parsim</span><span className="text-[9px] font-normal text-blue-2">the token razor</span></span>
             </div>
             <p className="foot-desc text-dim text-[13px] leading-[1.8] max-w-[300px]">
               A context runtime for long-horizon AI. Keep the signal, reduce the replay.
@@ -79,7 +79,7 @@ export default function Footer() {
           </div>
 
           <div className="foot-col">
-            <h4 className="font-mono text-[10px] tracking-[0.3em] text-dim2 mb-[20px]">VIRO</h4>
+            <h4 className="font-mono text-[10px] tracking-[0.3em] text-dim2 mb-[20px]">PARSIM</h4>
             <a href="#cta" className="block text-dim text-[13px] py-[6px] transition-all duration-250 hover:text-blue-2 hover:pl-[6px]">
               Careers
             </a>
@@ -96,7 +96,7 @@ export default function Footer() {
         </div>
 
         <div className="foot-bottom flex justify-between flex-wrap gap-[14px] mt-[70px] pt-[26px] border-t border-line font-mono text-[10px] tracking-[0.15em] text-dim2">
-          <span>© 2026 VIRO SYSTEMS — ALL TOKENS ACCOUNTED FOR</span>
+          <span>© 2026 PARSIM — ALL TOKENS ACCOUNTED FOR</span>
           <span>BUILT FOR THE LONG HORIZON ◈</span>
         </div>
       </div>
