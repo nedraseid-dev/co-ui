@@ -491,7 +491,7 @@ h2.display .blue-word {
 
 /* big cta */
 #cta .mega {
-  font-size: clamp(52px, 10vw, 150px);
+  font-size: clamp(44px, 8vw, 120px);
   font-weight: 500;
   line-height: 0.95;
   letter-spacing: -0.03em;
