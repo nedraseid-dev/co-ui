@@ -1,0 +1,6 @@
+{
+  "name": "parsim — AI Token Maximization & Long-Horizon Context Engine",
+  "description": "Parsim compresses, optimizes, and scales attention state for frontier LLMs, autonomous agents, and multi-turn reasoning chains.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
