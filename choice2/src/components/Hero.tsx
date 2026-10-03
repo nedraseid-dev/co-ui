@@ -1,6 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
-import { ASSETS } from '../data/content';
 import { ScrollReveal } from './ScrollReveal';
 import { EditableText } from './EditableText';
 import { TextScramble } from './TextScramble';
@@ -21,7 +20,6 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPress }) => {
   });
 
   // Parallax transformations for background image and wave graphics
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '24%']);
   const wavesY = useTransform(scrollYProgress, [0, 1], ['0%', '16%']);
   const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '10%']);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.2]);
@@ -36,20 +34,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPress }) => {
       className="relative min-h-[92vh] flex flex-col justify-between overflow-hidden bg-[#080808] border-b border-neutral-900 px-6 sm:px-8 lg:px-12 pt-12 pb-16 text-white"
     >
       
-      {/* Background Neural Token Matrix with Smooth Parallax */}
-      <motion.div 
-        style={{ y: backgroundY }}
-        className="absolute inset-0 pointer-events-none select-none z-0 will-change-transform"
-      >
-        <img
-          src={ASSETS.hero}
-          alt="Parsim neural token matrix and attention convergence"
-          className="w-full h-full object-cover object-right-top opacity-35 mix-blend-screen scale-105"
-          referrerPolicy="no-referrer"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#080808] via-[#080808]/85 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/50 to-transparent" />
-      </motion.div>
+    
 
       {/* Luminous International Safety Orange Wave Graphics with Parallax */}
       <motion.div 
@@ -120,6 +105,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPress }) => {
           <circle cx="620" cy="340" r="160" fill="#ff3b00" fillOpacity="0.08" className="blur-3xl" />
         </svg>
       </motion.div>
+
+      {/* Magnetic dot field (above waves, below text) */}
+      <HeroMagneticDots />
 
       {/* Top telemetry and sound utility row */}
       <div className="relative z-10 w-full flex items-center justify-between">
@@ -208,3 +196,165 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPress }) => {
     </section>
   );
 };
+
+/* ---------- Magnetic dot field ---------- */
+
+type Dot = { hx: number; hy: number; x: number; y: number; vx: number; vy: number };
+
+function HeroMagneticDots() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const host = canvas?.parentElement;
+    const ctx = canvas?.getContext('2d');
+    if (!canvas || !host || !ctx) return;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const GAP = 34;        // space between dots
+    const RADIUS = 150;    // cursor influence radius
+    const STRENGTH = 3.2;  // push power
+    const SPRING = 0.06;   // how fast dots return home
+    const DAMPING = 0.82;  // lower = more wobble
+
+    let dots: Dot[] = [];
+    let w = 0;
+    let h = 0;
+    let raf = 0;
+    let t = 0;
+    let visible = true;
+    let hovering = false;
+    let mode = 1; // 1 = push away, -1 = pull in (while mouse is held down)
+    const mouse = { x: -9999, y: -9999 };
+
+    const build = () => {
+      const r = host.getBoundingClientRect();
+      w = r.width;
+      h = r.height;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      dots = [];
+      const cols = Math.ceil(w / GAP) + 1;
+      const rows = Math.ceil(h / GAP) + 1;
+      const ox = (w - (cols - 1) * GAP) / 2;
+      const oy = (h - (rows - 1) * GAP) / 2;
+      for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+          const x = ox + i * GAP;
+          const y = oy + j * GAP;
+          dots.push({ hx: x, hy: y, x, y, vx: 0, vy: 0 });
+        }
+      }
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+      for (const d of dots) {
+        const dx = d.x - mouse.x;
+        const dy = d.y - mouse.y;
+        const dist = Math.hypot(dx, dy) || 0.001;
+
+        if (dist < RADIUS) {
+          const f = 1 - dist / RADIUS;
+          const force = f * f * STRENGTH * mode;
+          d.vx += (dx / dist) * force;
+          d.vy += (dy / dist) * force;
+        }
+
+        d.vx += (d.hx - d.x) * SPRING;
+        d.vy += (d.hy - d.y) * SPRING;
+        d.vx *= DAMPING;
+        d.vy *= DAMPING;
+        d.x += d.vx;
+        d.y += d.vy;
+
+        // 0 = resting grey, 1 = fully lit orange
+        const prox = Math.max(0, 1 - dist / RADIUS);
+        const disp = Math.min(Math.hypot(d.x - d.hx, d.y - d.hy) / 40, 1);
+        const k = Math.max(prox * 0.6, disp);
+
+        const r = 102 + (255 - 102) * k;
+        const g = 102 + (59 - 102) * k;
+        const b = 102 + (0 - 102) * k;
+        const s = 2 + k * 3;
+
+        ctx.fillStyle = `rgba(${r | 0}, ${g | 0}, ${b | 0}, ${0.3 + 0.7 * k})`;
+        ctx.fillRect(d.x - s / 2, d.y - s / 2, s, s);
+      }
+    };
+
+    const tick = () => {
+      if (visible) {
+        t += 0.016;
+        if (!hovering) {
+          // idle / touch: a virtual cursor drifts through the field
+          mouse.x = w * (0.5 + 0.32 * Math.sin(t * 0.55));
+          mouse.y = h * (0.5 + 0.28 * Math.sin(t * 0.9 + 1.2));
+        }
+        draw();
+      }
+      raf = requestAnimationFrame(tick);
+    };
+
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType === 'touch') return;
+      const r = host.getBoundingClientRect();
+      mouse.x = e.clientX - r.left;
+      mouse.y = e.clientY - r.top;
+      hovering = true;
+    };
+    const onLeave = () => {
+      hovering = false;
+      mode = 1;
+    };
+    const onDown = (e: PointerEvent) => {
+      if (e.pointerType !== 'touch') mode = -1;
+    };
+    const onUp = () => {
+      mode = 1;
+    };
+
+    build();
+    const ro = new ResizeObserver(build);
+    ro.observe(host);
+
+    const io = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+    });
+    io.observe(host);
+
+    if (reduced) {
+      draw(); // static dot grid, no motion
+    } else {
+      host.addEventListener('pointermove', onMove);
+      host.addEventListener('pointerleave', onLeave);
+      host.addEventListener('pointerdown', onDown);
+      window.addEventListener('pointerup', onUp);
+      raf = requestAnimationFrame(tick);
+    }
+
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+      io.disconnect();
+      host.removeEventListener('pointermove', onMove);
+      host.removeEventListener('pointerleave', onLeave);
+      host.removeEventListener('pointerdown', onDown);
+      window.removeEventListener('pointerup', onUp);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      aria-hidden
+      className="absolute inset-0 z-0 pointer-events-none"
+    />
+  );
+}
