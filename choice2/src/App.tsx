@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Manifesto } from './components/Manifesto';
+import { TickerBar } from './components/TickerBar';
 import { WhyParsim } from './components/WhyParsim';
 import { TokenMaximizerWidget } from './components/TokenMaximizerWidget';
 import { Testimonial } from './components/Testimonial';
@@ -14,6 +15,9 @@ import { StatsGrid } from './components/StatsGrid';
 import { LatestNews } from './components/LatestNews';
 import { ParsimFooter } from './components/ParsimFooter';
 import { ScrollReveal } from './components/ScrollReveal';
+
+// High-Performance Visual Enhancements
+import { CyberNoiseBackground } from './components/CyberNoiseBackground';
 
 // Shared UI & Interactive Modals
 import { ContactDrawer } from './components/ContactDrawer';
@@ -45,31 +49,37 @@ export default function App() {
     <TextEditorProvider>
       <div className="min-h-screen bg-[#080808] text-white flex flex-col font-['Poppins',sans-serif] relative selection:bg-[#ff3b00] selection:text-black">
         
+        {/* Zero-latency Ambient Background */}
+        <CyberNoiseBackground />
+
         {/* Navigation Header */}
         <Navbar 
           onOpenContact={() => setIsContactOpen(true)}
           onNavigateSection={handleNavigateSection}
         />
 
-        <main className="flex-1">
-          {/* Hero Section with Scroll Animations */}
+        <main className="flex-1 relative z-10">
+          {/* Hero Section with Parallax, Shimmer, and Status Radar */}
           <Hero 
             onOpenPress={handleOpenPressHero}
           />
 
-          {/* Full-Bleed Safety Orange Manifesto Banner */}
+          {/* High-Velocity Telemetry Ticker Ribbon */}
+          <TickerBar />
+
+          {/* Full-Bleed Safety Orange Manifesto Banner with Word-by-Word Split Reveal */}
           <Manifesto />
 
-          {/* Interactive Token Maximizer & Horizon Lab */}
+          {/* Interactive Token Maximizer & Horizon Lab with Spotlight Glow */}
           <section id="token-maximizer" className="bg-[#080808] border-b border-neutral-900 py-20 sm:py-28 px-6 sm:px-8 lg:px-12 text-white">
             <div className="max-w-7xl mx-auto">
-              <ScrollReveal direction="up" delay={0.1}>
+              <ScrollReveal direction="up" delay={0.08}>
                 <TokenMaximizerWidget />
               </ScrollReveal>
             </div>
           </section>
 
-          {/* Why Parsim 4-Commitment Architecture Grid */}
+          {/* Why Parsim with 3D Tilt Cards & Spotlight Hover */}
           <WhyParsim />
 
           {/* Frontier Case Studies / Testimonials Carousel */}
@@ -78,7 +88,7 @@ export default function App() {
           {/* Trusted By Leading Inference Labs Logos */}
           <TrustedBy />
 
-          {/* Capabilities Deep-Dive (Long-Horizon Agents, KV-Cache Compression, Token Maximization) */}
+          {/* Capabilities Deep-Dive (Stacked Left Side Navigation & Right Side Scroll Lighting) */}
           <Capabilities />
 
           {/* Performance Waveguide Ribbon & NOC Telemetry Link */}
@@ -86,17 +96,17 @@ export default function App() {
             onOpenTelemetry={() => setIsTelemetryOpen(true)}
           />
 
-          {/* Empirical Stats Grid (42.8T Tokens, 99.98% Recall, 16.4x Reduction, 10M Context) */}
+          {/* Empirical Stats Grid with Dynamic Count-Up Numbers */}
           <StatsGrid />
 
-          {/* Latest Research & Papers */}
+          {/* Latest Research & Papers with Staggered 3D Tilt Cards */}
           <LatestNews 
             onSelectArticle={(article) => setSelectedArticle(article)}
             onViewAllNews={() => handleNavigateSection('news')}
           />
         </main>
 
-        {/* High-Tech Parsim Engineering Footer */}
+        {/* High-Tech Parsim Engineering Footer with Big Wordmark & Vertical Half Blur */}
         <ParsimFooter 
           onOpenContact={() => setIsContactOpen(true)}
           onNavigateSection={handleNavigateSection}

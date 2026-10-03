@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShieldCheck, Infinity, Cpu, Layers } from 'lucide-react';
 import { ScrollReveal } from './ScrollReveal';
+import { SpotlightCard } from './SpotlightCard';
 
 export const WhyParsim: React.FC = () => {
   return (
@@ -10,7 +11,7 @@ export const WhyParsim: React.FC = () => {
         {/* Left Column: Heading and intro */}
         <ScrollReveal direction="up" delay={0.1} className="lg:col-span-5 space-y-6">
           <div className="flex items-center gap-2 text-[11px] font-mono tracking-widest text-neutral-400 uppercase">
-            <span className="text-[#ff3b00] text-sm">·</span>
+            <span className="text-[#ff3b00] text-sm animate-ping">·</span>
             <span>WHY PARSIM</span>
           </div>
 
@@ -25,79 +26,87 @@ export const WhyParsim: React.FC = () => {
           </p>
         </ScrollReveal>
 
-        {/* Right Column: 2x2 Grid of Commitment Cards */}
+        {/* Right Column: 2x2 Grid of 3D Tilt & Spotlight Commitment Cards */}
         <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
           
           {/* Card 1: Lossless KV-compression */}
           <ScrollReveal direction="up" delay={0.15}>
-            <div className="bg-[#0e0e0e] border border-neutral-800/80 hover:border-neutral-700 p-6 sm:p-7 rounded-sm flex flex-col justify-between transition-colors min-h-[200px] shadow-lg group">
-              <div className="flex items-center justify-between text-neutral-400">
-                <ShieldCheck className="w-5 h-5 text-neutral-300 stroke-[1.5] group-hover:text-[#ff3b00] transition-colors" />
-                <span className="font-mono text-xs text-neutral-400 font-medium tracking-wider">16X RATIO</span>
+            <SpotlightCard enableTilt={true} className="rounded-sm">
+              <div className="bg-[#0e0e0e] border border-neutral-800/80 p-6 sm:p-7 rounded-sm flex flex-col justify-between min-h-[220px] shadow-lg">
+                <div className="flex items-center justify-between text-neutral-400">
+                  <ShieldCheck className="w-5 h-5 text-neutral-300 stroke-[1.5] group-hover:text-[#ff3b00] transition-colors" />
+                  <span className="font-mono text-xs text-neutral-400 font-medium tracking-wider">16X RATIO</span>
+                </div>
+                <div className="mt-8 space-y-2">
+                  <h3 className="text-base font-semibold text-white tracking-tight group-hover:text-[#ff3b00] transition-colors">
+                    Lossless KV-compression, 16x factor
+                  </h3>
+                  <p className="text-xs sm:text-[13px] text-neutral-400 leading-relaxed">
+                    Built with adaptive attention subspace projection backed by zero-perplexity-drift guarantees.
+                  </p>
+                </div>
               </div>
-              <div className="mt-8 space-y-2">
-                <h3 className="text-base font-semibold text-white tracking-tight group-hover:text-[#ff3b00] transition-colors">
-                  Lossless KV-compression, 16x factor
-                </h3>
-                <p className="text-xs sm:text-[13px] text-neutral-400 leading-relaxed">
-                  Built with adaptive attention subspace projection backed by zero-perplexity-drift guarantees.
-                </p>
-              </div>
-            </div>
+            </SpotlightCard>
           </ScrollReveal>
 
           {/* Card 2: 10M+ long-horizon context */}
           <ScrollReveal direction="up" delay={0.2}>
-            <div className="bg-[#0e0e0e] border border-neutral-800/80 hover:border-neutral-700 p-6 sm:p-7 rounded-sm flex flex-col justify-between transition-colors min-h-[200px] shadow-lg group">
-              <div className="flex items-center justify-between text-neutral-400">
-                <Infinity className="w-5 h-5 text-neutral-300 stroke-[1.5] group-hover:text-[#ff3b00] transition-colors" />
-                <span className="font-mono text-xs text-neutral-400 font-medium tracking-wider">10M+ TOKENS</span>
+            <SpotlightCard enableTilt={true} className="rounded-sm">
+              <div className="bg-[#0e0e0e] border border-neutral-800/80 p-6 sm:p-7 rounded-sm flex flex-col justify-between min-h-[220px] shadow-lg">
+                <div className="flex items-center justify-between text-neutral-400">
+                  <Infinity className="w-5 h-5 text-neutral-300 stroke-[1.5] group-hover:text-[#ff3b00] transition-colors" />
+                  <span className="font-mono text-xs text-neutral-400 font-medium tracking-wider">10M+ TOKENS</span>
+                </div>
+                <div className="mt-8 space-y-2">
+                  <h3 className="text-base font-semibold text-white tracking-tight group-hover:text-[#ff3b00] transition-colors">
+                    10M+ long-horizon context, sustained
+                  </h3>
+                  <p className="text-xs sm:text-[13px] text-neutral-400 leading-relaxed">
+                    Proven stability across million-step agentic execution without degradation or attention sink collapse.
+                  </p>
+                </div>
               </div>
-              <div className="mt-8 space-y-2">
-                <h3 className="text-base font-semibold text-white tracking-tight group-hover:text-[#ff3b00] transition-colors">
-                  10M+ long-horizon context, sustained
-                </h3>
-                <p className="text-xs sm:text-[13px] text-neutral-400 leading-relaxed">
-                  Proven stability across million-step agentic execution without degradation or attention sink collapse.
-                </p>
-              </div>
-            </div>
+            </SpotlightCard>
           </ScrollReveal>
 
           {/* Card 3: Zero-overhead kernel */}
           <ScrollReveal direction="up" delay={0.25}>
-            <div className="bg-[#0e0e0e] border border-neutral-800/80 hover:border-neutral-700 p-6 sm:p-7 rounded-sm flex flex-col justify-between transition-colors min-h-[200px] shadow-lg group">
-              <div className="flex items-center justify-between text-neutral-400">
-                <Cpu className="w-5 h-5 text-neutral-300 stroke-[1.5] group-hover:text-[#ff3b00] transition-colors" />
-                <span className="font-mono text-xs text-neutral-400 font-medium tracking-wider">&lt;1.2% O/H</span>
+            <SpotlightCard enableTilt={true} className="rounded-sm">
+              <div className="bg-[#0e0e0e] border border-neutral-800/80 p-6 sm:p-7 rounded-sm flex flex-col justify-between min-h-[220px] shadow-lg">
+                <div className="flex items-center justify-between text-neutral-400">
+                  <Cpu className="w-5 h-5 text-neutral-300 stroke-[1.5] group-hover:text-[#ff3b00] transition-colors" />
+                  <span className="font-mono text-xs text-neutral-400 font-medium tracking-wider">&lt;1.2% O/H</span>
+                </div>
+                <div className="mt-8 space-y-2">
+                  <h3 className="text-base font-semibold text-white tracking-tight group-hover:text-[#ff3b00] transition-colors">
+                    Zero-overhead kernel, Bare-metal CUDA
+                  </h3>
+                  <p className="text-xs sm:text-[13px] text-neutral-400 leading-relaxed">
+                    Hand-tuned FlashAttention-3 and Triton kernels engineered for H100, B200, and TPU v5p clusters.
+                  </p>
+                </div>
               </div>
-              <div className="mt-8 space-y-2">
-                <h3 className="text-base font-semibold text-white tracking-tight group-hover:text-[#ff3b00] transition-colors">
-                  Zero-overhead kernel, Bare-metal CUDA
-                </h3>
-                <p className="text-xs sm:text-[13px] text-neutral-400 leading-relaxed">
-                  Hand-tuned FlashAttention-3 and Triton kernels engineered for H100, B200, and TPU v5p clusters.
-                </p>
-              </div>
-            </div>
+            </SpotlightCard>
           </ScrollReveal>
 
           {/* Card 4: Needle-in-haystack recall */}
           <ScrollReveal direction="up" delay={0.3}>
-            <div className="bg-[#0e0e0e] border border-neutral-800/80 hover:border-neutral-700 p-6 sm:p-7 rounded-sm flex flex-col justify-between transition-colors min-h-[200px] shadow-lg group">
-              <div className="flex items-center justify-between text-neutral-400">
-                <Layers className="w-5 h-5 text-neutral-300 stroke-[1.5] group-hover:text-[#ff3b00] transition-colors" />
-                <span className="font-mono text-xs text-neutral-400 font-medium tracking-wider">100% RECALL</span>
+            <SpotlightCard enableTilt={true} className="rounded-sm">
+              <div className="bg-[#0e0e0e] border border-neutral-800/80 p-6 sm:p-7 rounded-sm flex flex-col justify-between min-h-[220px] shadow-lg">
+                <div className="flex items-center justify-between text-neutral-400">
+                  <Layers className="w-5 h-5 text-neutral-300 stroke-[1.5] group-hover:text-[#ff3b00] transition-colors" />
+                  <span className="font-mono text-xs text-neutral-400 font-medium tracking-wider">100% RECALL</span>
+                </div>
+                <div className="mt-8 space-y-2">
+                  <h3 className="text-base font-semibold text-white tracking-tight group-hover:text-[#ff3b00] transition-colors">
+                    Needle-in-haystack recall, 100% deterministic
+                  </h3>
+                  <p className="text-xs sm:text-[13px] text-neutral-400 leading-relaxed">
+                    Designed so no critical instruction or faint semantic dependency is ever dropped in the context abyss.
+                  </p>
+                </div>
               </div>
-              <div className="mt-8 space-y-2">
-                <h3 className="text-base font-semibold text-white tracking-tight group-hover:text-[#ff3b00] transition-colors">
-                  Needle-in-haystack recall, 100% deterministic
-                </h3>
-                <p className="text-xs sm:text-[13px] text-neutral-400 leading-relaxed">
-                  Designed so no critical instruction or faint semantic dependency is ever dropped in the context abyss.
-                </p>
-              </div>
-            </div>
+            </SpotlightCard>
           </ScrollReveal>
 
         </div>

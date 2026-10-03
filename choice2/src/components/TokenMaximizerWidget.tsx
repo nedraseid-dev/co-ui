@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Zap, Database, TrendingUp, Layers, CheckCircle2 } from 'lucide-react';
+import { SpotlightCard } from './SpotlightCard';
 
 export const TokenMaximizerWidget: React.FC = () => {
   const [horizonTokens, setHorizonTokens] = useState<number>(5000000); // 5M tokens default
@@ -104,77 +105,83 @@ export const TokenMaximizerWidget: React.FC = () => {
         </div>
       </div>
 
-      {/* Metric Cards Comparison */}
+      {/* Metric Cards Comparison with Spotlight Glow */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         
         {/* Metric 1: KV Cache Memory */}
-        <div className="bg-[#141414] border border-neutral-800/80 p-5 rounded-sm space-y-3 shadow-lg">
-          <div className="flex items-center justify-between text-neutral-400">
-            <span className="text-[11px] font-mono tracking-wider uppercase font-semibold">KV-Cache VRAM</span>
-            <Database className="w-4 h-4 text-[#ff3b00]" />
-          </div>
-
-          <div className="space-y-1">
-            <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-white tabular-nums">{parsimVram}</span>
-              <span className="text-xs text-[#ff3b00] font-mono">GB (Parsim)</span>
+        <SpotlightCard enableTilt={false} className="rounded-sm">
+          <div className="bg-[#141414] border border-neutral-800/80 p-5 rounded-sm space-y-3 shadow-lg h-full">
+            <div className="flex items-center justify-between text-neutral-400">
+              <span className="text-[11px] font-mono tracking-wider uppercase font-semibold">KV-Cache VRAM</span>
+              <Database className="w-4 h-4 text-[#ff3b00]" />
             </div>
-            <div className="text-[11px] text-neutral-500 line-through tabular-nums">
-              {standardVram} GB (Standard Uncompressed)
+
+            <div className="space-y-1">
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-bold text-white tabular-nums">{parsimVram}</span>
+                <span className="text-xs text-[#ff3b00] font-mono">GB (Parsim)</span>
+              </div>
+              <div className="text-[11px] text-neutral-500 line-through tabular-nums">
+                {standardVram} GB (Standard Uncompressed)
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-neutral-800/80 flex items-center justify-between text-[11px] font-mono text-[#ff3b00]">
+              <span className="text-neutral-400">MEM SAVED</span>
+              <span className="font-semibold">-{memorySavedPercent}% HBM</span>
             </div>
           </div>
-
-          <div className="pt-2 border-t border-neutral-800/80 flex items-center justify-between text-[11px] font-mono text-[#ff3b00]">
-            <span className="text-neutral-400">MEM SAVED</span>
-            <span className="font-semibold">-{memorySavedPercent}% HBM</span>
-          </div>
-        </div>
+        </SpotlightCard>
 
         {/* Metric 2: Decoding Throughput */}
-        <div className="bg-[#141414] border border-neutral-800/80 p-5 rounded-sm space-y-3 shadow-lg">
-          <div className="flex items-center justify-between text-neutral-400">
-            <span className="text-[11px] font-mono tracking-wider uppercase font-semibold">Decoding Throughput</span>
-            <Zap className="w-4 h-4 text-[#ff3b00]" />
-          </div>
-
-          <div className="space-y-1">
-            <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-white tabular-nums">4.8x</span>
-              <span className="text-xs text-[#ff3b00] font-mono">Tokens/Sec</span>
+        <SpotlightCard enableTilt={false} className="rounded-sm">
+          <div className="bg-[#141414] border border-neutral-800/80 p-5 rounded-sm space-y-3 shadow-lg h-full">
+            <div className="flex items-center justify-between text-neutral-400">
+              <span className="text-[11px] font-mono tracking-wider uppercase font-semibold">Decoding Throughput</span>
+              <Zap className="w-4 h-4 text-[#ff3b00]" />
             </div>
-            <div className="text-[11px] text-neutral-400">
-              Zero memory bandwidth stall at deep horizons
+
+            <div className="space-y-1">
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-bold text-white tabular-nums">4.8x</span>
+                <span className="text-xs text-[#ff3b00] font-mono">Tokens/Sec</span>
+              </div>
+              <div className="text-[11px] text-neutral-400">
+                Zero memory bandwidth stall at deep horizons
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-neutral-800/80 flex items-center justify-between text-[11px] font-mono text-white">
+              <span className="text-neutral-400">P95 LATENCY</span>
+              <span className="font-semibold text-[#ff3b00]">1.4 ms/step</span>
             </div>
           </div>
-
-          <div className="pt-2 border-t border-neutral-800/80 flex items-center justify-between text-[11px] font-mono text-white">
-            <span className="text-neutral-400">P95 LATENCY</span>
-            <span className="font-semibold text-[#ff3b00]">1.4 ms/step</span>
-          </div>
-        </div>
+        </SpotlightCard>
 
         {/* Metric 3: Horizon Inference Cost */}
-        <div className="bg-[#141414] border border-neutral-800/80 p-5 rounded-sm space-y-3 shadow-lg">
-          <div className="flex items-center justify-between text-neutral-400">
-            <span className="text-[11px] font-mono tracking-wider uppercase font-semibold">Compute Cost / Run</span>
-            <TrendingUp className="w-4 h-4 text-[#ff3b00]" />
-          </div>
-
-          <div className="space-y-1">
-            <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-white tabular-nums">${parsimCost}</span>
-              <span className="text-xs text-[#ff3b00] font-mono">/ Horizon Run</span>
+        <SpotlightCard enableTilt={false} className="rounded-sm">
+          <div className="bg-[#141414] border border-neutral-800/80 p-5 rounded-sm space-y-3 shadow-lg h-full">
+            <div className="flex items-center justify-between text-neutral-400">
+              <span className="text-[11px] font-mono tracking-wider uppercase font-semibold">Compute Cost / Run</span>
+              <TrendingUp className="w-4 h-4 text-[#ff3b00]" />
             </div>
-            <div className="text-[11px] text-neutral-500 line-through tabular-nums">
-              ${standardCost} / Run (Unoptimized)
+
+            <div className="space-y-1">
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-bold text-white tabular-nums">${parsimCost}</span>
+                <span className="text-xs text-[#ff3b00] font-mono">/ Horizon Run</span>
+              </div>
+              <div className="text-[11px] text-neutral-500 line-through tabular-nums">
+                ${standardCost} / Run (Unoptimized)
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-neutral-800/80 flex items-center justify-between text-[11px] font-mono text-[#ff3b00]">
+              <span className="text-neutral-400">COST YIELD</span>
+              <span className="font-semibold">91.4% REDUCTION</span>
             </div>
           </div>
-
-          <div className="pt-2 border-t border-neutral-800/80 flex items-center justify-between text-[11px] font-mono text-[#ff3b00]">
-            <span className="text-neutral-400">COST YIELD</span>
-            <span className="font-semibold">91.4% REDUCTION</span>
-          </div>
-        </div>
+        </SpotlightCard>
 
       </div>
 

@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'motion/react';
 import { ASSETS } from '../data/content';
 import { ScrollReveal } from './ScrollReveal';
 import { EditableText } from './EditableText';
+import { TextScramble } from './TextScramble';
+import { MagneticButton } from './MagneticButton';
+import { Terminal } from 'lucide-react';
 
 interface HeroProps {
   onOpenPress: () => void;
@@ -9,28 +13,49 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onOpenPress }) => {
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end start'],
+  });
+
+  // Parallax transformations for background image and wave graphics
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '24%']);
+  const wavesY = useTransform(scrollYProgress, [0, 1], ['0%', '16%']);
+  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '10%']);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.2]);
 
   const toggleSound = () => {
     setIsPlayingAudio(!isPlayingAudio);
   };
 
   return (
-    <section className="relative min-h-[92vh] flex flex-col justify-between overflow-hidden bg-[#080808] border-b border-neutral-900 px-6 sm:px-8 lg:px-12 pt-12 pb-16 text-white">
+    <section 
+      ref={containerRef}
+      className="relative min-h-[92vh] flex flex-col justify-between overflow-hidden bg-[#080808] border-b border-neutral-900 px-6 sm:px-8 lg:px-12 pt-12 pb-16 text-white"
+    >
       
-      {/* Background Neural Token Matrix & Deep Charcoal Vignette */}
-      <div className="absolute inset-0 pointer-events-none select-none z-0">
+      {/* Background Neural Token Matrix with Smooth Parallax */}
+      <motion.div 
+        style={{ y: backgroundY }}
+        className="absolute inset-0 pointer-events-none select-none z-0 will-change-transform"
+      >
         <img
           src={ASSETS.hero}
           alt="Parsim neural token matrix and attention convergence"
-          className="w-full h-full object-cover object-right-top opacity-35 mix-blend-screen scale-105 transition-transform duration-1000"
+          className="w-full h-full object-cover object-right-top opacity-35 mix-blend-screen scale-105"
           referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#080808] via-[#080808]/85 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/50 to-transparent" />
-      </div>
+      </motion.div>
 
-      {/* Luminous International Safety Orange Wave Graphics Weaving Across Right Side */}
-      <div className="absolute top-0 right-0 w-full sm:w-2/3 h-full pointer-events-none select-none z-0 overflow-hidden">
+      {/* Luminous International Safety Orange Wave Graphics with Parallax */}
+      <motion.div 
+        style={{ y: wavesY }}
+        className="absolute top-0 right-0 w-full sm:w-2/3 h-full pointer-events-none select-none z-0 overflow-hidden will-change-transform"
+      >
         <svg
           viewBox="0 0 900 700"
           fill="none"
@@ -94,41 +119,63 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPress }) => {
           {/* Radial ambient halo */}
           <circle cx="620" cy="340" r="160" fill="#ff3b00" fillOpacity="0.08" className="blur-3xl" />
         </svg>
+      </motion.div>
+
+      {/* Top telemetry and sound utility row */}
+      <div className="relative z-10 w-full flex items-center justify-between">
+        
+        {/* Hacker / Terminal Cyber Decoded Status Badge with Radar Wave */}
+        <div className="relative overflow-hidden inline-flex items-center gap-2 bg-[#0e0e0e]/90 border border-neutral-800/90 rounded px-3 py-1.5 font-mono text-[11px] text-neutral-400 backdrop-blur-sm shadow-sm group">
+          <span className="absolute inset-0 animate-shimmer-sweep pointer-events-none opacity-40" />
+          <span className="relative flex h-2 w-2">
+            <span className="animate-radar-wave absolute inline-flex h-full w-full rounded-full bg-[#ff3b00] opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff3b00]" />
+          </span>
+          <span className="text-[#ff3b00] font-bold">KERNEL:</span>
+          <TextScramble text="10M_CONTEXT_ACTIVE" scrambleSpeed={28} className="text-neutral-200 font-semibold" />
+        </div>
+
+        {/* Audio Telemetry Toggle with Magnetic Button */}
+        <MagneticButton strength={0.35}>
+          <button
+            onClick={toggleSound}
+            className="group flex items-center justify-center w-8 h-8 rounded-sm border border-neutral-800 bg-[#0e0e0e]/80 hover:bg-neutral-900 text-neutral-300 transition-all cursor-pointer backdrop-blur-sm shadow-md"
+            title={isPlayingAudio ? "Mute kernel telemetry pulse" : "Listen to inference token stream"}
+            aria-label="Toggle inference kernel audio feedback"
+          >
+            {isPlayingAudio ? (
+              <div className="flex items-center gap-[2px] h-3">
+                <span className="w-[2px] h-3 bg-[#ff3b00] animate-pulse" />
+                <span className="w-[2px] h-2 bg-[#ff3b00] animate-bounce" />
+                <span className="w-[2px] h-3.5 bg-[#ff3b00] animate-pulse" />
+              </div>
+            ) : (
+              <div className="flex items-center gap-[3px] h-3 opacity-60 group-hover:opacity-100">
+                <span className="w-[1.5px] h-3.5 bg-neutral-400" />
+                <span className="w-[1.5px] h-3.5 bg-neutral-400" />
+              </div>
+            )}
+          </button>
+        </MagneticButton>
       </div>
 
-      {/* Top utility row: Audio telemetry toggle */}
-      <div className="relative z-10 w-full flex justify-end">
-        <button
-          onClick={toggleSound}
-          className="group flex items-center justify-center w-8 h-8 rounded-sm border border-neutral-800 bg-[#0e0e0e]/80 hover:bg-neutral-900 text-neutral-300 transition-all cursor-pointer backdrop-blur-sm shadow-md"
-          title={isPlayingAudio ? "Mute kernel telemetry pulse" : "Listen to inference token stream"}
-          aria-label="Toggle inference kernel audio feedback"
-        >
-          {isPlayingAudio ? (
-            <div className="flex items-center gap-[2px] h-3">
-              <span className="w-[2px] h-3 bg-[#ff3b00] animate-pulse" />
-              <span className="w-[2px] h-2 bg-[#ff3b00] animate-bounce" />
-              <span className="w-[2px] h-3.5 bg-[#ff3b00] animate-pulse" />
-            </div>
-          ) : (
-            <div className="flex items-center gap-[3px] h-3 opacity-60 group-hover:opacity-100">
-              <span className="w-[1.5px] h-3.5 bg-neutral-400" />
-              <span className="w-[1.5px] h-3.5 bg-neutral-400" />
-            </div>
-          )}
-        </button>
-      </div>
-
-      {/* Main Massive Headline */}
-      <ScrollReveal direction="up" delay={0.1} className="relative z-10 my-auto py-12 max-w-5xl">
-        <h1 className="text-5xl sm:text-7xl lg:text-[5.75rem] font-medium tracking-[-0.035em] text-white leading-[1.04]">
-          <EditableText
-            id="hero_headline"
-            as="span"
-            defaultText="Tokens that think across horizons."
-          />
-        </h1>
-      </ScrollReveal>
+      {/* Main Massive Headline with Shimmer Gradient & Parallax */}
+      <motion.div 
+        style={{ y: contentY, opacity: contentOpacity }}
+        className="relative z-10 my-auto py-12 max-w-5xl"
+      >
+        <ScrollReveal direction="up" delay={0.1}>
+          <h1 className="text-5xl sm:text-7xl lg:text-[5.75rem] font-medium tracking-[-0.035em] text-white leading-[1.04]">
+            <span className="relative inline-block bg-gradient-to-r from-white via-neutral-100 to-neutral-400 bg-clip-text text-transparent">
+              <EditableText
+                id="hero_headline"
+                as="span"
+                defaultText="Tokens that think across horizons."
+              />
+            </span>
+          </h1>
+        </ScrollReveal>
+      </motion.div>
 
       {/* Bottom Row: Subtitle & Horizon Metrics */}
       <div className="relative z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-8 pt-8">

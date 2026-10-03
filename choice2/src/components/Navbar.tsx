@@ -35,10 +35,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onNavigateSection
 
           <button 
             onClick={() => onNavigateSection('token-maximizer')} 
-            className="hover:text-white transition-colors cursor-pointer flex items-center gap-1.5"
+            className="hover:text-white transition-colors cursor-pointer flex items-center gap-2 group"
           >
             <span>Token Maximizer</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b00] animate-pulse" />
+            <span className="relative flex h-2 w-2">
+              <span className="animate-radar-wave absolute inline-flex h-full w-full rounded-full bg-[#ff3b00] opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff3b00]" />
+            </span>
           </button>
           
           <button 
@@ -114,14 +117,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onNavigateSection
           </div>
         </nav>
 
-        {/* CTA Button: International Safety Orange #ff3b00 */}
+        {/* CTA Button: International Safety Orange #ff3b00 with Shimmer */}
         <div className="hidden sm:flex items-center gap-4">
           <button
             onClick={onOpenContact}
-            className="group flex items-center gap-2.5 bg-[#ff3b00] hover:bg-[#e03400] text-black text-xs font-semibold px-4 py-2.5 rounded-sm transition-all duration-200 active:scale-[0.98] shadow-lg shadow-[#ff3b00]/20 cursor-pointer"
+            className="group relative overflow-hidden flex items-center gap-2.5 bg-[#ff3b00] hover:bg-[#ff4d15] text-black text-xs font-semibold px-4 py-2.5 rounded-sm transition-all duration-200 active:scale-[0.98] shadow-lg shadow-[#ff3b00]/25 cursor-pointer"
           >
-            <span>Deploy Engine</span>
-            <span className="w-4 h-4 bg-black/15 flex items-center justify-center rounded-sm transition-transform duration-200 group-hover:translate-x-0.5">
+            {/* Shimmer light sweep */}
+            <span className="absolute inset-0 animate-shimmer-sweep pointer-events-none" />
+            <span className="relative z-10">Deploy Engine</span>
+            <span className="relative z-10 w-4 h-4 bg-black/15 flex items-center justify-center rounded-sm transition-transform duration-200 group-hover:translate-x-0.5">
               <ArrowRight className="w-2.5 h-2.5 text-black" />
             </span>
           </button>

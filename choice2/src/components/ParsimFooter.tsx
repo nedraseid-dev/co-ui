@@ -183,43 +183,49 @@ export const ParsimFooter: React.FC<ParsimFooterProps> = ({
           </div>
         </div>
 
-        {/* Big "parsim." Wordmark with Top Half Normal & Bottom Half Blurred */}
-        <div className="relative pt-2 sm:pt-4 overflow-hidden select-none pointer-events-none text-center leading-none">
-          <div className="relative inline-block font-serif tracking-tighter text-black text-8xl sm:text-[11rem] md:text-[14rem] lg:text-[16.5rem] leading-[0.82] font-normal">
+        {/* Big "parsim" Wordmark with Vertical Half Blur (Lower part of every letter blurred) */}
+        <div className="relative pt-4 sm:pt-6 pb-6 sm:pb-8 overflow-hidden select-none pointer-events-none text-center leading-none">
+          <div className="relative inline-block mx-auto max-w-full">
             
-            {/* Top Half: 100% Crisp, Sharp, Jet-Black Normal Text */}
+            {/* Layer 1: Razor-Sharp Upper Half of Every Letter */}
             <div 
-              className="relative z-10 text-black select-none"
+              className="font-serif tracking-tighter text-black text-8xl sm:text-[11rem] md:text-[14rem] lg:text-[16.5rem] leading-[0.82] font-normal"
               style={{
-                WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 62%)',
-                maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 62%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, #000 0%, #000 45%, transparent 54%)',
+                maskImage: 'linear-gradient(to bottom, #000 0%, #000 45%, transparent 54%)',
               }}
             >
-              parsim.
+              parsim<span className="text-black">.</span>
             </div>
 
-            {/* Bottom Half: True Defocused Blur Effect */}
+            {/* Layer 2: Distinctly Blurred Lower Part of Every Letter */}
             <div 
-              className="absolute inset-0 z-0 text-black select-none pointer-events-none filter blur-[8px] sm:blur-[12px] md:blur-[16px] opacity-85"
+              className="absolute inset-0 font-serif tracking-tighter text-black text-8xl sm:text-[11rem] md:text-[14rem] lg:text-[16.5rem] leading-[0.82] font-normal"
               style={{
-                WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,0) 35%, rgba(0,0,0,0.85) 55%, rgba(0,0,0,1) 100%)',
-                maskImage: 'linear-gradient(to bottom, rgba(0,0,0,0) 35%, rgba(0,0,0,0.85) 55%, rgba(0,0,0,1) 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, transparent 38%, #000 48%, #000 100%)',
+                maskImage: 'linear-gradient(to bottom, transparent 38%, #000 48%, #000 100%)',
+                filter: 'blur(12px)',
+                WebkitFilter: 'blur(12px)',
+                opacity: 0.92,
               }}
               aria-hidden="true"
             >
-              parsim.
+              parsim<span className="text-black">.</span>
             </div>
 
-            {/* Ambient Base Diffusion: Soft ethereal dissipation into the orange footer background */}
+            {/* Layer 3: Deep Ambient Blur Diffusion on the Lower Part */}
             <div 
-              className="absolute inset-0 z-0 text-black select-none pointer-events-none filter blur-[24px] sm:blur-[32px] md:blur-[40px] opacity-40"
+              className="absolute inset-0 font-serif tracking-tighter text-black text-8xl sm:text-[11rem] md:text-[14rem] lg:text-[16.5rem] leading-[0.82] font-normal"
               style={{
-                WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,0) 45%, rgba(0,0,0,1) 75%, rgba(0,0,0,1) 100%)',
-                maskImage: 'linear-gradient(to bottom, rgba(0,0,0,0) 45%, rgba(0,0,0,1) 75%, rgba(0,0,0,1) 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, transparent 40%, #000 52%, #000 100%)',
+                maskImage: 'linear-gradient(to bottom, transparent 40%, #000 52%, #000 100%)',
+                filter: 'blur(26px)',
+                WebkitFilter: 'blur(26px)',
+                opacity: 0.65,
               }}
               aria-hidden="true"
             >
-              parsim.
+              parsim<span className="text-black">.</span>
             </div>
 
           </div>
