@@ -42,6 +42,31 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Footer text selection: crisp pitch black background with vibrant orange text so copying is clean & never black-on-black */
+footer,
+footer * {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+footer ::selection {
+  background-color: #000000 !important;
+  color: #ff3b00 !important;
+  -webkit-text-fill-color: #ff3b00 !important;
+}
+
+footer *::selection {
+  background-color: #000000 !important;
+  color: #ff3b00 !important;
+  -webkit-text-fill-color: #ff3b00 !important;
+}
+
+footer::-moz-selection,
+footer *::-moz-selection {
+  background-color: #000000 !important;
+  color: #ff3b00 !important;
+}
+
 /* High-Performance GPU-Accelerated Animations */
 @keyframes shimmerSweep {
   0% {
