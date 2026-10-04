@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { ChevronDown, ArrowRight, Menu, X } from 'lucide-react';
+import { ChevronDown, ArrowRight, Menu, X, Sun, Moon } from 'lucide-react';
 import { ParsimLogo } from './ParsimLogo';
 
 interface NavbarProps {
   onOpenContact: () => void;
   onNavigateSection: (id: string) => void;
+  theme: 'dark' | 'light';
+  onToggleTheme: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onNavigateSection }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onNavigateSection, theme, onToggleTheme }) => {
   const [companyDropdownOpen, setCompanyDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -117,8 +119,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onNavigateSection
           </div>
         </nav>
 
-        {/* CTA Button: International Safety Orange #ff3b00 with Shimmer */}
+        {/* Theme toggle + CTA Button: International Safety Orange #ff3b00 with Shimmer */}
         <div className="hidden sm:flex items-center gap-4">
+          <button
+            onClick={onToggleTheme}
+            aria-label="Toggle light and dark theme"
+            className="w-9 h-9 flex items-center justify-center rounded-sm border border-neutral-800 bg-neutral-900 text-neutral-300 hover:text-white transition-colors cursor-pointer"
+          >
+            {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </button>
+
           <button
             onClick={onOpenContact}
             className="group relative overflow-hidden flex items-center gap-2.5 bg-[#ff3b00] hover:bg-[#ff4d15] text-black text-xs font-semibold px-4 py-2.5 rounded-sm transition-all duration-200 active:scale-[0.98] shadow-lg shadow-[#ff3b00]/25 cursor-pointer"
@@ -134,6 +144,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onNavigateSection
 
         {/* Mobile menu trigger */}
         <div className="flex md:hidden items-center gap-3">
+          <button
+            onClick={onToggleTheme}
+            aria-label="Toggle light and dark theme"
+            className="sm:hidden w-8 h-8 flex items-center justify-center rounded-sm border border-neutral-800 bg-neutral-900 text-neutral-300 hover:text-white transition-colors cursor-pointer"
+          >
+            {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </button>
+
           <button
             onClick={onOpenContact}
             className="flex items-center gap-2 bg-[#ff3b00] text-black text-xs font-semibold px-3 py-2 rounded-sm"

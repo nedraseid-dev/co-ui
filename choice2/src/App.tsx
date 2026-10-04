@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Parsim Core Components
 import { Navbar } from './components/Navbar';
@@ -34,6 +34,16 @@ export default function App() {
   const [selectedArticle, setSelectedArticle] = useState<NewsItem | null>(null);
   const [templatePageTitle, setTemplatePageTitle] = useState<string | null>(null);
 
+  // Light / dark theme
+  const [theme, setTheme] = useState<'dark' | 'light'>(
+    () => (localStorage.getItem('theme') as 'dark' | 'light') || 'dark'
+  );
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
   const handleNavigateSection = (sectionId: string) => {
     const el = document.getElementById(sectionId);
     if (el) {
@@ -56,6 +66,8 @@ export default function App() {
         <Navbar 
           onOpenContact={() => setIsContactOpen(true)}
           onNavigateSection={handleNavigateSection}
+          theme={theme}
+          onToggleTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
         />
 
         <main className="flex-1 relative z-10">
