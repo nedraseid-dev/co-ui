@@ -1,0 +1,6 @@
+{
+  "name": "Parsim — AI Token Automation for Long Horizons",
+  "description": "Parsim delivers autonomous AI token automation for long-horizon enterprise workflows with state persistence, frame-scrubbed interactive choreography, and resilient agent architectures.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
