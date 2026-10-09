@@ -24,7 +24,7 @@ export const ParsimLogo: React.FC<ParsimLogoProps> = ({
           className="w-full h-full"
           aria-hidden="true"
         >
-          <g fill="#f4f5f7" transform="translate(8 14) scale(1.15)">
+          <g fill="#ff3b00" transform="translate(8 14) scale(1.15)">
             <rect x="4" y="2" width="7" height="7" />
             <rect x="13" y="2" width="7" height="7" />
             <rect x="22" y="2" width="7" height="7" />
