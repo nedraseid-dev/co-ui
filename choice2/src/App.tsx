@@ -24,6 +24,7 @@ import { ContactDrawer } from './components/ContactDrawer';
 import { TelemetryModal } from './components/TelemetryModal';
 import { NewsModal } from './components/NewsModal';
 import { TemplateModal } from './components/TemplateModal';
+import { AuthPage } from './components/AuthPage';
 import { TextEditorProvider } from './context/TextEditorContext';
 import { NewsItem } from './types';
 import { NEWS_ITEMS } from './data/content';
@@ -36,7 +37,7 @@ export default function App() {
 
   // Light / dark theme
   const [theme, setTheme] = useState<'dark' | 'light'>(
-    () => (localStorage.getItem('theme') as 'dark' | 'light') || 'dark'
+    () => (localStorage.getItem('theme') as 'dark' | 'light') || 'light'
   );
 
   useEffect(() => {
@@ -54,6 +55,10 @@ export default function App() {
   const handleOpenPressHero = () => {
     setSelectedArticle(NEWS_ITEMS[0]);
   };
+
+  if (window.location.pathname === '/auth' || window.location.pathname === '/signup') {
+    return <AuthPage mode={window.location.pathname === '/signup' ? 'signup' : 'signin'} />;
+  }
 
   return (
     <TextEditorProvider>

@@ -127,6 +127,22 @@ export const LatestNews: React.FC<LatestNewsProps> = ({ onSelectArticle, onViewA
           ))}
         </div>
 
+        <ScrollReveal direction="up" delay={0.1}>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-t border-neutral-900 pt-8">
+            <div className="space-y-2">
+              <h3 className="text-xl sm:text-2xl font-medium text-white">Put long-horizon intelligence to work.</h3>
+              <p className="text-xs sm:text-sm text-neutral-400">Sign in to continue with Parsim.</p>
+            </div>
+            <a
+              href="/auth"
+              className="group inline-flex shrink-0 items-center gap-2.5 bg-[#ff3b00] px-5 py-3 text-xs font-semibold text-black transition-colors hover:bg-[#ff6a36]"
+            >
+              <span>Continue to Parsim</span>
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </a>
+          </div>
+        </ScrollReveal>
+
       </div>
     </section>
   );

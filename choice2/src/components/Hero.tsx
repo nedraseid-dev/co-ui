@@ -4,7 +4,7 @@ import { ScrollReveal } from './ScrollReveal';
 import { EditableText } from './EditableText';
 import { TextScramble } from './TextScramble';
 import { MagneticButton } from './MagneticButton';
-import { Terminal } from 'lucide-react';
+import { ArrowRight, Terminal } from 'lucide-react';
 
 interface HeroProps {
   onOpenPress: () => void;
@@ -153,7 +153,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPress }) => {
         className="relative z-10 my-auto py-12 max-w-5xl"
       >
         <ScrollReveal direction="up" delay={0.1}>
-          <h1 className="text-5xl sm:text-7xl lg:text-[5.75rem] font-medium tracking-[-0.035em] text-white leading-[1.04]">
+          <h1 className="text-4xl sm:text-6xl lg:text-[5rem] font-medium tracking-[-0.035em] text-white leading-[1.04]">
             <span className="relative inline-block bg-gradient-to-r from-white via-neutral-100 to-neutral-400 bg-clip-text text-transparent">
               <EditableText
                 id="hero_headline"
@@ -170,13 +170,22 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPress }) => {
         
         {/* Left Subtitle */}
         <ScrollReveal direction="up" delay={0.2} className="max-w-xl">
-          <p className="text-[13px] sm:text-sm text-neutral-400 leading-relaxed font-normal">
-            <EditableText
-              id="hero_subtext"
-              as="span"
-              defaultText="Parsim compresses, optimizes, and scales attention state for frontier LLMs, autonomous agents, and multi-turn reasoning chains. 99.984% semantic fidelity, measured at 10M tokens."
-            />
-          </p>
+          <div className="space-y-5">
+            <p className="text-xs sm:text-[13px] text-neutral-400 leading-relaxed font-normal">
+              <EditableText
+                id="hero_subtext"
+                as="span"
+                defaultText="Parsim compresses, optimizes, and scales attention state for frontier LLMs, autonomous agents, and multi-turn reasoning chains. 99.984% semantic fidelity, measured at 10M tokens."
+              />
+            </p>
+            <a
+              href="/auth"
+              className="group inline-flex items-center gap-2.5 bg-[#ff3b00] px-5 py-3 text-xs font-semibold text-black transition-colors hover:bg-[#ff6a36]"
+            >
+              <span>Access Parsim</span>
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </a>
+          </div>
         </ScrollReveal>
 
         {/* Live Horizon Specs */}
