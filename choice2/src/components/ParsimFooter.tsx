@@ -124,10 +124,10 @@ export const ParsimFooter: React.FC<ParsimFooterProps> = ({
               </li>
               <li>
                 <button 
-                  onClick={() => onNavigateSection('token-maximizer')} 
+                  onClick={() => onNavigateSection('live-token-stream')} 
                   className="inline-block px-2 py-0.5 -mx-2 rounded-sm hover:bg-black hover:text-[#ff3b00] transition-all text-left cursor-pointer"
                 >
-                  KV-Cache Reducer
+                  Live Token Stream
                 </button>
               </li>
               <li>

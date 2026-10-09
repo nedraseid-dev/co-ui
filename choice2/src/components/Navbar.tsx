@@ -36,10 +36,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onNavigateSection
           </button>
 
           <button 
-            onClick={() => onNavigateSection('token-maximizer')} 
+            onClick={() => onNavigateSection('live-token-stream')} 
             className="hover:text-white transition-colors cursor-pointer flex items-center gap-2 group"
           >
-            <span>Token Maximizer</span>
+            <span>Live Token Stream</span>
             <span className="relative flex h-2 w-2">
               <span className="animate-radar-wave absolute inline-flex h-full w-full rounded-full bg-[#ff3b00] opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff3b00]" />
@@ -179,11 +179,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onNavigateSection
             Architecture
           </button>
           <button 
-            onClick={() => { onNavigateSection('token-maximizer'); setMobileMenuOpen(false); }}
+            onClick={() => { onNavigateSection('live-token-stream'); setMobileMenuOpen(false); }}
             className="block w-full text-left text-sm text-neutral-300 hover:text-white py-1 flex items-center justify-between"
           >
-            <span>Token Maximizer</span>
-            <span className="text-[10px] bg-[#ff3b00] text-black font-semibold px-1.5 py-0.5 rounded">NEW</span>
+            <span>Live Token Stream</span>
+            <span className="text-[10px] bg-[#ff3b00] text-black font-semibold px-1.5 py-0.5 rounded">LIVE</span>
           </button>
           <button 
             onClick={() => { onNavigateSection('why-parsim'); setMobileMenuOpen(false); }}

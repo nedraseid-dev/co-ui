@@ -6,7 +6,7 @@ import { Hero } from './components/Hero';
 import { Manifesto } from './components/Manifesto';
 import { TickerBar } from './components/TickerBar';
 import { WhyParsim } from './components/WhyParsim';
-import { TokenMaximizerWidget } from './components/TokenMaximizerWidget';
+import { LiveTokenStream } from './components/LiveTokenStream';
 import { Testimonial } from './components/Testimonial';
 import { TrustedBy } from './components/TrustedBy';
 import { Capabilities } from './components/Capabilities';
@@ -87,11 +87,11 @@ export default function App() {
           {/* Full-Bleed Safety Orange Manifesto Banner with Word-by-Word Split Reveal */}
           <Manifesto />
 
-          {/* Interactive Token Maximizer & Horizon Lab with Spotlight Glow */}
-          <section id="token-maximizer" className="bg-[#080808] border-b border-neutral-900 py-20 sm:py-28 px-6 sm:px-8 lg:px-12 text-white">
+          {/* Live Token Stream — Compaction Pass */}
+          <section id="live-token-stream" className="bg-[#080808] border-b border-neutral-900 py-20 sm:py-28 px-6 sm:px-8 lg:px-12 text-white">
             <div className="max-w-7xl mx-auto">
               <ScrollReveal direction="up" delay={0.08}>
-                <TokenMaximizerWidget />
+                <LiveTokenStream />
               </ScrollReveal>
             </div>
           </section>

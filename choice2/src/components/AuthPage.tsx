@@ -31,11 +31,14 @@ export const AuthPage: React.FC<AuthPageProps> = ({ mode }) => {
               {Array.from({ length: 2 }, (_, index) => <span key={index} className="h-10 w-10 bg-[#ff3b00]" />)}
             </div>
           </div>
-          <div className="flex items-baseline font-['Poppins',sans-serif] text-[clamp(4.5rem,10vw,8.5rem)] font-extrabold leading-[0.8] tracking-[-0.07em] text-[#101010]">
+          <div className="flex items-baseline font-['Poppins',sans-serif] text-[clamp(3.5rem,8vw,7rem)] font-extrabold leading-[0.8] tracking-[-0.07em] text-[#101010]">
             <span>parsim</span><span className="text-[#ff3b00]">.</span>
           </div>
           <p className="mt-10 text-center text-xs font-semibold tracking-[0.22em] text-neutral-500 sm:text-base">
             FEWER TOKENS. CHEAPER INFERENCE.
+          </p>
+          <p className="mt-3 max-w-xs text-center text-sm leading-relaxed text-neutral-500">
+            Give advanced AI more room to reason. Parsim makes long-context inference more efficient, so models can think further while using fewer tokens.
           </p>
         </a>
       </aside>
