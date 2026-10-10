@@ -23,6 +23,7 @@ import { CyberNoiseBackground } from './components/CyberNoiseBackground';
 import { ContactDrawer } from './components/ContactDrawer';
 import { TelemetryModal } from './components/TelemetryModal';
 import { NewsModal } from './components/NewsModal';
+import { ResearchDetailPage } from './components/ResearchDetailPage';
 import { TemplateModal } from './components/TemplateModal';
 import { AuthPage } from './components/AuthPage';
 import { TextEditorProvider } from './context/TextEditorContext';
@@ -58,6 +59,13 @@ export default function App() {
 
   if (window.location.pathname === '/auth' || window.location.pathname === '/signup') {
     return <AuthPage mode={window.location.pathname === '/signup' ? 'signup' : 'signin'} />;
+  }
+
+  const researchId = window.location.pathname.match(/^\/research\/([^/]+)\/?$/)?.[1];
+  const researchArticle = NEWS_ITEMS.find((article) => article.type === 'featured' && article.id === researchId);
+
+  if (researchArticle) {
+    return <ResearchDetailPage article={researchArticle} />;
   }
 
   return (

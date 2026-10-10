@@ -51,8 +51,8 @@ export const LatestNews: React.FC<LatestNewsProps> = ({ onSelectArticle, onViewA
           {featuredNews.map((article, idx) => (
             <ScrollReveal key={article.id} direction="up" delay={0.15 + idx * 0.1}>
               <SpotlightCard enableTilt={true} className="rounded-sm">
-                <div
-                  onClick={() => onSelectArticle(article)}
+                <a
+                  href={`/research/${article.id}`}
                   className="group cursor-pointer bg-[#0e0e0e] border border-neutral-800 rounded-sm overflow-hidden flex flex-col justify-between transition-colors shadow-xl h-full"
                 >
                   {/* Image Banner */}
@@ -93,7 +93,7 @@ export const LatestNews: React.FC<LatestNewsProps> = ({ onSelectArticle, onViewA
                       <ArrowRight className="w-3.5 h-3.5 text-[#ff3b00] group-hover:translate-x-1 transition-transform" />
                     </div>
                   </div>
-                </div>
+                </a>
               </SpotlightCard>
             </ScrollReveal>
           ))}
