@@ -24,16 +24,17 @@ export const ParsimLogo: React.FC<ParsimLogoProps> = ({
           className="w-full h-full"
           aria-hidden="true"
         >
-          <g fill="#ff3b00" transform="translate(8 14) scale(1.15)">
-            <rect x="4" y="2" width="7" height="7" />
-            <rect x="13" y="2" width="7" height="7" />
-            <rect x="22" y="2" width="7" height="7" />
-            <rect x="31" y="2" width="7" height="7" />
-            <rect x="8" y="12" width="7" height="7" />
-            <rect x="17" y="12" width="7" height="7" />
-            <rect x="26" y="12" width="7" height="7" />
-            <rect x="13" y="22" width="7" height="7" />
-            <rect x="22" y="22" width="7" height="7" />
+          <rect x="1" y="1" width="62" height="62" rx="10" fill="#08080b" stroke="#242429" strokeWidth="1.5" />
+          <g fill="#f5f5f5">
+            <rect x="13" y="16" width="8" height="8" />
+            <rect x="23" y="16" width="8" height="8" />
+            <rect x="33" y="16" width="8" height="8" />
+            <rect x="43" y="16" width="8" height="8" />
+            <rect x="18" y="28" width="8" height="8" />
+            <rect x="28" y="28" width="8" height="8" />
+            <rect x="38" y="28" width="8" height="8" />
+            <rect x="23" y="40" width="8" height="8" />
+            <rect x="33" y="40" width="8" height="8" />
           </g>
         </svg>
       </div>
