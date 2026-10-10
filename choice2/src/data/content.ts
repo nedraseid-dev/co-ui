@@ -1,11 +1,11 @@
 import { TestimonialItem, NewsItem, CapabilitySection } from '../types';
 
-import heroImg from '../assets/images/hero_token_matrix_1790692674952.jpg';
-import kvCacheImg from '../assets/images/capabilities_kv_cache_1790692687588.jpg';
-import longHorizonImg from '../assets/images/capabilities_long_horizon_1790692700317.jpg';
-import chipImg from '../assets/images/news_benchmark_chip_1790692711952.jpg';
-import blueprintsImg from '../assets/images/news_blueprints_1790690559803.jpg';
-import avatarElenaImg from '../assets/images/avatar_elena_1790690641253.jpg';
+const heroImg = '/5th.avif';
+const kvCacheImg = '/2nd.jpg';
+const longHorizonImg = '/4th.png';
+const chipImg = '/3rd.jfif';
+const blueprintsImg = '/1st.jfif';
+const avatarElenaImg = '/2nd.jpg';
 
 export const ASSETS = {
   hero: heroImg,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Chrome, Github, LockKeyhole, Mail, UserRound } from 'lucide-react';
+import { ArrowLeft, Chrome, Github, LockKeyhole, Mail, UserRound } from 'lucide-react';
 
 interface AuthPageProps {
   mode: 'signin' | 'signup';
@@ -49,6 +49,10 @@ export const AuthPage: React.FC<AuthPageProps> = ({ mode }) => {
 
       <section className="flex h-dvh min-h-0 items-center justify-center overflow-hidden bg-white px-4 py-3 sm:px-8 lg:px-10">
         <div className="w-full max-w-[440px] rounded-[28px] border border-neutral-200 bg-white px-6 py-5 shadow-[0_16px_50px_rgba(17,17,17,0.07)] sm:px-7 sm:py-6">
+        <a href="/" className="mb-4 inline-flex items-center gap-1.5 text-xs font-medium text-neutral-500 transition-colors hover:text-[#ff3b00]">
+          <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+          Back to Home
+        </a>
         <header className="mb-5 text-center sm:mb-6">
           <h1 className="text-[30px] font-bold leading-tight text-[#171717] sm:text-[32px]">
             {isSignup ? 'Create Account' : 'Welcome Back'}
