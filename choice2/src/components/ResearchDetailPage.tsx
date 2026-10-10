@@ -13,7 +13,7 @@ export const ResearchDetailPage: React.FC<ResearchDetailPageProps> = ({ article 
         <a href="/" className="font-['Poppins',sans-serif] text-lg font-extrabold tracking-tight text-white">
           parsim<span className="text-[#ff3b00]">.</span>
         </a>
-        <a href="/#news" className="inline-flex items-center gap-2 text-xs font-medium text-neutral-400 transition-colors hover:text-white">
+        <a href="/research" className="inline-flex items-center gap-2 text-xs font-medium text-neutral-400 transition-colors hover:text-white">
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to research
         </a>
@@ -57,7 +57,7 @@ export const ResearchDetailPage: React.FC<ResearchDetailPageProps> = ({ article 
           {article.fullContent || article.excerpt}
         </p>
         <div className="mt-10 flex flex-col gap-4 border-t border-neutral-900 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <a href="/#news" className="inline-flex items-center gap-2 text-xs font-medium text-neutral-400 transition-colors hover:text-white">
+          <a href="/research" className="inline-flex items-center gap-2 text-xs font-medium text-neutral-400 transition-colors hover:text-white">
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             Back to research
           </a>

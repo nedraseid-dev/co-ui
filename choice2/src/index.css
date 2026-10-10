@@ -100,12 +100,38 @@ footer *::-moz-selection {
 .animate-marquee-infinite {
   display: flex;
   width: max-content;
-  animation: marqueeInfinite 24s linear infinite;
+  animation: marqueeInfinite 18s linear infinite;
   will-change: transform;
 }
 
 .animate-marquee-infinite:hover {
   animation-play-state: paused;
+}
+
+.trusted-by-logos-window {
+  container-type: inline-size;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.trusted-by-logo-group {
+  display: flex;
+  width: max(100cqw, 48rem);
+  flex: none;
+  align-items: center;
+  justify-content: space-around;
+  gap: clamp(2rem, 5cqw, 4rem);
+  padding-inline: 1rem;
+}
+
+.trusted-by-logos-window:hover .animate-marquee-infinite {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-infinite {
+    animation: none;
+  }
 }
 
 @keyframes radarWave {
