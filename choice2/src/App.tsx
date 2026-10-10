@@ -152,7 +152,6 @@ export default function App() {
         <NewsModal 
           article={selectedArticle} 
           onClose={() => setSelectedArticle(null)}
-          onOpenContact={() => setIsContactOpen(true)}
         />
 
         <TemplateModal 

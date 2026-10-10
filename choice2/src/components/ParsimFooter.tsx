@@ -63,13 +63,13 @@ export const ParsimFooter: React.FC<ParsimFooterProps> = ({
               <div className="text-black/70 font-semibold text-[10px] tracking-wider">KV REDUCTION FACTOR</div>
               <div className="text-lg sm:text-xl font-bold text-black">16.4x</div>
             </div>
-            <button
-              onClick={onOpenContact}
+            <a
+              href="/signup"
               className="flex items-center gap-2.5 bg-black text-white text-xs font-semibold px-4 sm:px-5 py-2.5 sm:py-3 rounded-sm cursor-pointer shadow-lg"
             >
               <span>Deploy Engine</span>
               <ArrowRight className="w-3.5 h-3.5 text-[#ff3b00]" />
-            </button>
+            </a>
           </div>
 
         </div>

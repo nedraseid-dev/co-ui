@@ -5,10 +5,9 @@ import { NewsItem } from '../types';
 interface NewsModalProps {
   article: NewsItem | null;
   onClose: () => void;
-  onOpenContact: () => void;
 }
 
-export const NewsModal: React.FC<NewsModalProps> = ({ article, onClose, onOpenContact }) => {
+export const NewsModal: React.FC<NewsModalProps> = ({ article, onClose }) => {
   if (!article) return null;
 
   return (
@@ -91,16 +90,13 @@ export const NewsModal: React.FC<NewsModalProps> = ({ article, onClose, onOpenCo
           </div>
 
           <div className="pt-4 border-t border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <button
-              onClick={() => {
-                onClose();
-                onOpenContact();
-              }}
+            <a
+              href="/signup"
               className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#ff3b00] hover:bg-[#e03400] text-black text-xs font-semibold px-4 py-2.5 rounded-sm transition-colors cursor-pointer"
             >
               <span>Schedule Architecture Review</span>
               <ArrowRight className="w-3.5 h-3.5 text-black" />
-            </button>
+            </a>
 
             <button
               onClick={onClose}

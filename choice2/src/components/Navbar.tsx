@@ -129,8 +129,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onNavigateSection
             {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
 
-          <button
-            onClick={onOpenContact}
+          <a
+            href="/signup"
             className="group relative overflow-hidden flex items-center gap-2.5 bg-[#ff3b00] hover:bg-[#ff4d15] text-black text-xs font-semibold px-4 py-2.5 rounded-sm transition-all duration-200 active:scale-[0.98] shadow-lg shadow-[#ff3b00]/25 cursor-pointer"
           >
             {/* Shimmer light sweep */}
@@ -139,7 +139,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onNavigateSection
             <span className="relative z-10 w-4 h-4 bg-black/15 flex items-center justify-center rounded-sm transition-transform duration-200 group-hover:translate-x-0.5">
               <ArrowRight className="w-2.5 h-2.5 text-black" />
             </span>
-          </button>
+          </a>
         </div>
 
         {/* Mobile menu trigger */}
@@ -204,13 +204,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onNavigateSection
             Research
           </button>
           <div className="pt-2">
-            <button
-              onClick={() => { onOpenContact(); setMobileMenuOpen(false); }}
+            <a
+              href="/signup"
               className="w-full flex items-center justify-center gap-2 bg-[#ff3b00] text-black text-xs font-semibold py-3 rounded-sm"
             >
               <span>Deploy Engine</span>
               <ArrowRight className="w-3 h-3 text-black" />
-            </button>
+            </a>
           </div>
         </div>
       )}
