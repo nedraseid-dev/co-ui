@@ -39,12 +39,12 @@ export default function App() {
 
   // Light / dark theme
   const [theme, setTheme] = useState<'dark' | 'light'>(
-    () => (localStorage.getItem('theme') as 'dark' | 'light') || 'light'
+    () => localStorage.getItem('themePreference') === 'dark' ? 'dark' : 'light'
   );
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    localStorage.setItem('theme', theme);
+    localStorage.setItem('themePreference', theme);
   }, [theme]);
 
   const handleNavigateSection = (sectionId: string) => {
