@@ -123,7 +123,6 @@ export default function App() {
 
           {/* Latest Research & Papers with Staggered 3D Tilt Cards */}
           <LatestNews 
-            onSelectArticle={(article) => setSelectedArticle(article)}
             onViewAllNews={() => handleNavigateSection('news')}
           />
         </main>

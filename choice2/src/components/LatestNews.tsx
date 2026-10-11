@@ -1,18 +1,16 @@
 import React from 'react';
 import { NEWS_ITEMS } from '../data/content';
-import { NewsItem } from '../types';
 import { ArrowRight } from 'lucide-react';
 import { ScrollReveal } from './ScrollReveal';
 import { SpotlightCard } from './SpotlightCard';
+import { FaqSection } from './FaqSection';
 
 interface LatestNewsProps {
-  onSelectArticle: (article: NewsItem) => void;
   onViewAllNews: () => void;
 }
 
-export const LatestNews: React.FC<LatestNewsProps> = ({ onSelectArticle, onViewAllNews }) => {
+export const LatestNews: React.FC<LatestNewsProps> = ({ onViewAllNews }) => {
   const featuredNews = NEWS_ITEMS.filter((item) => item.type === 'featured');
-  const rowNews = NEWS_ITEMS.filter((item) => item.type === 'row');
 
   return (
     <section id="news" className="bg-[#080808] border-b border-neutral-900 py-24 sm:py-32 px-6 sm:px-8 lg:px-12 text-white">
@@ -99,33 +97,7 @@ export const LatestNews: React.FC<LatestNewsProps> = ({ onSelectArticle, onViewA
           ))}
         </div>
 
-        {/* 3 Compact Rows */}
-        <div className="border-t border-neutral-900 divide-y divide-neutral-900">
-          {rowNews.map((article, idx) => (
-            <ScrollReveal key={article.id} direction="up" delay={0.1 + idx * 0.08}>
-              <div
-                onClick={() => onSelectArticle(article)}
-                className="group py-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer hover:bg-[#111111]/50 px-4 -mx-4 rounded-sm transition-colors"
-              >
-                <div className="space-y-1.5 max-w-2xl">
-                  <div className="flex items-center gap-2 text-xs font-mono text-neutral-500">
-                    <span className="text-[#ff3b00] font-medium">{article.category}</span>
-                    <span>·</span>
-                    <span>{article.date}</span>
-                  </div>
-                  <h4 className="text-base font-medium text-white group-hover:text-[#ff3b00] transition-colors">
-                    {article.title}
-                  </h4>
-                </div>
-
-                <div className="flex items-center gap-4 text-xs font-mono text-neutral-500">
-                  <span>{article.readTime}</span>
-                  <ArrowRight className="w-4 h-4 text-neutral-600 group-hover:text-[#ff3b00] group-hover:translate-x-1 transition-all" />
-                </div>
-              </div>
-            </ScrollReveal>
-          ))}
-        </div>
+        <FaqSection />
 
         <ScrollReveal direction="up" delay={0.1}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-t border-neutral-900 pt-8">
