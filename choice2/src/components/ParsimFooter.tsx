@@ -138,14 +138,6 @@ export const ParsimFooter: React.FC<ParsimFooterProps> = ({
                   Sub-quadratic Kernels
                 </button>
               </li>
-              <li>
-                <button 
-                  onClick={() => onNavigateSection('performance')} 
-                  className="inline-block px-2 py-0.5 -mx-2 rounded-sm text-left cursor-pointer"
-                >
-                  10M Needle Audits
-                </button>
-              </li>
             </ul>
           </div>
 

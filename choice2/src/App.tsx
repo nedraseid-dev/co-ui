@@ -10,7 +10,6 @@ import { LiveTokenStream } from './components/LiveTokenStream';
 import { Testimonial } from './components/Testimonial';
 import { TrustedBy } from './components/TrustedBy';
 import { Capabilities } from './components/Capabilities';
-import { Performance } from './components/Performance';
 import { StatsGrid } from './components/StatsGrid';
 import { LatestNews } from './components/LatestNews';
 import { ParsimFooter } from './components/ParsimFooter';
@@ -21,7 +20,6 @@ import { CyberNoiseBackground } from './components/CyberNoiseBackground';
 
 // Shared UI & Interactive Modals
 import { ContactDrawer } from './components/ContactDrawer';
-import { TelemetryModal } from './components/TelemetryModal';
 import { NewsModal } from './components/NewsModal';
 import { ResearchDetailPage } from './components/ResearchDetailPage';
 import { ResearchIndexPage } from './components/ResearchIndexPage';
@@ -33,7 +31,6 @@ import { NEWS_ITEMS } from './data/content';
 
 export default function App() {
   const [isContactOpen, setIsContactOpen] = useState(false);
-  const [isTelemetryOpen, setIsTelemetryOpen] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState<NewsItem | null>(null);
   const [templatePageTitle, setTemplatePageTitle] = useState<string | null>(null);
 
@@ -121,11 +118,6 @@ export default function App() {
           {/* Capabilities Deep-Dive (Stacked Left Side Navigation & Right Side Scroll Lighting) */}
           <Capabilities />
 
-          {/* Performance Waveguide Ribbon & NOC Telemetry Link */}
-          <Performance 
-            onOpenTelemetry={() => setIsTelemetryOpen(true)}
-          />
-
           {/* Empirical Stats Grid with Dynamic Count-Up Numbers */}
           <StatsGrid />
 
@@ -147,11 +139,6 @@ export default function App() {
         <ContactDrawer 
           isOpen={isContactOpen} 
           onClose={() => setIsContactOpen(false)} 
-        />
-
-        <TelemetryModal 
-          isOpen={isTelemetryOpen} 
-          onClose={() => setIsTelemetryOpen(false)} 
         />
 
         <NewsModal 

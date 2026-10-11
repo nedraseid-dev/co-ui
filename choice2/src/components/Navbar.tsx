@@ -54,13 +54,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onNavigateSection
           </button>
 
           <button 
-            onClick={() => onNavigateSection('performance')} 
-            className="hover:text-white transition-colors cursor-pointer"
-          >
-            Benchmarks
-          </button>
-          
-          <button 
             onClick={() => onNavigateSection('news')} 
             className="hover:text-white transition-colors cursor-pointer"
           >
@@ -190,12 +183,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onNavigateSection
             className="block w-full text-left text-sm text-neutral-300 hover:text-white py-1"
           >
             Why Parsim
-          </button>
-          <button 
-            onClick={() => { onNavigateSection('performance'); setMobileMenuOpen(false); }}
-            className="block w-full text-left text-sm text-neutral-300 hover:text-white py-1"
-          >
-            Benchmarks
           </button>
           <button 
             onClick={() => { onNavigateSection('news'); setMobileMenuOpen(false); }}
