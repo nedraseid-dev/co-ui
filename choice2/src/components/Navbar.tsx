@@ -92,13 +92,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onNavigateSection
                   >
                     Why Parsim Philosophy
                   </a>
-                  <a 
-                    href="#testimonial" 
-                    onClick={(e) => { e.preventDefault(); onNavigateSection('testimonial'); setCompanyDropdownOpen(false); }}
-                    className="block px-3 py-2 text-xs text-neutral-300 hover:text-white hover:bg-neutral-900 rounded transition-colors"
-                  >
-                    Frontier AI Testimonials
-                  </a>
+                    <a 
+                      href="#testimonial" 
+                      onClick={(e) => { e.preventDefault(); onNavigateSection('testimonial'); setCompanyDropdownOpen(false); }}
+                      className="block px-3 py-2 text-xs text-neutral-300 hover:text-white hover:bg-neutral-900 rounded transition-colors"
+                    >
+                      Parsim Philosophy
+                    </a>
                   <a
                     href="/auth"
                     className="w-full text-left px-3 py-2 text-xs text-neutral-300 hover:text-white hover:bg-neutral-900 rounded transition-colors flex items-center justify-between"

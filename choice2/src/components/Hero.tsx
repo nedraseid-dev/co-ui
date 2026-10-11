@@ -45,7 +45,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPress }) => {
         {/* Left Subtitle */}
         <ScrollReveal direction="up" delay={0.2} className="max-w-xl">
           <div className="space-y-2">
-            <p className="max-w-xl text-[11px] sm:text-xs text-neutral-400 leading-snug font-normal">
+            <p className="max-w-xl text-xs sm:text-[13px] text-neutral-400 leading-snug font-medium">
               <EditableText
                 id="hero_subtext"
                 as="span"
@@ -54,7 +54,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPress }) => {
             </p>
             <a
               href="/auth"
-              className="group inline-flex items-center gap-2 bg-[#ff3b00] px-4 py-2.5 text-[11px] font-semibold text-black transition-colors hover:bg-[#ff6a36]"
+              className="group inline-flex items-center gap-2 bg-[#ff3b00] px-4 py-3.5 text-[11px] font-semibold text-black transition-colors hover:bg-[#ff6a36]"
             >
               <span>Access Parsim</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
