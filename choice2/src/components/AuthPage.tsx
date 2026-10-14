@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Chrome, Github, LockKeyhole, Mail, UserRound } from 'lucide-react';
+import { ArrowLeft, Chrome, Github, LockKeyhole, Mail, Moon, Sun, UserRound } from 'lucide-react';
 
 interface AuthPageProps {
   mode: 'signin' | 'signup';
+  theme: 'dark' | 'light';
+  onToggleTheme: () => void;
 }
 
-export const AuthPage: React.FC<AuthPageProps> = ({ mode }) => {
+export const AuthPage: React.FC<AuthPageProps> = ({ mode, theme, onToggleTheme }) => {
   const [message, setMessage] = useState('');
   const isSignup = mode === 'signup';
+  const isDark = theme === 'dark';
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -21,8 +24,8 @@ export const AuthPage: React.FC<AuthPageProps> = ({ mode }) => {
   };
 
   return (
-    <main className="grid h-dvh w-full grid-cols-1 overflow-hidden bg-white text-[#111111] lg:grid-cols-2">
-      <aside className="hidden h-dvh items-center justify-center border-r border-neutral-200 bg-white px-8 lg:flex">
+    <main className={`grid h-dvh w-full grid-cols-1 overflow-hidden lg:grid-cols-2 ${isDark ? 'bg-[#080808] text-white' : 'bg-white text-[#111111]'}`}>
+      <aside className={`order-2 hidden h-dvh items-center justify-center border-l px-8 lg:flex ${isDark ? 'border-neutral-800 bg-[#080808]' : 'border-neutral-200 bg-white'}`}>
         <div className="flex w-full max-w-xl flex-col items-center text-center">
           <div className="mb-8 flex flex-col items-center gap-3" aria-hidden="true">
             <div className="flex gap-2">
@@ -35,36 +38,47 @@ export const AuthPage: React.FC<AuthPageProps> = ({ mode }) => {
               {Array.from({ length: 2 }, (_, index) => <span key={index} className="h-9 w-9 bg-[#ff3b00]" />)}
             </div>
           </div>
-          <a href="/" aria-label="Parsim home" className="font-['Poppins',sans-serif] text-7xl font-extrabold leading-[0.8] tracking-[-0.07em] text-[#101010]">
+          <a href="/" aria-label="Parsim home" className={`font-['Poppins',sans-serif] text-5xl font-extrabold leading-[0.8] tracking-[-0.07em] sm:text-6xl ${isDark ? 'text-white' : 'text-[#101010]'}`}>
             parsim<span className="text-[#ff3b00]">.</span>
           </a>
-          <p className="mt-9 text-center text-sm font-semibold tracking-[0.16em] text-neutral-500">
+          <p className={`mt-8 text-center text-[10px] font-semibold tracking-[0.16em] sm:text-xs ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
             FEWER TOKENS. CHEAPER INFERENCE.
           </p>
-          <p className="mt-3 max-w-sm text-center text-[13px] leading-relaxed text-neutral-500">
+          <p className={`mt-3 max-w-sm text-center text-[11px] leading-relaxed sm:text-xs ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
             Give advanced AI more room to reason. Parsim makes long-context inference more efficient, so models can think further while using fewer tokens.
           </p>
         </div>
       </aside>
 
-      <section className="flex h-dvh min-h-0 items-center justify-center overflow-hidden bg-white px-4 py-3 sm:px-8 lg:px-10">
-        <div className="w-full max-w-[440px] rounded-[28px] border border-neutral-200 bg-white px-6 py-5 shadow-[0_16px_50px_rgba(17,17,17,0.07)] sm:px-7 sm:py-6">
-        <a href="/" className="mb-4 inline-flex items-center gap-1.5 text-xs font-medium text-neutral-500 transition-colors hover:text-[#ff3b00]">
-          <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-          Back to Home
-        </a>
-        <header className="mb-5 text-center sm:mb-6">
-          <h1 className="text-[30px] font-bold leading-tight text-[#171717] sm:text-[32px]">
+      <section className={`order-1 flex h-dvh min-h-0 items-center justify-center overflow-hidden px-4 py-3 sm:px-8 lg:px-14 ${isDark ? 'bg-[#080808]' : 'bg-white'}`}>
+        <div className="w-full max-w-sm">
+        <div className="mb-3 flex items-center justify-between">
+          <a href="/" className={`inline-flex items-center gap-1.5 text-[11px] font-medium transition-colors hover:text-[#ff3b00] ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
+            <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+            Back to Home
+          </a>
+          <button
+            type="button"
+            onClick={onToggleTheme}
+            aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+            title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+            className={`flex h-8 w-8 items-center justify-center border transition-colors ${isDark ? 'border-neutral-700 text-neutral-300 hover:bg-neutral-800' : 'border-neutral-300 text-neutral-600 hover:bg-neutral-100'}`}
+          >
+            {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
+        </div>
+        <header className="mb-4 text-center">
+          <h1 className={`text-[22px] font-bold leading-tight sm:text-2xl ${isDark ? 'text-white' : 'text-[#171717]'}`}>
             {isSignup ? 'Create Account' : 'Welcome Back'}
           </h1>
-          <p className="mt-2 text-xs font-semibold text-neutral-500 sm:text-[13px]">
+          <p className={`mt-1.5 text-[10px] font-semibold sm:text-[11px] ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
             {isSignup ? 'Create your Parsim workspace.' : 'Sign in to continue to your workspace.'}
           </p>
         </header>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-2">
           {isSignup && (
-            <label className="block space-y-1.5 text-[11px] font-medium text-neutral-600">
+            <label className={`block space-y-1 text-[9px] font-medium ${isDark ? 'text-neutral-300' : 'text-neutral-600'}`}>
               Name
               <span className="relative block">
                 <UserRound className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#777777]" aria-hidden="true" />
@@ -74,12 +88,12 @@ export const AuthPage: React.FC<AuthPageProps> = ({ mode }) => {
                   autoComplete="name"
                   required
                   placeholder="Full name"
-                  className="h-12 w-full rounded-[13px] border border-neutral-300 bg-neutral-50 pl-10 pr-4 text-[13px] text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-[#ff3b00]"
+                  className={`h-10 w-full rounded-[11px] border pl-10 pr-4 text-[11px] outline-none placeholder:text-neutral-500 focus:border-[#ff3b00] ${isDark ? 'border-neutral-700 bg-[#171717] text-white' : 'border-neutral-300 bg-neutral-50 text-neutral-900 placeholder:text-neutral-400'}`}
                 />
               </span>
             </label>
           )}
-          <label className="block space-y-1.5 text-[11px] font-medium text-neutral-600">
+          <label className={`block space-y-1 text-[9px] font-medium ${isDark ? 'text-neutral-300' : 'text-neutral-600'}`}>
             Email
             <span className="relative block">
               <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#777777]" aria-hidden="true" />
@@ -89,11 +103,11 @@ export const AuthPage: React.FC<AuthPageProps> = ({ mode }) => {
                 autoComplete="email"
                 required
                 placeholder="Email Address"
-                className="h-12 w-full rounded-[13px] border border-neutral-300 bg-neutral-50 pl-10 pr-4 text-[13px] text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-[#ff3b00]"
+                className={`h-10 w-full rounded-[11px] border pl-10 pr-4 text-[11px] outline-none placeholder:text-neutral-500 focus:border-[#ff3b00] ${isDark ? 'border-neutral-700 bg-[#171717] text-white' : 'border-neutral-300 bg-neutral-50 text-neutral-900 placeholder:text-neutral-400'}`}
               />
             </span>
           </label>
-          <label className="block space-y-1.5 text-[11px] font-medium text-neutral-600">
+          <label className={`block space-y-1 text-[9px] font-medium ${isDark ? 'text-neutral-300' : 'text-neutral-600'}`}>
             Password
             <span className="relative block">
               <LockKeyhole className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#777777]" aria-hidden="true" />
@@ -104,30 +118,30 @@ export const AuthPage: React.FC<AuthPageProps> = ({ mode }) => {
                 minLength={8}
                 required
                 placeholder="Password"
-                className="h-12 w-full rounded-[13px] border border-neutral-300 bg-neutral-50 pl-10 pr-4 text-[13px] text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-[#ff3b00]"
+                className={`h-10 w-full rounded-[11px] border pl-10 pr-4 text-[11px] outline-none placeholder:text-neutral-500 focus:border-[#ff3b00] ${isDark ? 'border-neutral-700 bg-[#171717] text-white' : 'border-neutral-300 bg-neutral-50 text-neutral-900 placeholder:text-neutral-400'}`}
               />
             </span>
           </label>
           <button
             type="submit"
-            className="flex h-[50px] w-full items-center justify-center rounded-[13px] bg-[#ff3b00] text-[13px] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-[#f0440c]"
+            className="flex h-10 w-full items-center justify-center rounded-[11px] bg-[#ff3b00] text-[11px] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-[#f0440c]"
           >
             {isSignup ? 'Create Account' : 'Sign In'}
           </button>
-          <p role="status" aria-live="polite" className="min-h-0 text-center text-[11px] leading-4 text-neutral-500">{message}</p>
+          <p role="status" aria-live="polite" className={`min-h-0 text-center text-[10px] leading-4 ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>{message}</p>
         </form>
 
-        <div className="my-4 flex items-center gap-3" aria-hidden="true">
-          <span className="h-px flex-1 bg-neutral-200" />
-          <span className="bg-white px-1 text-[10px] font-bold uppercase tracking-wide text-neutral-500">Or continue with</span>
-          <span className="h-px flex-1 bg-neutral-200" />
+        <div className="my-3 flex items-center gap-3" aria-hidden="true">
+          <span className={`h-px flex-1 ${isDark ? 'bg-neutral-800' : 'bg-neutral-200'}`} />
+          <span className={`px-1 text-[9px] font-bold uppercase tracking-wide ${isDark ? 'bg-[#080808] text-neutral-400' : 'bg-white text-neutral-500'}`}>Or continue with</span>
+          <span className={`h-px flex-1 ${isDark ? 'bg-neutral-800' : 'bg-neutral-200'}`} />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <button
             type="button"
             onClick={() => handleProviderSignIn('Google')}
-            className="flex h-[50px] items-center justify-center gap-2 rounded-[13px] border border-neutral-300 bg-white text-[11px] font-bold uppercase tracking-[0.1em] text-[#111111] transition-colors hover:bg-neutral-50"
+            className={`flex h-10 items-center justify-center gap-2 rounded-[11px] border text-[9px] font-bold uppercase tracking-[0.1em] transition-colors ${isDark ? 'border-neutral-700 bg-[#171717] text-white hover:bg-[#222222]' : 'border-neutral-300 bg-white text-[#111111] hover:bg-neutral-50'}`}
           >
             <Chrome className="h-4 w-4" aria-hidden="true" />
             Google
@@ -135,14 +149,14 @@ export const AuthPage: React.FC<AuthPageProps> = ({ mode }) => {
           <button
             type="button"
             onClick={() => handleProviderSignIn('GitHub')}
-            className="flex h-[50px] items-center justify-center gap-2 rounded-[13px] border border-neutral-300 bg-white text-[11px] font-bold uppercase tracking-[0.1em] text-[#111111] transition-colors hover:bg-neutral-50"
+            className={`flex h-10 items-center justify-center gap-2 rounded-[11px] border text-[9px] font-bold uppercase tracking-[0.1em] transition-colors ${isDark ? 'border-neutral-700 bg-[#171717] text-white hover:bg-[#222222]' : 'border-neutral-300 bg-white text-[#111111] hover:bg-neutral-50'}`}
           >
             <Github className="h-4 w-4" aria-hidden="true" />
             GitHub
           </button>
         </div>
 
-        <p className="mt-5 border-t border-neutral-200 pt-4 text-center text-[11px] font-medium text-neutral-500">
+        <p className={`mt-4 border-t pt-3 text-center text-[9px] font-medium ${isDark ? 'border-neutral-800 text-neutral-400' : 'border-neutral-200 text-neutral-500'}`}>
           {isSignup ? 'Already have an account? ' : "Don't have an account? "}
           <a href={isSignup ? '/auth' : '/signup'} className="font-bold text-[#ff4b0b] hover:text-[#ff6938]">
             {isSignup ? 'Sign In' : 'Sign Up'}

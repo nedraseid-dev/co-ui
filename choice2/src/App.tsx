@@ -56,7 +56,13 @@ export default function App() {
   };
 
   if (window.location.pathname === '/auth' || window.location.pathname === '/signup') {
-    return <AuthPage mode={window.location.pathname === '/signup' ? 'signup' : 'signin'} />;
+    return (
+      <AuthPage
+        mode={window.location.pathname === '/signup' ? 'signup' : 'signin'}
+        theme={theme}
+        onToggleTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+      />
+    );
   }
 
   if (window.location.pathname.replace(/\/$/, '') === '/research') {
