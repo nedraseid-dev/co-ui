@@ -56,9 +56,9 @@ export const ParsimFooter: React.FC<ParsimFooterProps> = ({
           <div>
             <p className="text-xs text-neutral-500">LIVE SUPPORT</p>
             <p className="mt-0.5 text-[13px] font-medium text-white">Need help with your AI project?</p>
-            <button onClick={onOpenContact} className="mt-1 inline-flex items-center gap-1 font-mono text-[11px] text-[#ff3b00] hover:text-[#ff765f]">
+            <a href="/auth" className="mt-1 inline-flex items-center gap-1 font-mono text-[11px] text-[#ff3b00] hover:text-[#ff765f]">
               START A CONVERSATION <ArrowRight className="h-3 w-3" aria-hidden="true" />
-            </button>
+            </a>
           </div>
         </div>
       </div>
