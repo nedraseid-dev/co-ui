@@ -24,8 +24,11 @@ export const AuthPage: React.FC<AuthPageProps> = ({ mode, theme, onToggleTheme }
   };
 
   return (
-    <main className={`grid h-dvh w-full grid-cols-1 overflow-hidden lg:grid-cols-2 ${isDark ? 'bg-[#080808] text-white' : 'bg-white text-[#111111]'}`}>
-      <aside className={`order-2 hidden h-dvh items-center justify-center border-l px-8 lg:flex ${isDark ? 'border-neutral-800 bg-[#080808]' : 'border-neutral-200 bg-white'}`}>
+    <main
+      className={`grid h-dvh w-full grid-cols-1 overflow-hidden lg:grid-cols-2 ${isDark ? 'bg-[#080808] text-white' : 'bg-white text-[#111111]'}`}
+      style={!isSignup ? { backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08)), url('/background.png')", backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+    >
+      <aside className={`order-2 hidden h-dvh items-center justify-center border-l px-8 lg:flex ${!isSignup ? 'border-white/20 bg-transparent' : isDark ? 'border-neutral-800 bg-[#080808]' : 'border-neutral-200 bg-white'}`}>
         <div className="flex w-full max-w-xl flex-col items-center text-center">
           <div className="mb-8 flex flex-col items-center gap-3" aria-hidden="true">
             <div className="flex gap-2">
@@ -38,19 +41,19 @@ export const AuthPage: React.FC<AuthPageProps> = ({ mode, theme, onToggleTheme }
               {Array.from({ length: 2 }, (_, index) => <span key={index} className="h-9 w-9 bg-[#ff3b00]" />)}
             </div>
           </div>
-          <a href="/" aria-label="Parsim home" className={`font-['Poppins',sans-serif] text-5xl font-extrabold leading-[0.8] tracking-[-0.07em] sm:text-6xl ${isDark ? 'text-white' : 'text-[#101010]'}`}>
+          <a href="/" aria-label="Parsim home" className={`font-['Poppins',sans-serif] text-5xl font-extrabold leading-[0.8] tracking-[-0.07em] sm:text-6xl ${!isSignup || isDark ? 'text-[#f4f4f5]' : 'text-[#101010]'}`}>
             parsim<span className="text-[#ff3b00]">.</span>
           </a>
-          <p className={`mt-8 text-center text-[10px] font-semibold tracking-[0.16em] sm:text-xs ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
+          <p className={`mt-8 text-center text-[10px] font-semibold tracking-[0.16em] sm:text-xs ${!isSignup ? 'text-white/80' : isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
             FEWER TOKENS. CHEAPER INFERENCE.
           </p>
-          <p className={`mt-3 max-w-sm text-center text-[11px] leading-relaxed sm:text-xs ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
+          <p className={`mt-3 max-w-sm text-center text-[11px] leading-relaxed sm:text-xs ${!isSignup ? 'text-white/75' : isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
             Give advanced AI more room to reason. Parsim makes long-context inference more efficient, so models can think further while using fewer tokens.
           </p>
         </div>
       </aside>
 
-      <section className={`order-1 flex h-dvh min-h-0 items-center justify-center overflow-hidden px-4 py-3 sm:px-8 lg:px-14 ${isDark ? 'bg-[#080808]' : 'bg-white'}`}>
+      <section className={`order-1 flex h-dvh min-h-0 items-center justify-center overflow-hidden px-4 py-3 sm:px-8 lg:px-14 ${!isSignup ? (isDark ? 'bg-black/55 backdrop-blur-sm' : 'bg-white/70 backdrop-blur-sm') : isDark ? 'bg-[#080808]' : 'bg-white'}`}>
         <div className="w-full max-w-sm">
         <div className="mb-3 flex items-center justify-between">
           <a href="/" className={`inline-flex items-center gap-1.5 text-[11px] font-medium transition-colors hover:text-[#ff3b00] ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>

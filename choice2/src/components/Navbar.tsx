@@ -3,13 +3,12 @@ import { ChevronDown, ArrowRight, Menu, X, Sun, Moon } from 'lucide-react';
 import { ParsimLogo } from './ParsimLogo';
 
 interface NavbarProps {
-  onOpenContact: () => void;
   onNavigateSection: (id: string) => void;
   theme: 'dark' | 'light';
   onToggleTheme: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onNavigateSection, theme, onToggleTheme }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onNavigateSection, theme, onToggleTheme }) => {
   const [companyDropdownOpen, setCompanyDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -123,7 +122,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onNavigateSection
           </button>
 
           <a
-            href="/signup"
+            href="/auth"
             className="group relative overflow-hidden flex items-center gap-2.5 bg-[#ff3b00] hover:bg-[#ff4d15] text-black text-xs font-semibold px-4 py-2.5 rounded-sm transition-all duration-200 active:scale-[0.98] shadow-lg shadow-[#ff3b00]/25 cursor-pointer"
           >
             {/* Shimmer light sweep */}
@@ -145,13 +144,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onNavigateSection
             {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
 
-          <button
-            onClick={onOpenContact}
+          <a
+            href="/auth"
             className="flex items-center gap-2 bg-[#ff3b00] text-black text-xs font-semibold px-3 py-2 rounded-sm"
           >
             <span>Deploy</span>
             <ArrowRight className="w-3 h-3 text-black" />
-          </button>
+          </a>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 text-neutral-400 hover:text-white focus:outline-none"
@@ -192,7 +191,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onNavigateSection
           </button>
           <div className="pt-2">
             <a
-              href="/signup"
+              href="/auth"
               className="w-full flex items-center justify-center gap-2 bg-[#ff3b00] text-black text-xs font-semibold py-3 rounded-sm"
             >
               <span>Deploy Engine</span>

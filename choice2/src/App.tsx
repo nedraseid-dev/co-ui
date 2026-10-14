@@ -85,7 +85,6 @@ export default function App() {
 
         {/* Navigation Header */}
         <Navbar 
-          onOpenContact={() => setIsContactOpen(true)}
           onNavigateSection={handleNavigateSection}
           theme={theme}
           onToggleTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
