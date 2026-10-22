@@ -81,35 +81,8 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPress }) => {
 };
 
 /* =========================================================
-   Integration visual: raw output  ->  Parsim snippet
-   All text below is SAMPLE content. Edit it freely.
+   Integration snippet. All text below is SAMPLE content.
    ========================================================= */
-
-// Left panel: noisy raw output (kind: cmd | info | warn | err)
-const RAW_LINES: [string, string][] = [
-  ['$ vllm serve deepseek-r1 --max-model-len 10000000', 'cmd'],
-  ['INFO  kv_cache alloc layers=0..60 size=960.0GB', 'info'],
-  ['INFO  request id=9d1 ctx=8,412,330 tokens', 'info'],
-  ['INFO  request id=9d2 ctx=8,413,118 tokens', 'info'],
-  ['WARN  hbm usage 94% (75.2/80 GB)', 'warn'],
-  ['ERROR torch.cuda.OutOfMemoryError: CUDA out of memory', 'err'],
-  ['WARN  context exceeded, truncating 2,104,882 tokens', 'warn'],
-  ['$ python agent.py --steps 100000', 'cmd'],
-  ['INFO  step=41,022 recall=0.71', 'info'],
-  ['INFO  step=41,023 recall=0.69', 'info'],
-  ['WARN  attention sink collapse detected', 'warn'],
-  ['ERROR agent lost system prompt at step 48,310', 'err'],
-  ['INFO  kv_cache alloc layers=0..60 size=960.0GB', 'info'],
-  ['WARN  hbm usage 97% (77.6/80 GB)', 'warn'],
-  ['ERROR torch.cuda.OutOfMemoryError: CUDA out of memory', 'err'],
-];
-
-const RAW_CLASS: Record<string, string> = {
-  cmd: 'text-neutral-200 font-semibold',
-  info: 'text-neutral-500',
-  warn: 'text-[#ff7700]',
-  err: 'text-[#ff3b00] font-semibold',
-};
 
 // Right panel: integration snippets. Token = [text, styleKey?]
 type Tok = [string, string?];
@@ -150,127 +123,121 @@ function HeroIntegration() {
   const tabs = Object.keys(SNIPPETS);
   const [tab, setTab] = useState(tabs[0]);
   const [copied, setCopied] = useState(false);
+  const [copyFailed, setCopyFailed] = useState(false);
   const lines = SNIPPETS[tab];
 
-  const copy = () => {
-    navigator.clipboard.writeText(lines.map((l) => l.map((t) => t[0]).join('')).join('\n'));
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1800);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(lines.map((l) => l.map((t) => t[0]).join('')).join('\n'));
+      setCopied(true);
+      setCopyFailed(false);
+    } catch (error) {
+      console.error('Unable to copy the integration snippet.', error);
+      setCopied(false);
+      setCopyFailed(true);
+    }
+    setTimeout(() => {
+      setCopied(false);
+      setCopyFailed(false);
+    }, 1800);
   };
 
-  // fixed height on small screens, fills the available height on desktop
-  const panel = 'flex flex-col min-h-0 h-[132px] sm:h-[158px] lg:h-full backdrop-blur-sm';
+  // Give the single code card more room while letting it fill the desktop hero.
+  const panel = 'flex h-[230px] min-h-0 flex-col backdrop-blur-sm sm:h-[260px] lg:h-full';
+  const fileName = tab === 'Python' ? 'quickstart.py' : tab === 'vLLM' ? 'config.yaml' : 'terminal';
+  const highlightedLine = tab === 'Python' ? 3 : tab === 'vLLM' ? 2 : 1;
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-[1fr_56px_1.2fr] lg:grid-rows-[minmax(0,1fr)] gap-2 lg:gap-0 items-stretch lg:h-full lg:max-h-[360px]">
+    <div className="grid min-h-0 grid-cols-1 items-center lg:h-full">
       <style>{`
-        .hx-l { background: rgba(255,255,255,.04); }
         .hx-r { background: rgba(255,59,0,.075); }
-        html[data-theme='light'] .hx-l { background: rgba(0,0,0,.04); }
+        .hx-editor-surface { background: rgba(8,8,8,.66); }
+        .hx-status-dot { animation: hxStatusPulse 2s ease-in-out infinite; }
+        .hx-active-line { background: linear-gradient(90deg, rgba(255,59,0,.12), transparent); }
         html[data-theme='light'] .hx-r { background: rgba(255,59,0,.08); }
-        @keyframes parsimScroll { from { transform: translateY(0); } to { transform: translateY(-50%); } }
-        .parsim-scroll { animation: parsimScroll 32s linear infinite; }
-        @media (prefers-reduced-motion: reduce) { .parsim-scroll { animation: none; } }
+        html[data-theme='light'] .hx-editor-surface { background: rgba(255,255,255,.72); }
+        @keyframes hxStatusPulse { 50% { opacity: .45; box-shadow: 0 0 3px rgba(255,59,0,.25); } }
+        @media (prefers-reduced-motion: reduce) { .hx-status-dot { animation: none; } }
       `}</style>
 
-      {/* LEFT: without Parsim */}
-      <div className={`${panel} hx-l`}>
-        <div className="px-2 pt-2 pb-1 sm:px-4 flex items-start justify-between gap-2 shrink-0">
-          <div>
-            <h3 className="font-serif text-base sm:text-lg text-white leading-none">without parsim</h3>
-            <p className="mt-1 text-[9px] sm:text-[10px] text-neutral-400">kv cache · logs · errors</p>
+      <div className="relative mx-auto w-full max-w-2xl lg:max-h-[440px] lg:rotate-[-1deg]">
+        <div aria-hidden="true" className="absolute inset-0 translate-x-2 translate-y-2 rotate-[2deg] rounded-xl border border-[#ff3b00]/25 bg-[#ff3b00]/[0.035]" />
+        <div aria-hidden="true" className="absolute inset-0 -translate-x-2 -translate-y-1 rotate-[-2deg] rounded-xl border border-neutral-700/60" />
+        <div className={`${panel} hx-r relative z-10 overflow-hidden rounded-lg border border-[#ff3b00]/20 shadow-[0_0_50px_rgba(255,59,0,0.08)]`}>
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,59,0,0.11),transparent_58%)]" />
+          <div className="hx-editor-surface relative flex h-full min-h-0 flex-col">
+          <div className="flex items-center justify-between gap-1.5 border-b border-white/[0.07] px-2 py-1.5 sm:px-3">
+            <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
+              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-[#ff3b00]/20 bg-[#ff3b00]/10 text-[#ff6a36]">
+                <span className="font-mono text-[10px] font-bold">&gt;_</span>
+              </div>
+              <div className="min-w-0">
+                <div className="truncate text-[9px] font-semibold uppercase tracking-[0.12em] text-neutral-200 sm:text-[10px]">with parsim</div>
+                <div className="truncate font-mono text-[8px] text-neutral-500 sm:text-[9px]">{fileName}</div>
+                </div>
+              </div>
+            </div>
+            <div className="flex shrink-0 items-center gap-1 text-[7px] font-mono uppercase tracking-wider text-neutral-500 sm:text-[8px]">
+              <span className="hx-status-dot h-1.5 w-1.5 rounded-full bg-[#ff5a2f]" />
+              READY
+            </div>
           </div>
-          <span className="hidden sm:block text-[10px] text-neutral-500 text-right leading-tight max-w-[80px]">what your model reads</span>
-        </div>
 
-        <div
-          className="relative flex-1 min-h-0 overflow-hidden font-mono text-[8px] sm:text-[9px] leading-[1.45] px-2 sm:px-4"
-          style={{
-            WebkitMaskImage: 'linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent)',
-            maskImage: 'linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent)',
-          }}
-        >
-          <div className="parsim-scroll">
-            {[...RAW_LINES, ...RAW_LINES].map(([text, kind], i) => (
-              <div key={i} className={`whitespace-nowrap ${RAW_CLASS[kind]}`}>{text}</div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* CENTER: funnel + badge (desktop) */}
-      <div className="relative hidden lg:flex items-center justify-center">
-        <svg viewBox="0 0 72 300" preserveAspectRatio="none" className="absolute inset-0 w-full h-full" fill="none">
-          <defs>
-            <linearGradient id="hxFunnel" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#8a8a8a" stopOpacity="0.10" />
-              <stop offset="100%" stopColor="#ff3b00" stopOpacity="0.14" />
-            </linearGradient>
-          </defs>
-          <path
-            d="M0 0 C 26 0, 30 135, 36 135 C 42 135, 46 0, 72 0 L72 300 C 46 300, 42 165, 36 165 C 30 165, 26 300, 0 300 Z"
-            fill="url(#hxFunnel)"
-          />
-        </svg>
-        <div className="relative flex flex-col items-center gap-2">
-          <div className="w-14 h-14 rounded-full bg-[#0e0e0e] border border-[#ff3b00]/50 flex items-center justify-center text-[#ff3b00] font-mono font-bold text-sm">
-            ~16x
-          </div>
-          <div className="text-[9px] font-mono tracking-widest text-neutral-500 text-center leading-tight">COMPRESSION</div>
-        </div>
-      </div>
-
-      {/* RIGHT: with Parsim */}
-      <div className={`${panel} hx-r`}>
-        <div className="px-2 pt-2 pb-1 sm:px-4 flex items-start justify-between gap-2 shrink-0">
-          <div>
-            <h3 className="font-serif text-base sm:text-lg text-white leading-none">with parsim</h3>
-            <p className="mt-1 text-[9px] sm:text-[10px] text-neutral-400">a few lines to integrate</p>
-          </div>
-          <span className="hidden sm:block text-[10px] text-neutral-500 text-right leading-tight max-w-[80px]">what matters, kept</span>
-        </div>
-
-        {/* tabs */}
-        <div className="flex items-center gap-2 sm:gap-3 px-2 sm:px-4 pb-1 shrink-0">
-          {tabs.map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`pb-1 text-[9px] sm:text-[11px] font-mono cursor-pointer border-b transition-colors ${
-                tab === t
-                  ? 'border-[#ff3b00] text-white'
-                  : 'border-transparent text-neutral-500 hover:text-neutral-300'
-              }`}
-            >
-              {t}
-            </button>
-          ))}
-          <button
-            onClick={copy}
-            className="ml-auto inline-flex items-center gap-1 text-[8px] sm:text-[10px] font-mono tracking-wider text-neutral-400 hover:text-white cursor-pointer"
-            aria-label="Copy snippet"
-          >
-            {copied ? <Check className="w-3.5 h-3.5 text-[#ff3b00]" /> : <Copy className="w-3.5 h-3.5" />}
-            <span>{copied ? 'COPIED' : 'COPY'}</span>
-          </button>
-        </div>
-
-        {/* code */}
-        <pre className="flex-1 min-h-0 overflow-auto px-2 sm:px-4 pt-1 font-mono text-[8px] sm:text-[9px] leading-[1.45] text-neutral-300">
-          {lines.map((line, i) => (
-            <div key={`${tab}-${i}`} className="whitespace-pre min-h-[1.45em]">
-              {line.map(([text, key], j) => (
-                <span key={j} className={key ? TOK_CLASS[key] : undefined}>{text}</span>
+          <div className="flex shrink-0 items-center justify-between gap-1 border-b border-white/[0.06] px-2 py-1 sm:px-3">
+            <div className="flex items-center gap-0.5 rounded-md border border-white/[0.06] bg-black/20 p-0.5">
+              {tabs.map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setTab(t)}
+                  aria-pressed={tab === t}
+                  className={`cursor-pointer rounded px-1.5 py-0.5 text-[8px] font-mono transition-colors sm:px-2 sm:text-[9px] ${
+                    tab === t
+                      ? 'bg-[#ff3b00]/15 text-[#ff6a36]'
+                      : 'text-neutral-500 hover:text-neutral-300'
+                  }`}
+                >
+                  {t}
+                </button>
               ))}
             </div>
-          ))}
-        </pre>
+            <button
+              onClick={copy}
+              className="inline-flex shrink-0 cursor-pointer items-center gap-1 font-mono text-[7px] tracking-wider text-neutral-400 transition-colors hover:text-white sm:text-[8px]"
+              aria-label="Copy snippet"
+              aria-live="polite"
+            >
+              {copied ? <Check className="h-3 w-3 text-[#ff3b00]" /> : <Copy className="h-3 w-3" />}
+              <span>{copied ? 'COPIED' : copyFailed ? 'FAILED' : 'COPY'}</span>
+            </button>
+          </div>
 
-        {/* result */}
-        <div className="px-2 sm:px-4 py-1 font-mono text-[8px] sm:text-[9px] text-neutral-400 shrink-0">
-          <span className="text-neutral-500">960 GB</span> → <span className="text-[#ff3b00] font-semibold">58.5 GB</span>
-          <span className="text-neutral-600"> · </span>
-          recall <span className="text-white font-semibold">99.98%</span>
+          <pre className="flex-1 min-h-0 overflow-auto py-1 font-mono text-[8px] leading-[1.55] text-neutral-300 sm:text-[9px]">
+            {lines.map((line, i) => (
+              <div
+                key={`${tab}-${i}`}
+                className={`flex min-h-[1.55em] whitespace-pre pr-2 ${i === highlightedLine ? 'hx-active-line border-l border-[#ff3b00]/60' : 'border-l border-transparent'}`}
+              >
+                <span className="w-7 shrink-0 select-none pr-2 text-right text-[7px] text-neutral-600 sm:w-8 sm:text-[8px]">{String(i + 1).padStart(2, '0')}</span>
+                <span>
+                  {line.map(([text, key], j) => (
+                    <span key={j} className={key ? TOK_CLASS[key] : undefined}>{text}</span>
+                  ))}
+                </span>
+              </div>
+            ))}
+          </pre>
+
+          <div className="flex shrink-0 items-center justify-between gap-1 border-t border-white/[0.07] px-2 py-1 sm:px-3">
+            <div className="flex items-center gap-1 font-mono text-[7px] sm:gap-1.5 sm:text-[8px]">
+              <span className="text-neutral-500">960 GB</span>
+              <span className="text-neutral-600">→</span>
+              <span className="font-semibold text-[#ff6a36]">58.5 GB</span>
+              <span className="rounded border border-[#ff3b00]/20 bg-[#ff3b00]/10 px-1 py-px text-[#ff6a36]">16.4×</span>
+            </div>
+            <div className="shrink-0 font-mono text-[7px] text-neutral-500 sm:text-[8px]">
+              RECALL <span className="font-semibold text-neutral-200">99.98%</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
