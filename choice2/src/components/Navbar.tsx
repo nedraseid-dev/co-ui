@@ -84,13 +84,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigateSection, theme, onTogg
                   >
                     Why Parsim Philosophy
                   </a>
-                    <a 
-                      href="#testimonial" 
-                      onClick={(e) => { e.preventDefault(); onNavigateSection('testimonial'); setCompanyDropdownOpen(false); }}
-                      className="block px-3 py-2 text-xs text-neutral-300 hover:text-white hover:bg-neutral-900 rounded transition-colors"
-                    >
-                      Parsim Philosophy
-                    </a>
+                  <a 
+                    href="#testimonial" 
+                    onClick={(e) => { e.preventDefault(); onNavigateSection('testimonial'); setCompanyDropdownOpen(false); }}
+                    className="block px-3 py-2 text-xs text-neutral-300 hover:text-white hover:bg-neutral-900 rounded transition-colors"
+                  >
+                    Parsim Philosophy
+                  </a>
                   <a
                     href="/auth"
                     className="w-full text-left px-3 py-2 text-xs text-neutral-300 hover:text-white hover:bg-neutral-900 rounded transition-colors flex items-center justify-between"
@@ -111,7 +111,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigateSection, theme, onTogg
           </div>
         </nav>
 
-        {/* Theme toggle + CTA Button: International Safety Orange #ff3b00 with Shimmer */}
+        {/* Theme toggle + CTA Button: Orange background with Black text */}
         <div className="hidden sm:flex items-center gap-4">
           <button
             onClick={onToggleTheme}
@@ -123,11 +123,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigateSection, theme, onTogg
 
           <a
             href="/auth"
-            className="group relative overflow-hidden flex items-center gap-2.5 bg-[#ff3b00] hover:bg-[#ff4d15] text-black text-xs font-semibold px-4 py-2.5 rounded-sm transition-all duration-200 active:scale-[0.98] shadow-lg shadow-[#ff3b00]/25 cursor-pointer"
+            className="group relative overflow-hidden flex items-center gap-2.5 bg-[#ff3b00] hover:bg-[#ff4d15] text-black text-xs font-bold px-4 py-2.5 rounded-sm transition-all duration-200 active:scale-[0.98] shadow-lg shadow-[#ff3b00]/25 cursor-pointer"
           >
-            {/* Shimmer light sweep */}
             <span className="absolute inset-0 animate-shimmer-sweep pointer-events-none" />
-            <span className="relative z-10">Deploy Engine</span>
+            <span className="relative z-10 text-black">Deploy Engine</span>
             <span className="relative z-10 w-4 h-4 bg-black/15 flex items-center justify-center rounded-sm transition-transform duration-200 group-hover:translate-x-0.5">
               <ArrowRight className="w-2.5 h-2.5 text-black" />
             </span>
@@ -146,7 +145,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigateSection, theme, onTogg
 
           <a
             href="/auth"
-            className="flex items-center gap-2 bg-[#ff3b00] text-black text-xs font-semibold px-3 py-2 rounded-sm"
+            className="flex items-center gap-2 bg-[#ff3b00] text-black text-xs font-bold px-3 py-2 rounded-sm"
           >
             <span>Deploy</span>
             <ArrowRight className="w-3 h-3 text-black" />
@@ -192,7 +191,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigateSection, theme, onTogg
           <div className="pt-2">
             <a
               href="/auth"
-              className="w-full flex items-center justify-center gap-2 bg-[#ff3b00] text-black text-xs font-semibold py-3 rounded-sm"
+              className="w-full flex items-center justify-center gap-2 bg-[#ff3b00] text-black text-xs font-bold py-3 rounded-sm"
             >
               <span>Deploy Engine</span>
               <ArrowRight className="w-3 h-3 text-black" />
