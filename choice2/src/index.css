@@ -167,7 +167,6 @@ footer *::-moz-selection {
 .animate-orange-pulse {
   animation: orangePulseBreathe 4s ease-in-out infinite;
 }
-
 /* =========================================================
    LIGHT THEME. Every rule is scoped to html[data-theme='light'],
    so dark mode is untouched. Keep this block at the bottom.
@@ -267,6 +266,12 @@ html[data-theme='light'] footer .text-white { color: #ffffff; }
 html[data-theme='light'] .site-footer-dark .text-neutral-400 { color: #b3b3bb; }
 html[data-theme='light'] .site-footer-dark .text-neutral-500 { color: #92929b; }
 html[data-theme='light'] .site-footer-dark .border-neutral-800 { border-color: rgba(255, 255, 255, 0.12); }
+
+/* logo */
+html[data-theme='light'] svg[viewBox="0 0 36 36"] rect[fill="#ffffff"] { fill: #0b0b0b; }
+html[data-theme='light'] svg[viewBox="0 0 36 36"] line[stroke="#ffffff"] { stroke: #0b0b0b; }
+html[data-theme='light'] .group:hover svg[viewBox="0 0 36 36"] rect[fill="#ffffff"] { fill: #ff3b00; }
+html[data-theme='light'] .group:hover .group-hover\:stroke-white { stroke: #0b0b0b; }
 
 /* telemetry status colors */
 html[data-theme='light'] .text-emerald-400 { color: #047857; }

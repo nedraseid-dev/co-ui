@@ -55,10 +55,14 @@ export default function App() {
     setSelectedArticle(NEWS_ITEMS[0]);
   };
 
-  if (window.location.pathname === '/auth' || window.location.pathname === '/signup') {
+  if (
+    window.location.pathname === '/waitlist' ||
+    window.location.pathname === '/auth' ||
+    window.location.pathname === '/signup'
+  ) {
     return (
       <AuthPage
-        mode={window.location.pathname === '/signup' ? 'signup' : 'signin'}
+        mode="waitlist"
         theme={theme}
         onToggleTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
       />
